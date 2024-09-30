@@ -1,3 +1,5 @@
+const { appWindow } = window.__TAURI__.window;
+
 document.addEventListener('DOMContentLoaded', () => {
 	const chatForm = document.getElementById('chatForm');
 	const chatMessage = document.getElementById('chatMessage');
@@ -5,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	let requestsData = [];
 	let responsesData = [];
+	let applicationsData = [];
 
 	// Fetch the JSON files
 	fetch('data/requests.json')
@@ -17,6 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		.then(response => response.json())
 		.then(data => {
 			responsesData = data;
+		});
+
+	fetch('data/applications.json')
+		.then(response => response.json())
+		.then(data => {
+			applicationsData = data;
 		});
 
 	// Function to calculate Levenshtein distance
@@ -87,10 +96,71 @@ document.addEventListener('DOMContentLoaded', () => {
 		return "Sorry, I don't understand.";
 	}
 
+	let applicationPrefix = [
+		"open ",
+		"launch ",
+		"run ",
+		"start ",
+		"execute "
+	]
+
+	// Function to find the application name from the user message
+	function findApplication(requestKeyword) {
+		let applicationName = null;
+		let matchedApplicationName = null;
+		for (const prefix of applicationPrefix) {
+			if (requestKeyword.startsWith(prefix)) {
+				applicationName = requestKeyword.replace(prefix, '').trim();
+				const matchedApplication = applicationsData.find(app => 
+					app.keywords && app.keywords.some(keyword => keyword.toLowerCase() === applicationName.toLowerCase())
+				);
+				matchedApplicationName = matchedApplication.name;
+				console.log(`Detected Application Name: ${matchedApplication.name}`);
+			}
+		}
+
+		return matchedApplicationName;
+	}
+
+	// Open the application if the user message contains the application name
+	async function openApplication(applicationPath) {
+		try {
+			await window.__TAURI__.invoke('open_application', {
+				destination: applicationPath
+			});
+		} catch (error) {
+			console.error('Failed to open application:', error);
+			new Notification('Open Failed', {
+				body: 'Failed to open the application. Please try again later',
+				sound: 'Default'
+			});
+		}
+	}
+
+
 	chatForm.addEventListener('submit', function (event) {
 		event.preventDefault();
 		const userMessage = chatMessage.value.trim();
-		if (userMessage) {
+		if (userMessage.startsWith("open") || userMessage.startsWith("launch") || userMessage.startsWith("run") || userMessage.startsWith("start") || userMessage.startsWith("execute")) {
+			const response = findResponse(userMessage);
+			const applicationName = findApplication(userMessage);
+			if (applicationName) {
+				botResponse.textContent = "Opening " + applicationName + "...";
+				const matchedApplication = applicationsData.find(app => 
+					app.keywords && app.keywords.some(keyword => keyword.toLowerCase() === applicationName.toLowerCase())
+				);
+				if (matchedApplication) {
+					openApplication(matchedApplication.path);
+					console.log(`Opening application: ${matchedApplication.name}`);
+				} else {
+					console.log("Application not found in data");
+					botResponse.textContent = "Sorry, I couldn't find the application in the data.";
+				}
+			} else {
+				console.log("No application name detected");
+				botResponse.textContent = "Sorry, I couldn't detect any applications by that name.";
+			}
+		} else {
 			const response = findResponse(userMessage);
 			botResponse.textContent = response;
 		}

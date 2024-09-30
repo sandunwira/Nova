@@ -196,6 +196,7 @@
 	{
 		"intent": "help",
 		"requests": [
+			"help",
 			"can you help me",
 			"can you help me with something",
 			"can you help me with this",
@@ -214,6 +215,12 @@
 			"ambulance",
 			"doctor",
 			"hospital"
+		]
+	},
+	{
+		"intent": "application",
+		"requests": [
+			"open"
 		]
 	}
 ]

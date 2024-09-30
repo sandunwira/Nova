@@ -1,1 +1,1 @@
-// const { invoke } = window.__TAURI__.tauri;
+// const { appWindow } = window.__TAURI__.window;

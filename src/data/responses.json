@@ -15,12 +15,12 @@
 			"Hi there, how can I help you?",
 			"Hey there, how can I help you?",
 			"Hi there! How can I help you today?",
-			"Hello! I'm your friendly virtual assistant. What can I do for you?",
+			"Hello, Nova here! What can I do for you?",
 			"Hey, How may I assist you today?",
 			"Hey, Good to see you! What can I do for you?",
 			"Hey there! What's up?",
 			"Hi there! It's a pleasure to see you again. How can I help you today?",
-			"Hey! I'm your friendly virtual assistant. What can I do for you?",
+			"Hey, Nova here! What can I do for you?",
 			"Hi there! How may I assist you today? It's always a joy to be of service.",
 			"Good to see you! What can I do for you today? I'm ready to assist.",
 			"Hey there!, I'm here to support you.",
@@ -174,16 +174,15 @@
 	{
 		"intent": "intro",
 		"responses": [
-			"I am a virtual assistant designed to help you with your queries. How can I assist you today?",
-			"I am a virtual assistant here to help you. What can I do for you?",
-			"I am a virtual assistant programmed to assist you. How can I help you today?",
-			"I am a virtual assistant designed to help you with your needs. What can I do for you?",
-			"I am a virtual assistant here to assist you. How can I help you today?",
-			"I am a virtual assistant programmed to help you. What can I do for you?",
-			"I am a virtual assistant designed to assist you. How can I help you today?",
-			"I am a virtual assistant here to help you. What can I do for you?",
-			"I am a virtual assistant programmed to assist you. How can I help you today?",
-			"I am a virtual assistant designed to help you with your needs. What can I do for you?"
+			"My name is Nova, your friendly AI assistant.",
+			"Hello! I'm Nova, your virtual assistant. How can I help you today?",
+			"Hi there! I'm Nova, your AI companion. What can I do for you?",
+			"Nice to meet you! I'm Nova, your digital companion.",
+			"Hello! I'm Nova, your virtual assistant.",
+			"Greetings! I'm Nova, your AI companion.",
+			"Nice to meet you! I'm Nova, your virtual helper.",
+			"I'm Nova, I'm here to help you with anything you need.",
+			"Hello! I'm Nova, your friendly AI assistant."
 		]
 	},
 	{
@@ -285,7 +284,9 @@
 			"Yes, certainly! What can I do for you?",
 			"Yes, please! How can I help you today?",
 			"Yes, of course! What would you like to do?",
-			"Yes, absolutely! I'm ready to assist you."
+			"Yes, absolutely! I'm ready to assist you.",
+			"Yes, I'm here to help! What can I do for you?",
+			"Yes, I'm here to assist you. How can I help?"
 		]
 	},
 	{
@@ -301,6 +302,14 @@
 			"Emergency assistance is on standby. Please provide the details.",
 			"Is this a life-threatening emergency? Please describe the situation.",
 			"Emergency protocol initiated. Please provide the necessary information."
+		]
+	},
+	{
+		"intent": "application",
+		"responses": [
+			"Opening",
+			"Starting",
+			"Launching"
 		]
 	}
 ]

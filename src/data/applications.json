@@ -1,0 +1,24 @@
+[
+	{
+		"name": "Notepad",
+		"keywords": [
+			"notepad",
+			"note",
+			"notepd",
+			"notepadd"
+		],
+		"icon": "notepad.png",
+		"path": "C:\\Windows\\System32\\notepad.exe"
+	},
+	{
+		"name": "Calculator",
+		"keywords": [
+			"calculator",
+			"calc",
+			"calcuator",
+			"calcu"
+		],
+		"icon": "calculator.png",
+		"path": "C:\\Windows\\System32\\calc.exe"
+	}
+]
