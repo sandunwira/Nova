@@ -160,9 +160,44 @@ document.addEventListener('DOMContentLoaded', () => {
 				console.log("No application name detected");
 				botResponse.textContent = "Sorry, I couldn't detect any applications by that name.";
 			}
+		} else if (userMessage.toLowerCase().includes("random movie") || userMessage.toLowerCase().includes("movie recommendation") || userMessage.toLowerCase().includes("suggest me a movie") || userMessage.toLowerCase().includes("suggest a movie")) {
+			getRandomMovie();
 		} else {
 			const response = findResponse(userMessage);
 			botResponse.textContent = response;
 		}
 	});
 });
+
+
+// function to get a random movie
+function getRandomMovie() {
+	let movieDetails = null;
+	let randomMovieID = Math.floor(Math.random() * 10000000);
+
+	fetch(`https://www.omdbapi.com/?i=tt${randomMovieID}&apikey=1e86c5d2`)
+		.then(response => response.json())
+		.then(data => {
+			const movieTitle = data.Title;
+			const movieYear = data.Year;
+			const movieGenre = data.Genre;
+			const moviePlot = data.Plot;
+			const movieRating = data.imdbRating;
+			const movieActors = data.Actors;
+			const movieDirector = data.Director;
+			const type = data.Type;
+
+			console.log(randomMovieID);
+
+			if (movieTitle === undefined || type === "episode") {
+				getRandomMovie();
+				return;
+			}
+
+			movieDetails = `${movieTitle} (${movieYear})\nGenre: ${movieGenre}\nRating: ${movieRating}\nDirector: ${movieDirector}\nActors: ${movieActors}\nPlot: ${moviePlot}\nImdb: https://www.imdb.com/title/${data.imdbID}`;
+			console.log(movieDetails);
+			botResponse.textContent = movieDetails
+		});
+
+	return movieDetails;
+}
