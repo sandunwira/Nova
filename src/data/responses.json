@@ -186,6 +186,16 @@
 		]
 	},
 	{
+		"intent": "tasks",
+		"responses": [
+			"I can do event plans, talk, tell a joke, troubleshoot your pc and many other things for you!",
+			"I'm here to assist you with your daily tasks such as event planning, troubleshoot your pc and many more!",
+			"I can help you with event planning, troubleshooting your pc and many other tasks!",
+			"I can assist you with event planning, troubleshooting your pc and many other tasks!",
+			"I'm here to help you with event planning, troubleshooting your pc and many other tasks!"
+		]
+	},
+	{
 		"intent": "howareyou",
 		"responses": [
 			"I'm doing well, thank you for asking! How are you?",

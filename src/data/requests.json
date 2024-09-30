@@ -110,6 +110,20 @@
 		]
 	},
 	{
+		"intent": "tasks",
+		"requests": [
+			"what can you do",
+			"what do you do",
+			"what tasks you can do",
+			"what are your tasks",
+			"what are your abilities",
+			"what are your capabilities",
+			"what are your functions",
+			"what are your features",
+			"what are your skills"
+		]
+	},
+	{
 		"intent": "howareyou",
 		"requests": [
 			"how are you",
@@ -220,6 +234,7 @@
 	{
 		"intent": "joke",
 		"requests": [
+			"can you tell me a joke",
 			"tell me a joke",
 			"tell a joke",
 			"give me a joke",
