@@ -218,6 +218,16 @@
 		]
 	},
 	{
+		"intent": "joke",
+		"requests": [
+			"tell me a joke",
+			"tell a joke",
+			"give me a joke",
+			"a joke",
+			"joke"
+		]
+	},
+	{
 		"intent": "application",
 		"requests": [
 			"open"
