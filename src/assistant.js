@@ -162,6 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		} else if (userMessage.toLowerCase().includes("random movie") || userMessage.toLowerCase().includes("movie recommendation") || userMessage.toLowerCase().includes("suggest me a movie") || userMessage.toLowerCase().includes("suggest a movie")) {
 			getRandomMovie();
+		} else if (userMessage.toLowerCase().includes("ip address") || userMessage.toLowerCase().includes("ip")) {
+			getIPAddress();
 		} else {
 			const response = findResponse(userMessage);
 			botResponse.textContent = response;
@@ -202,4 +204,23 @@ function getRandomMovie() {
 		});
 
 	return movieDetails;
+}
+
+
+
+// function to get the ip address
+function getIPAddress() {
+	let ipadress = null;
+
+	botResponse.textContent = "Fetching your IP Address...";
+
+	fetch('https://api.ipify.org?format=json')
+		.then(response => response.json())
+		.then(data => {
+			ipadress = data.ip;
+			console.log(ipadress);
+			botResponse.textContent = "Your IP Address is: " + ipadress;
+		});
+
+	return ipadress;
 }
