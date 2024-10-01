@@ -214,7 +214,7 @@ function getIPAddress() {
 
 	botResponse.textContent = "Fetching your IP Address...";
 
-	fetch('https://api.ipify.org?format=json')
+	fetch('https://ipinfo.io/?token=a6384bf1fee5c5')
 		.then(response => response.json())
 		.then(data => {
 			ipadress = data.ip;
