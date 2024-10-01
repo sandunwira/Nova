@@ -169,7 +169,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		} else if (userMessage.toLowerCase().includes("weather")) {
 			botResponse.textContent = "Fetching the weather...";
 			getWeather().then(weatherDetails => botResponse.textContent = weatherDetails).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the weather data.");
-		} else {
+		} else if (userMessage.toLowerCase().includes("search") || userMessage.toLowerCase().includes("find") || userMessage.toLowerCase().includes("look up") || userMessage.toLowerCase().includes("what") || userMessage.toLowerCase().includes("who") || userMessage.toLowerCase().includes("when") || userMessage.toLowerCase().includes("where") || userMessage.toLowerCase().includes("why")) {
+			botResponse.textContent = "Searching the web...";
+			searchWeb(userMessage).then(snippetText => botResponse.textContent = snippetText).catch(error => botResponse.textContent = "Sorry, I couldn't find any relevant information.");
+		}
+		else {
 			const response = findResponse(userMessage);
 			botResponse.textContent = response;
 		}
@@ -245,5 +249,77 @@ async function getWeather() {
 		return weatherDetails;
 	} catch (error) {
 		console.error('Error in getWeather:', error);
+	}
+}
+
+
+// function to search the web
+async function searchWeb(query) {
+	const proxyUrl = 'https://api.allorigins.win/get?url=';
+	const targetUrl = encodeURIComponent(`https://html.duckduckgo.com/html/?q=${query}`);
+	const url = proxyUrl + targetUrl;
+
+	try {
+		const response = await fetch(url);
+		let data = await response.json();
+		console.log('Fetched data:', data);
+
+		let htmlString = data.contents.replace(/\s+/g, ' ').trim();
+		console.log('HTML string:', htmlString);
+
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(htmlString, 'text/html');
+		console.log('Parsed document:', doc);
+
+		// Priority 1: Find the element with the ID 'zero_click_abstract'
+		let snippetElement = doc.getElementById('zero_click_abstract');
+		let snippetText = 'Sorry, I couldn\'t find any relevant information.';
+
+		if (snippetElement) {
+			snippetText = snippetElement.innerText;
+			console.log('Snippet text: ' + snippetText);
+			snippetText = snippetText.replace('More at Wikipedia', '');
+		} else {
+			// Priority 2: Find the first element with the class 'result__snippet'
+			const snippetElements = doc.querySelectorAll('.result__snippet');
+			if (snippetElements.length > 0) {
+				// Check if the first element's text starts with "Learn about"
+				if (snippetElements[0].innerText.startsWith('Learn about')) {
+					// If so, use the second element's text if it exists
+					if (snippetElements.length > 1) {
+						snippetText = snippetElements[1].innerText;
+					}
+				} else {
+					// Otherwise, use the first element's text
+					snippetText = snippetElements[0].innerText;
+				}
+			}
+		}
+
+		// Remove the last sentence that contains "More at..."
+		snippetText = snippetText.replace(/\.?\s*More at.*$/, '');
+
+		// Split the text into sentences
+		let sentences = snippetText.split('. ');
+
+		// Remove the last sentence that ends with "..."
+		for (let i = sentences.length - 1; i >= 0; i--) {
+			if (sentences[i].endsWith('...')) {
+				sentences.splice(i, 1);
+				break;
+			}
+		}
+
+		// Join the sentences back together
+		snippetText = sentences.join('. ');
+
+		console.log('Sanitized snippet text: ' + snippetText);
+
+		return snippetText;
+	}
+	catch (error) {
+		console.error('Error fetching or parsing HTML:', error);
+		searchWeb(query);
+		throw error;
 	}
 }
