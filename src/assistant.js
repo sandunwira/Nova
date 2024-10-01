@@ -163,7 +163,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		} else if (userMessage.toLowerCase().includes("random movie") || userMessage.toLowerCase().includes("movie recommendation") || userMessage.toLowerCase().includes("suggest me a movie") || userMessage.toLowerCase().includes("suggest a movie")) {
 			getRandomMovie();
 		} else if (userMessage.toLowerCase().includes("ip address") || userMessage.toLowerCase().includes("ip")) {
-			getIPAddress();
+			botResponse.textContent = "Fetching your IP Address...";
+			getIPAddress().then(ipaddress => botResponse.textContent = "Your IP Address is: " + ipaddress).catch(error => botResponse.textContent = "Sorry, I couldn't fetch your IP Address.");
+		} else if (userMessage.toLowerCase().includes("weather")) {
+			botResponse.textContent = "Fetching the weather...";
+			getWeather().then(weatherDetails => botResponse.textContent = weatherDetails).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the weather data.");
 		} else {
 			const response = findResponse(userMessage);
 			botResponse.textContent = response;
@@ -209,18 +213,36 @@ function getRandomMovie() {
 
 
 // function to get the ip address
-function getIPAddress() {
-	let ipadress = null;
-
-	botResponse.textContent = "Fetching your IP Address...";
-
-	fetch('https://ipinfo.io/?token=a6384bf1fee5c5')
+async function getIPAddress() {
+	return fetch('https://ipinfo.io/?token=a6384bf1fee5c5')
 		.then(response => response.json())
 		.then(data => {
-			ipadress = data.ip;
-			console.log(ipadress);
-			botResponse.textContent = "Your IP Address is: " + ipadress;
+			const ipaddress = data.ip;
+			console.log(ipaddress);
+			return ipaddress;
+		})
+		.catch(error => {
+			console.error('Error in getIPAddress:', error);
+			throw error;
 		});
+}
 
-	return ipadress;
+
+// function to get the weather
+async function getWeather() {
+	try {
+		const ipaddressforlocation = await getIPAddress();
+		console.log(`IP Address for Location: ${ipaddressforlocation}`);
+		const location = await fetch(`https://ipinfo.io/${ipaddressforlocation}/city?token=a6384bf1fee5c5`)
+			.then(response => response.text());
+		console.log(`Location: ${location}`);
+		const weatherData = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=2e65cf86daa6dc72fef7c3f47c32788e`)
+			.then(response => response.json());
+		console.log(weatherData);
+		const weatherDetails = `Weather in ${location} (based on the IP Address) - ${weatherData.weather[0].description.charAt(0).toUpperCase() + weatherData.weather[0].description.slice(1)}\n- Temperature: ${Math.round(weatherData.main.temp - 273.15)}°C\n- Humidity: ${weatherData.main.humidity}%\n- Wind Speed: ${weatherData.wind.speed} m/s`;
+		console.log(weatherDetails);
+		return weatherDetails;
+	} catch (error) {
+		console.error('Error in getWeather:', error);
+	}
 }
