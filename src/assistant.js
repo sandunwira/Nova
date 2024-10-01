@@ -175,6 +175,8 @@ function getRandomMovie() {
 	let movieDetails = null;
 	let randomMovieID = Math.floor(Math.random() * 10000000);
 
+	botResponse.textContent = "Searching for a movie...";
+
 	fetch(`https://www.omdbapi.com/?i=tt${randomMovieID}&apikey=1e86c5d2`)
 		.then(response => response.json())
 		.then(data => {
