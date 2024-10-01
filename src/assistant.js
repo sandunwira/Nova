@@ -161,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				botResponse.textContent = "Sorry, I couldn't detect any applications by that name.";
 			}
 		} else if (userMessage.toLowerCase().includes("random movie") || userMessage.toLowerCase().includes("movie recommendation") || userMessage.toLowerCase().includes("suggest me a movie") || userMessage.toLowerCase().includes("suggest a movie")) {
+			botResponse.textContent = "Searching for a movie...";
 			getRandomMovie();
 		} else if (userMessage.toLowerCase().includes("ip address") || userMessage.toLowerCase().includes("ip")) {
 			botResponse.textContent = "Fetching your IP Address...";
