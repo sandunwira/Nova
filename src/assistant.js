@@ -175,6 +175,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		} else if (userMessage.toLowerCase().includes("date") || userMessage.toLowerCase().includes("today's date") || userMessage.toLowerCase().includes("what's the date") || userMessage.toLowerCase().includes("tell me the date") || userMessage.toLowerCase().includes("what date is it") || userMessage.toLowerCase().includes("what's today's date")) {
 			botResponse.textContent = "Fetching the date...";
 			botResponse.textContent = "Today is " + getDate();
+		} else if (userMessage.toLowerCase().includes("calc") || userMessage.toLowerCase().includes("calculate") || userMessage.toLowerCase().includes("calculator") || userMessage.toLowerCase().includes("math")) {
+			const expression = userMessage.replace("calc", "").replace("calculate", "").replace("calculator", "").replace("math", "").trim();
+			botResponse.textContent = "Calculating...";
+			const result = calculateNumbers(expression);
+			botResponse.textContent = `The answer of ${expression} is: ${result}`;
 		} else if (userMessage.toLowerCase().includes("search") || userMessage.toLowerCase().includes("find") || userMessage.toLowerCase().includes("look up") || userMessage.toLowerCase().includes("what") || userMessage.toLowerCase().includes("who") || userMessage.toLowerCase().includes("when") || userMessage.toLowerCase().includes("where") || userMessage.toLowerCase().includes("why")) {
 			botResponse.textContent = "Searching the web...";
 			searchWeb(userMessage).then(snippetText => botResponse.textContent = snippetText).catch(error => botResponse.textContent = "Sorry, I couldn't find any relevant information.");
@@ -393,4 +398,17 @@ function getDate() {
 	}
 	let year = date.getFullYear();
 	return `${month} ${day}, ${year}`;
+}
+
+
+// function to calculate numbers
+function calculateNumbers(expression) {
+	try {
+		const result = new Function ('return ' + expression)();
+		return result;
+	}
+	catch (error) {
+		console.error('Error in calculateNumbers:', error);
+		throw error;
+	}
 }
