@@ -169,11 +169,16 @@ document.addEventListener('DOMContentLoaded', () => {
 		} else if (userMessage.toLowerCase().includes("weather")) {
 			botResponse.textContent = "Fetching the weather...";
 			getWeather().then(weatherDetails => botResponse.textContent = weatherDetails).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the weather data.");
+		} else if (userMessage.toLowerCase().includes("time") || userMessage.toLowerCase().includes("clock") || userMessage.toLowerCase().includes("current time") || userMessage.toLowerCase().includes("what's the time") || userMessage.toLowerCase().includes("what time is it") || userMessage.toLowerCase().includes("tell me the time")) {
+			botResponse.textContent = "Fetching the time...";
+			botResponse.textContent = "Current time is " + getTime();
+		} else if (userMessage.toLowerCase().includes("date") || userMessage.toLowerCase().includes("today's date") || userMessage.toLowerCase().includes("what's the date") || userMessage.toLowerCase().includes("tell me the date") || userMessage.toLowerCase().includes("what date is it") || userMessage.toLowerCase().includes("what's today's date")) {
+			botResponse.textContent = "Fetching the date...";
+			botResponse.textContent = "Today is " + getDate();
 		} else if (userMessage.toLowerCase().includes("search") || userMessage.toLowerCase().includes("find") || userMessage.toLowerCase().includes("look up") || userMessage.toLowerCase().includes("what") || userMessage.toLowerCase().includes("who") || userMessage.toLowerCase().includes("when") || userMessage.toLowerCase().includes("where") || userMessage.toLowerCase().includes("why")) {
 			botResponse.textContent = "Searching the web...";
 			searchWeb(userMessage).then(snippetText => botResponse.textContent = snippetText).catch(error => botResponse.textContent = "Sorry, I couldn't find any relevant information.");
-		}
-		else {
+		} else {
 			const response = findResponse(userMessage);
 			botResponse.textContent = response;
 		}
@@ -322,4 +327,70 @@ async function searchWeb(query) {
 		searchWeb(query);
 		throw error;
 	}
+}
+
+
+// function to get the time
+function getTime() {
+	let date = new Date();
+	let hours = date.getHours();
+	hours = hours - 12;
+	if (hours < 10) {
+		hours = '0' + hours;
+	}
+	let minutes = date.getMinutes();
+	if (minutes < 10) {
+		minutes = '0' + minutes;
+	}
+	let ampm = date.getHours() >= 12 ? 'pm' : 'am';
+	return `${hours}:${minutes}${ampm}`;
+}
+
+// function to get the date
+function getDate() {
+	let date = new Date();
+	let day = date.getDate();
+	if (day < 10) {
+		day = '0' + day;
+	}
+	let month = date.getMonth();
+	switch (month) {
+		case 0:
+			month = "January";
+			break;
+		case 1:
+			month = "February";
+			break;
+		case 2:
+			month = "March";
+			break;
+		case 3:
+			month = "April";
+			break;
+		case 4:
+			month = "May";
+			break;
+		case 5:
+			month = "June";
+			break;
+		case 6:
+			month = "July";
+			break;
+		case 7:
+			month = "August";
+			break;
+		case 8:
+			month = "September";
+			break;
+		case 9:
+			month = "October";
+			break;
+		case 10:
+			month = "November";
+			break;
+		case 11:
+			month = "December";
+	}
+	let year = date.getFullYear();
+	return `${month} ${day}, ${year}`;
 }
