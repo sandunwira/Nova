@@ -243,6 +243,19 @@
 		]
 	},
 	{
+		"intent": "fact",
+		"requests": [
+			"can you tell me a fact",
+			"tell me a fact",
+			"tell a fact",
+			"give me a fact",
+			"a fact",
+			"fact",
+			"random fact",
+			"random fact please"
+		]
+	},
+	{
 		"intent": "application",
 		"requests": [
 			"open"
