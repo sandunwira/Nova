@@ -38,6 +38,14 @@
 		]
 	},
 	{
+		"intent": "night",
+		"requests": [
+			"good night",
+			"night",
+			"good night to you"
+		]
+	},
+	{
 		"intent": "goodbye",
 		"requests": [
 			"goodbye",

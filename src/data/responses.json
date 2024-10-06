@@ -73,6 +73,37 @@
 		]
 	},
 	{
+		"intent": "night",
+		"responses": [
+			"Good night! Get some proper sleep.",
+			"Good night! Sweet dreams.",
+			"Night! Time to rest.",
+			"Hello night! Ready to wind down?",
+			"Good night! Wishing you peaceful sleep.",
+			"Night! Hope you have a restful sleep.",
+			"Hello! Ready for a good night's rest?",
+			"Good night! Sleep tight.",
+			"Night! Time to recharge for tomorrow.",
+			"Hello! Wishing you a serene night.",
+			"Good night! Pleasant dreams.",
+			"Night! Don't let the bed bugs bite!",
+			"Hello! Hope you have a cozy night.",
+			"Good night! Rest well.",
+			"Night! See you in the morning.",
+			"Hello! Hope you have a relaxing night.",
+			"Good night! Dream big.",
+			"Night! Here's to a peaceful sleep.",
+			"Hello! Time to get some shut-eye.",
+			"Good night! See you on the flip side.",
+			"Night! Rest up for tomorrow.",
+			"Hello! Have a wonderful night.",
+			"Good night! May your dreams be delightful.",
+			"Night! Rest easy.",
+			"Hello! Sleep well and recharge.",
+			"Good night! I'll be here when you wake up."
+		]
+	},
+	{
 		"intent": "goodbye",
 		"responses": [
 			"Goodbye! Have a wonderful day!",
