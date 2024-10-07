@@ -435,6 +435,15 @@
 		"path": "C:\\Windows\\System32\\UserAccountControlSettings.exe"
 	},
 	{
+		"name": "Windows Defender",
+		"keywords": [
+			"windows defender",
+			"defender"
+		],
+		"icon": "Windowsdefender.png",
+		"path": "windowsdefender://"
+	},
+	{
 		"name": "Windows Defender Firewall with Advanced Security",
 		"keywords": [
 			"windows defender firewall with advanced security",

@@ -4,6 +4,8 @@
 use tauri::Manager;
 use std::env;
 use std::fs;
+use std::process::Command;
+use std::path::Path;
 
 fn main() {
   tauri::Builder::default()
@@ -18,21 +20,27 @@ fn main() {
 
 #[tauri::command]
 fn open_application(destination: String) -> Result<(), String> {
-    use std::process::Command;
-    use std::path::Path;
-
+  // Check if the destination is a protocol
+  if destination.contains("://") {
+    // Use the `start` command to open the protocol
+    Command::new("cmd")
+      .args(&["/C", "start", &destination])
+      .spawn()
+      .map_err(|e| format!("Failed to open application: {}", e))?;
+  } else {
     // Use the provided destination path directly
     let application_path = Path::new(&destination);
 
-    // Check if the chrome.exe path exists
+    // Check if the application path exists
     if !application_path.exists() {
         return Err(format!("The specified path does not exist: {:?}", application_path));
     }
 
-    // Attempt to launch Chromium
+    // Attempt to launch the application
     Command::new(application_path)
         .spawn()
         .map_err(|e| format!("Failed to open application: {}", e))?;
+  }
 
-    Ok(())
+  Ok(())
 }
