@@ -292,11 +292,14 @@
 	{
 		"intent": "tasks",
 		"responses": [
-			"I can do event plans, talk, tell a joke, troubleshoot your pc and many other things for you!",
-			"I'm here to assist you with your daily tasks such as event planning, troubleshoot your pc and many more!",
-			"I can help you with event planning, troubleshooting your pc and many other tasks!",
-			"I can assist you with event planning, troubleshooting your pc and many other tasks!",
-			"I'm here to help you with event planning, troubleshooting your pc and many other tasks!"
+			"I'm here to help you with your daily tasks, open applications, answer questions, and provide information. I'm still learning, but I'll do my best to assist you.",
+			"I'm your virtual assistant, ready to help with tasks, open applications, answer questions, and provide information. While I'm still in beta, I'll do my best to assist you.",
+			"I can help you with everything from scheduling tasks to playing games. I'm still learning, but I'll do my best to answer your questions.",
+			"I'm here to offer advice, answer questions, and assist you with your daily tasks. I'm constantly learning and improving.",
+			"I'm your all-in-one assistant, ready to help with tasks, open applications, information, and entertainment. I'm still learning, but I'll do my best to assist you.",
+			"I'm here to offer advice, answer questions, open applications, and help with your daily tasks. I'm still learning, but I'll do my best to assist you.",
+			"I'm designed to assist you with your needs. Whether it's scheduling tasks, open applications, finding information, or playing games, I'm here to help.",
+			"I'm here to offer advice, answer questions, and assist you with your daily tasks. I'm constantly evolving to better serve your needs."
 		]
 	},
 	{
