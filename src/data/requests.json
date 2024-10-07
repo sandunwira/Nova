@@ -80,6 +80,13 @@
 		]
 	},
 	{
+		"intent": "noresponse",
+		"requests": [
+			"",
+			" "
+		]
+	},
+	{
 		"intent": "understanding",
 		"requests": [
 			"now you get it",

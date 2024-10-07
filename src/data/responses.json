@@ -174,6 +174,40 @@
 		]
 	},
 	{
+		"intent": "noresponse",
+		"responses": [
+			"Sorry, I didn't understand you.",
+			"Please go on.",
+			"Not sure I understand that.",
+			"Please don't hesitate to talk to me.",
+			"Could you provide more details?",
+			"I'm not quite following. Could you explain further?",
+			"I'm here. What else can I help with?",
+			"I'm listening. What else is on your mind?",
+			"Please elaborate on that.",
+			"Could you clarify?",
+			"Feel free to ask me anything.",
+			"I'm ready to assist. What's next?",
+			"Sorry, I'm not getting it. Can you rephrase?",
+			"I'm all ears. What's up?",
+			"Let's try that again. What do you mean?",
+			"Sorry, could you repeat that?",
+			"I'm here to help. What else do you need?",
+			"Please continue. I'm here for you.",
+			"I'm here to assist. What can I do for you?",
+			"Not quite following. Could you provide more information?",
+			"I'm here to listen. Please share more.",
+			"I'm still here. What else can I assist with?",
+			"I may need more context. Can you explain further?",
+			"Let's dive deeper into that. What's on your mind?",
+			"Sorry, I'm not sure I understand. Can you explain differently?",
+			"I'm here to assist you. Please continue.",
+			"Please continue. I'm here to help.",
+			"I'm listening. What more can I do for you?",
+			"I'm here to assist. Let's work through this together."
+		]
+	},
+	{
 		"intent": "understanding",
 		"responses": [
 			"Yes, I understand. Is there anything else you'd like to discuss?",
