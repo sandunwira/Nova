@@ -1,190 +1,194 @@
 const { appWindow } = window.__TAURI__.window;
 
-document.addEventListener('DOMContentLoaded', () => {
-	const chatForm = document.getElementById('chatForm');
-	const chatMessage = document.getElementById('chatMessage');
-	const botResponse = document.getElementById('botResponse');
+const chatForm = document.getElementById('chatForm');
+const chatMessage = document.getElementById('chatMessage');
+const botResponse = document.getElementById('botResponse');
 
-	let requestsData = [];
-	let responsesData = [];
-	let applicationsData = [];
-
-	// Fetch the JSON files
-	fetch('data/requests.json')
-		.then(response => response.json())
-		.then(data => {
-			requestsData = data;
-		});
-
-	fetch('data/responses.json')
-		.then(response => response.json())
-		.then(data => {
-			responsesData = data;
-		});
-
-	fetch('data/applications.json')
-		.then(response => response.json())
-		.then(data => {
-			applicationsData = data;
-		});
-
-	// Function to calculate Levenshtein distance
-	function levenshtein(a, b) {
-		const matrix = [];
-
-		for (let i = 0; i <= b.length; i++) {
-			matrix[i] = [i];
-		}
-
-		for (let j = 0; j <= a.length; j++) {
-			matrix[0][j] = j;
-		}
-
-		for (let i = 1; i <= b.length; i++) {
-			for (let j = 1; j <= a.length; j++) {
-				if (b.charAt(i - 1) === a.charAt(j - 1)) {
-					matrix[i][j] = matrix[i - 1][j - 1];
-				} else {
-					matrix[i][j] = Math.min(
-						matrix[i - 1][j - 1] + 1,
-						Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1)
-					);
-				}
-			}
-		}
-
-		return matrix[b.length][a.length];
-	}
-
-	// Function to find the relevant response for a given request keyword
-	function findResponse(requestKeyword) {
-		// Find the intent for the given request keyword
-		let intent = null;
-		let minDistance = Infinity;
-		let closestRequest = null;
-
-		for (const request of requestsData) {
-			for (const req of request.requests) {
-				const distance = levenshtein(req.toLowerCase(), requestKeyword.toLowerCase());
-				if (distance < minDistance) {
-					minDistance = distance;
-					closestRequest = req;
-					intent = request.intent;
-				}
-			}
-		}
-
-		// Log the closest request keyword
-		console.log(`Matched Intent: ${intent}`);
-
-		// If intent is found, find the relevant response
-		if (intent) {
-			for (const response of responsesData) {
-				if (response.intent === intent) {
-					// Return a random response from the matched intent
-					const responses = response.responses;
-					if (responses) {
-						return responses[Math.floor(Math.random() * responses.length)];
-					} else {
-						console.error('Responses array is undefined for intent:', intent);
-					}
-				}
-			}
-		}
-
-		// Return a default response if no match is found
-		return "Sorry, I don't understand.";
-	}
-
-	let applicationPrefix = [
-		"open ",
-		"launch ",
-		"run ",
-		"start ",
-		"execute "
-	]
-
-	// Function to find the application name from the user message
-	function findApplication(requestKeyword) {
-		let applicationName = null;
-		let matchedApplicationName = null;
-		let applicationPath = null;
-		for (const prefix of applicationPrefix) {
-			if (requestKeyword.startsWith(prefix)) {
-				applicationName = requestKeyword.replace(prefix, '').trim();
-				const matchedApplication = applicationsData.find(app => 
-					app.keywords && app.keywords.some(keyword => keyword.toLowerCase() === applicationName.toLowerCase())
-				);
-				if (matchedApplication) {
-					matchedApplicationName = matchedApplication.name;
-					applicationPath = matchedApplication.path;
-					console.log(`Detected Application Name: ${matchedApplication.name}`);
-				}
-			}
-		}
-
-		return { applicationName: matchedApplicationName, applicationPath };
-	}
-
-	// Open the application if the user message contains the application name
-	async function openApplication(applicationPath, applicationName) {
-		try {
-			await window.__TAURI__.invoke('open_application', {
-				destination: applicationPath
-			});
-			botResponse.textContent = `${applicationName} launched successfully. Enjoy!`;
-		} catch (error) {
-			console.error('Failed to open application:', error);
-			new Notification('Failed to open the application', {
-				body: 'Failed to open the application. Please try again later',
-				sound: 'Default'
-			});
-			botResponse.textContent = `Failed to open ${applicationName}. Please try again later.`;
-		}
-	}
+let requestsData = [];
+let responsesData = [];
+let applicationsData = [];
 
 
-	chatForm.addEventListener('submit', function (event) {
-		event.preventDefault();
-		const userMessage = chatMessage.value.trim();
-		if (userMessage.startsWith("open") || userMessage.startsWith("launch") || userMessage.startsWith("run") || userMessage.startsWith("start") || userMessage.startsWith("execute")) {
-			const { applicationName, applicationPath } = findApplication(userMessage);
-			botResponse.textContent = "Launching " + applicationName + "...";
-			if (applicationPath) {
-				openApplication(applicationPath, applicationName);
-			} else {
-				console.log("No application name detected");
-				botResponse.textContent = "Sorry, I couldn't detect any applications by that name.";
-			}
-		} else if (userMessage.toLowerCase().includes("search")) {
-			botResponse.textContent = "Searching the web...";
-			searchWeb(userMessage).then(snippetText => botResponse.textContent = snippetText).catch(error => botResponse.textContent = "Sorry, I couldn't find any relevant information. Please try again in a bit or try a different search query.");
-		} else if (userMessage.toLowerCase().includes("random movie") || userMessage.toLowerCase().includes("movie recommendation") || userMessage.toLowerCase().includes("suggest me a movie") || userMessage.toLowerCase().includes("suggest a movie")) {
-			botResponse.textContent = "Searching for a movie...";
-			getRandomMovie();
-		} else if (userMessage.toLowerCase().includes("ip address") || userMessage.toLowerCase().includes("ip")) {
-			botResponse.textContent = "Fetching your IP Address...";
-			getIPAddress().then(ipaddress => botResponse.textContent = "Your IP Address is: " + ipaddress).catch(error => botResponse.textContent = "Sorry, I couldn't fetch your IP Address.");
-		} else if (userMessage.toLowerCase().includes("weather")) {
-			botResponse.textContent = "Fetching the weather...";
-			getWeather().then(weatherDetails => botResponse.textContent = weatherDetails).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the weather data.");
-		} else if (userMessage.toLowerCase().includes("time") || userMessage.toLowerCase().includes("clock") || userMessage.toLowerCase().includes("current time") || userMessage.toLowerCase().includes("what's the time") || userMessage.toLowerCase().includes("what time is it") || userMessage.toLowerCase().includes("tell me the time")) {
-			botResponse.textContent = "Fetching the time...";
-			botResponse.textContent = "Current time is " + getTime();
-		} else if (userMessage.toLowerCase().includes("date") || userMessage.toLowerCase().includes("today's date") || userMessage.toLowerCase().includes("what's the date") || userMessage.toLowerCase().includes("tell me the date") || userMessage.toLowerCase().includes("what date is it") || userMessage.toLowerCase().includes("what's today's date")) {
-			botResponse.textContent = "Fetching the date...";
-			botResponse.textContent = "Today is " + getDate();
-		} else if (userMessage.toLowerCase().includes("calc") || userMessage.toLowerCase().includes("calculate") || userMessage.toLowerCase().includes("calculator") || userMessage.toLowerCase().includes("math")) {
-			const expression = userMessage.replace("calc", "").replace("calculate", "").replace("calculator", "").replace("math", "").trim();
-			botResponse.textContent = "Calculating...";
-			const result = calculateNumbers(expression);
-			botResponse.textContent = `The answer of ${expression} is: ${result}`;
-		} else {
-			const response = findResponse(userMessage);
-			botResponse.textContent = response;
-		}
+// Fetch the JSON files
+fetch('data/requests.json')
+	.then(response => response.json())
+	.then(data => {
+		requestsData = data;
 	});
+
+fetch('data/responses.json')
+	.then(response => response.json())
+	.then(data => {
+		responsesData = data;
+	});
+
+fetch('data/applications.json')
+	.then(response => response.json())
+	.then(data => {
+		applicationsData = data;
+	});
+
+
+
+chatForm.addEventListener('submit', function (event) {
+	event.preventDefault();
+	const userMessage = chatMessage.value.trim();
+
+	if (userMessage.startsWith("open") || userMessage.startsWith("launch") || userMessage.startsWith("run") || userMessage.startsWith("start") || userMessage.startsWith("execute")) {
+		const { applicationName, applicationPath } = findApplication(userMessage);
+		botResponse.textContent = "Launching " + applicationName + "...";
+
+		if (applicationPath) {
+			openApplication(applicationPath, applicationName);
+		} else {
+			console.log("No application name detected");
+			botResponse.textContent = "Sorry, I couldn't detect any applications by that name.";
+		}
+	} else if (userMessage.toLowerCase().includes("search")) {
+		botResponse.textContent = "Searching the web...";
+		searchWeb(userMessage).then(snippetText => botResponse.textContent = snippetText).catch(error => botResponse.textContent = "Sorry, I couldn't find any relevant information. Please try again in a bit or try a different search query.");
+	} else if (userMessage.toLowerCase().includes("random movie") || userMessage.toLowerCase().includes("movie recommendation") || userMessage.toLowerCase().includes("suggest me a movie") || userMessage.toLowerCase().includes("suggest a movie")) {
+		botResponse.textContent = "Searching for a movie...";
+		getRandomMovie();
+	} else if (userMessage.toLowerCase().includes("ip address") || userMessage.toLowerCase().includes("ip")) {
+		botResponse.textContent = "Fetching your IP Address...";
+		getIPAddress().then(ipaddress => botResponse.textContent = "Your IP Address is: " + ipaddress).catch(error => botResponse.textContent = "Sorry, I couldn't fetch your IP Address.");
+	} else if (userMessage.toLowerCase().includes("weather")) {
+		botResponse.textContent = "Fetching the weather...";
+		getWeather().then(weatherDetails => botResponse.textContent = weatherDetails).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the weather data.");
+	} else if (userMessage.toLowerCase().includes("time") || userMessage.toLowerCase().includes("clock") || userMessage.toLowerCase().includes("current time") || userMessage.toLowerCase().includes("what's the time") || userMessage.toLowerCase().includes("what time is it") || userMessage.toLowerCase().includes("tell me the time")) {
+		botResponse.textContent = "Fetching the time...";
+		botResponse.textContent = "Current time is " + getTime();
+	} else if (userMessage.toLowerCase().includes("date") || userMessage.toLowerCase().includes("today's date") || userMessage.toLowerCase().includes("what's the date") || userMessage.toLowerCase().includes("tell me the date") || userMessage.toLowerCase().includes("what date is it") || userMessage.toLowerCase().includes("what's today's date")) {
+		botResponse.textContent = "Fetching the date...";
+		botResponse.textContent = "Today is " + getDate();
+	} else if (userMessage.toLowerCase().includes("calc") || userMessage.toLowerCase().includes("calculate") || userMessage.toLowerCase().includes("calculator") || userMessage.toLowerCase().includes("math")) {
+		const expression = userMessage.replace("calc", "").replace("calculate", "").replace("calculator", "").replace("math", "").trim();
+		botResponse.textContent = "Calculating...";
+		const result = calculateNumbers(expression);
+		botResponse.textContent = `The answer of ${expression} is: ${result}`;
+	} else {
+		const response = findResponse(userMessage);
+		botResponse.textContent = response;
+	}
 });
+
+
+
+// Function to calculate Levenshtein distance
+function levenshtein(a, b) {
+	const matrix = [];
+
+	for (let i = 0; i <= b.length; i++) {
+		matrix[i] = [i];
+	}
+
+	for (let j = 0; j <= a.length; j++) {
+		matrix[0][j] = j;
+	}
+
+	for (let i = 1; i <= b.length; i++) {
+		for (let j = 1; j <= a.length; j++) {
+			if (b.charAt(i - 1) === a.charAt(j - 1)) {
+				matrix[i][j] = matrix[i - 1][j - 1];
+			} else {
+				matrix[i][j] = Math.min(
+					matrix[i - 1][j - 1] + 1,
+					Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1)
+				);
+			}
+		}
+	}
+
+	return matrix[b.length][a.length];
+}
+
+
+
+// Function to find the relevant response for a given request keyword
+function findResponse(requestKeyword) {
+	// Find the intent for the given request keyword
+	let intent = null;
+	let minDistance = Infinity;
+	let closestRequest = null;
+
+	for (const request of requestsData) {
+		for (const req of request.requests) {
+			const distance = levenshtein(req.toLowerCase(), requestKeyword.toLowerCase());
+			if (distance < minDistance) {
+				minDistance = distance;
+				closestRequest = req;
+				intent = request.intent;
+			}
+		}
+	}
+
+	// Log the closest request keyword
+	console.log(`Matched Intent: ${intent}`);
+
+	// If intent is found, find the relevant response
+	if (intent) {
+		for (const response of responsesData) {
+			if (response.intent === intent) {
+				// Return a random response from the matched intent
+				const responses = response.responses;
+				if (responses) {
+					return responses[Math.floor(Math.random() * responses.length)];
+				} else {
+					console.error('Responses array is undefined for intent:', intent);
+				}
+			}
+		}
+	}
+
+	// Return a default response if no match is found
+	return "Sorry, I don't understand.";
+}
+
+
+
+let applicationPrefix = ["open ", "launch ", "run ", "start ", "execute "]
+
+// Function to find the application name from the user message
+function findApplication(requestKeyword) {
+	let applicationName = null;
+	let matchedApplicationName = null;
+	let applicationPath = null;
+
+	for (const prefix of applicationPrefix) {
+		if (requestKeyword.startsWith(prefix)) {
+			applicationName = requestKeyword.replace(prefix, '').trim();
+			const matchedApplication = applicationsData.find(app =>
+				app.keywords && app.keywords.some(keyword => keyword.toLowerCase() === applicationName.toLowerCase())
+			);
+			if (matchedApplication) {
+				matchedApplicationName = matchedApplication.name;
+				applicationPath = matchedApplication.path;
+				console.log(`Detected Application Name: ${matchedApplication.name}`);
+			}
+		}
+	}
+
+	return { applicationName: matchedApplicationName, applicationPath };
+}
+
+// Open the application if the user message contains the application name
+async function openApplication(applicationPath, applicationName) {
+	try {
+		await window.__TAURI__.invoke('open_application', {
+			destination: applicationPath
+		});
+		botResponse.textContent = `${applicationName} launched successfully. Enjoy!`;
+	} catch (error) {
+		console.error('Failed to open application:', error);
+		new Notification('Failed to open the application', {
+			body: 'Failed to open the application. Please try again later',
+			sound: 'Default'
+		});
+		botResponse.textContent = `Failed to open ${applicationName}. Please try again later.`;
+	}
+}
+
 
 
 // function to get a random movie
@@ -239,6 +243,7 @@ async function getIPAddress() {
 }
 
 
+
 // function to get the weather
 async function getWeather() {
 	try {
@@ -257,6 +262,7 @@ async function getWeather() {
 		console.error('Error in getWeather:', error);
 	}
 }
+
 
 
 // function to search the web
@@ -338,6 +344,7 @@ async function searchWeb(query) {
 }
 
 
+
 // function to get the time
 function getTime() {
 	let date = new Date();
@@ -354,6 +361,8 @@ function getTime() {
 	return `${hours}:${minutes}${ampm}`;
 }
 
+
+
 // function to get the date
 function getDate() {
 	let date = new Date();
@@ -363,51 +372,29 @@ function getDate() {
 	}
 	let month = date.getMonth();
 	switch (month) {
-		case 0:
-			month = "January";
-			break;
-		case 1:
-			month = "February";
-			break;
-		case 2:
-			month = "March";
-			break;
-		case 3:
-			month = "April";
-			break;
-		case 4:
-			month = "May";
-			break;
-		case 5:
-			month = "June";
-			break;
-		case 6:
-			month = "July";
-			break;
-		case 7:
-			month = "August";
-			break;
-		case 8:
-			month = "September";
-			break;
-		case 9:
-			month = "October";
-			break;
-		case 10:
-			month = "November";
-			break;
-		case 11:
-			month = "December";
+		case 0: month = "January"; break;
+		case 1: month = "February"; break;
+		case 2: month = "March"; break;
+		case 3: month = "April"; break;
+		case 4: month = "May"; break;
+		case 5: month = "June"; break;
+		case 6: month = "July"; break;
+		case 7: month = "August"; break;
+		case 8: month = "September"; break;
+		case 9: month = "October"; break;
+		case 10: month = "November"; break;
+		case 11: month = "December"; break;
 	}
 	let year = date.getFullYear();
 	return `${month} ${day}, ${year}`;
 }
 
 
+
 // function to calculate numbers
 function calculateNumbers(expression) {
 	try {
-		const result = new Function ('return ' + expression)();
+		const result = new Function('return ' + expression)();
 		return result;
 	}
 	catch (error) {
