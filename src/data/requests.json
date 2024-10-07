@@ -87,6 +87,21 @@
 		]
 	},
 	{
+		"intent": "neutral",
+		"requests": [
+			"nothing",
+			"nothing much",
+			"not much",
+			"just chillin'",
+			"same old, same old",
+			"nothing new",
+			"just hanging out",
+			"just taking it easy",
+			"nothing special",
+			"just the usual"
+		]
+	},
+	{
 		"intent": "understanding",
 		"requests": [
 			"now you get it",

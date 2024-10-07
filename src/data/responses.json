@@ -208,6 +208,39 @@
 		]
 	},
 	{
+		"intent": "neutral",
+		"responses": [
+			"Oh I see. Do you want to talk about something?",
+			"Got it. Anything on your mind?",
+			"Understood. Is there anything you'd like to discuss?",
+			"I hear you. How's your day going otherwise?",
+			"Okay. Anything else you'd like to share?",
+			"Fair enough. Is there anything you're curious about?",
+			"Noted. Is there something specific you'd like to know?",
+			"I see. Is there a topic you'd like to explore?",
+			"Gotcha. Is there something you'd like to talk about?",
+			"Alright. Anything else happening in your world?",
+			"Got it. How are you feeling today?",
+			"I understand. What else is going on with you?",
+			"Okay. Is there anything exciting you'd like to share?",
+			"I see. How's your day been so far?",
+			"Got it. What's on your mind?",
+			"Understood. Is there something you'd like to know more about?",
+			"Okay. Is there a particular topic you're interested in?",
+			"I hear you. Is there anything you'd like to ask?",
+			"Noted. How can I assist you today?",
+			"Alright. Anything else you'd like to mention?",
+			"I see. Is there a specific question you have?",
+			"Got it. How can I help you today?",
+			"Understood. Is there something specific you'd like to talk about?",
+			"Okay. How's everything else going?",
+			"I hear you. What else is happening in your day?",
+			"Got it. Anything else you want to share?",
+			"Understood. Is there anything else you'd like to discuss?",
+			"Okay. What's been on your mind lately?"
+		]
+	},
+	{
 		"intent": "understanding",
 		"responses": [
 			"Yes, I understand. Is there anything else you'd like to discuss?",
