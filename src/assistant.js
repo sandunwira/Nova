@@ -105,6 +105,20 @@ function levenshtein(a, b) {
 
 
 
+// Function to replace dynamic variables in the response
+function replaceDynamicVariables(response) {
+	const customData = {
+		// Custom data
+		name: "Adam",
+	};
+
+	return response.replace(/\[([^\]]+)\]/g, (match, variable) => {
+		return customData[variable] || match;
+	});
+}
+
+
+
 // Function to find the relevant response for a given request keyword
 function findResponse(requestKeyword) {
 	// Find the intent for the given request keyword
@@ -133,7 +147,10 @@ function findResponse(requestKeyword) {
 				// Return a random response from the matched intent
 				const responses = response.responses;
 				if (responses) {
-					return responses[Math.floor(Math.random() * responses.length)];
+					let selectedResponse = responses[Math.floor(Math.random() * responses.length)];
+					// Replace dynamic variables with custom data
+					selectedResponse = replaceDynamicVariables(selectedResponse);
+					return selectedResponse;
 				} else {
 					console.error('Responses array is undefined for intent:', intent);
 				}
@@ -142,7 +159,7 @@ function findResponse(requestKeyword) {
 	}
 
 	// Return a default response if no match is found
-	return "Sorry, I don't understand.";
+	return 'Sorry, I don\'t understand that. Please try again.';
 }
 
 
@@ -323,8 +340,8 @@ async function searchWeb(query) {
 			}
 		}
 
-		// Remove citation elements such as "[1]" and "[a]"
-		sentences = sentences.map(sentence => sentence.replace(/\[[a-zA-Z0-9]+\]/g, ''));
+		// Remove citation elements such as "[1]" or "[a]", "[ 1 ]" or "[ a ]" from the sentences
+		sentences = sentences.map(sentence => sentence.replace(/\[[a-zA-Z0-9]+\]/g, '').replace(/\[[ a-zA-Z0-9 ]+\]/g, ''));
 
 		// Join the sentences back together
 		snippetText = sentences.join('. ');
