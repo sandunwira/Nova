@@ -108,32 +108,38 @@ document.addEventListener('DOMContentLoaded', () => {
 	function findApplication(requestKeyword) {
 		let applicationName = null;
 		let matchedApplicationName = null;
+		let applicationPath = null;
 		for (const prefix of applicationPrefix) {
 			if (requestKeyword.startsWith(prefix)) {
 				applicationName = requestKeyword.replace(prefix, '').trim();
 				const matchedApplication = applicationsData.find(app => 
 					app.keywords && app.keywords.some(keyword => keyword.toLowerCase() === applicationName.toLowerCase())
 				);
-				matchedApplicationName = matchedApplication.name;
-				console.log(`Detected Application Name: ${matchedApplication.name}`);
+				if (matchedApplication) {
+					matchedApplicationName = matchedApplication.name;
+					applicationPath = matchedApplication.path;
+					console.log(`Detected Application Name: ${matchedApplication.name}`);
+				}
 			}
 		}
 
-		return matchedApplicationName;
+		return { applicationName: matchedApplicationName, applicationPath };
 	}
 
 	// Open the application if the user message contains the application name
-	async function openApplication(applicationPath) {
+	async function openApplication(applicationPath, applicationName) {
 		try {
 			await window.__TAURI__.invoke('open_application', {
 				destination: applicationPath
 			});
+			botResponse.textContent = `${applicationName} launched successfully. Enjoy!`;
 		} catch (error) {
 			console.error('Failed to open application:', error);
-			new Notification('Open Failed', {
+			new Notification('Failed to open the application', {
 				body: 'Failed to open the application. Please try again later',
 				sound: 'Default'
 			});
+			botResponse.textContent = `Failed to open ${applicationName}. Please try again later.`;
 		}
 	}
 
@@ -142,27 +148,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		event.preventDefault();
 		const userMessage = chatMessage.value.trim();
 		if (userMessage.startsWith("open") || userMessage.startsWith("launch") || userMessage.startsWith("run") || userMessage.startsWith("start") || userMessage.startsWith("execute")) {
-			const response = findResponse(userMessage);
-			const applicationName = findApplication(userMessage);
-			if (applicationName) {
-				botResponse.textContent = "Opening " + applicationName + "...";
-				const matchedApplication = applicationsData.find(app => 
-					app.keywords && app.keywords.some(keyword => keyword.toLowerCase() === applicationName.toLowerCase())
-				);
-				if (matchedApplication) {
-					openApplication(matchedApplication.path);
-					console.log(`Opening application: ${matchedApplication.name}`);
-				} else {
-					console.log("Application not found in data");
-					botResponse.textContent = "Sorry, I couldn't find the application in the data.";
-				}
+			const { applicationName, applicationPath } = findApplication(userMessage);
+			botResponse.textContent = "Launching " + applicationName + "...";
+			if (applicationPath) {
+				openApplication(applicationPath, applicationName);
 			} else {
 				console.log("No application name detected");
 				botResponse.textContent = "Sorry, I couldn't detect any applications by that name.";
 			}
 		} else if (userMessage.toLowerCase().includes("search")) {
 			botResponse.textContent = "Searching the web...";
-			searchWeb(userMessage).then(snippetText => botResponse.textContent = snippetText).catch(error => botResponse.textContent = "Sorry, I couldn't find any relevant information.");
+			searchWeb(userMessage).then(snippetText => botResponse.textContent = snippetText).catch(error => botResponse.textContent = "Sorry, I couldn't find any relevant information. Please try again in a bit or try a different search query.");
 		} else if (userMessage.toLowerCase().includes("random movie") || userMessage.toLowerCase().includes("movie recommendation") || userMessage.toLowerCase().includes("suggest me a movie") || userMessage.toLowerCase().includes("suggest a movie")) {
 			botResponse.textContent = "Searching for a movie...";
 			getRandomMovie();
@@ -284,7 +280,7 @@ async function searchWeb(query) {
 
 		// Priority 1: Find the element with the ID 'zero_click_abstract'
 		let snippetElement = doc.getElementById('zero_click_abstract');
-		let snippetText = 'Sorry, I couldn\'t find any relevant information.';
+		let snippetText = 'Sorry, I couldn\'t find any relevant information. Please try again in a bit or try a different search query.';
 
 		if (snippetElement) {
 			snippetText = snippetElement.innerText;
@@ -327,13 +323,16 @@ async function searchWeb(query) {
 		// Join the sentences back together
 		snippetText = sentences.join('. ');
 
+		if (snippetText.length === 0) {
+			snippetText = 'Sorry, I couldn\'t find any relevant information. Please try again in a bit or try a different search query.';
+		}
+
 		console.log('Sanitized snippet text: ' + snippetText);
 
 		return snippetText;
 	}
 	catch (error) {
 		console.error('Error fetching or parsing HTML:', error);
-		searchWeb(query);
 		throw error;
 	}
 }
