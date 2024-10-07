@@ -160,6 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				console.log("No application name detected");
 				botResponse.textContent = "Sorry, I couldn't detect any applications by that name.";
 			}
+		} else if (userMessage.toLowerCase().includes("search")) {
+			botResponse.textContent = "Searching the web...";
+			searchWeb(userMessage).then(snippetText => botResponse.textContent = snippetText).catch(error => botResponse.textContent = "Sorry, I couldn't find any relevant information.");
 		} else if (userMessage.toLowerCase().includes("random movie") || userMessage.toLowerCase().includes("movie recommendation") || userMessage.toLowerCase().includes("suggest me a movie") || userMessage.toLowerCase().includes("suggest a movie")) {
 			botResponse.textContent = "Searching for a movie...";
 			getRandomMovie();
@@ -180,9 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			botResponse.textContent = "Calculating...";
 			const result = calculateNumbers(expression);
 			botResponse.textContent = `The answer of ${expression} is: ${result}`;
-		} else if (userMessage.toLowerCase().includes("search")) {
-			botResponse.textContent = "Searching the web...";
-			searchWeb(userMessage).then(snippetText => botResponse.textContent = snippetText).catch(error => botResponse.textContent = "Sorry, I couldn't find any relevant information.");
 		} else {
 			const response = findResponse(userMessage);
 			botResponse.textContent = response;
