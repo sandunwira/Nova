@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			botResponse.textContent = "Calculating...";
 			const result = calculateNumbers(expression);
 			botResponse.textContent = `The answer of ${expression} is: ${result}`;
-		} else if (userMessage.toLowerCase().includes("search") || userMessage.toLowerCase().includes("find") || userMessage.toLowerCase().includes("look up") || userMessage.toLowerCase().includes("what") || userMessage.toLowerCase().includes("who") || userMessage.toLowerCase().includes("when") || userMessage.toLowerCase().includes("where") || userMessage.toLowerCase().includes("why")) {
+		} else if (userMessage.toLowerCase().includes("search")) {
 			botResponse.textContent = "Searching the web...";
 			searchWeb(userMessage).then(snippetText => botResponse.textContent = snippetText).catch(error => botResponse.textContent = "Sorry, I couldn't find any relevant information.");
 		} else {
@@ -265,6 +265,7 @@ async function getWeather() {
 
 // function to search the web
 async function searchWeb(query) {
+	query = query.replace('search ', '').trim();
 	const proxyUrl = 'https://api.allorigins.win/get?url=';
 	const targetUrl = encodeURIComponent(`https://html.duckduckgo.com/html/?q=${query}`);
 	const url = proxyUrl + targetUrl;
@@ -319,6 +320,9 @@ async function searchWeb(query) {
 				break;
 			}
 		}
+
+		// Remove citation elements such as "[1]" and "[a]"
+		sentences = sentences.map(sentence => sentence.replace(/\[[a-zA-Z0-9]+\]/g, ''));
 
 		// Join the sentences back together
 		snippetText = sentences.join('. ');
