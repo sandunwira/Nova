@@ -6,7 +6,7 @@
 			"calc"
 		],
 		"icon": "calc.png",
-		"path": "C:\\Windows\\System32\\calc.exe"
+		"path": "calculator:///"
 	},
 	{
 		"name": "Character Map",
@@ -130,6 +130,15 @@
 		"path": "C:\\Windows\\explorer.exe"
 	},
 	{
+		"name": "Feedback Hub",
+		"keywords": [
+			"feedback hub",
+			"feedback"
+		],
+		"icon": "FeedbackHub.png",
+		"path": "feedback-hub:///"
+	},
+	{
 		"name": "Bluetooth File Transfer",
 		"keywords": [
 			"bluetooth file transfer",
@@ -164,6 +173,14 @@
 		"path": "C:\\Windows\\System32\\mblctr.exe"
 	},
 	{
+		"name": "Camera",
+		"keywords": [
+			"camera"
+		],
+		"icon": "camera.png",
+		"path": "microsoft.windows.camera:///"
+	},
+	{
 		"name": "Windows Malicious Software Removal Tool",
 		"keywords": [
 			"windows malicious software removal tool",
@@ -171,6 +188,211 @@
 		],
 		"icon": "MRT.png",
 		"path": "C:\\Windows\\System32\\MRT.exe"
+	},
+	{
+		"name": "Microsoft Access",
+		"keywords": [
+			"microsoft access",
+			"access"
+		],
+		"icon": "MSACCESS.png",
+		"path": "msaccess.exe"
+	},
+	{
+		"name": "Action Center",
+		"keywords": [
+			"action center"
+		],
+		"icon": "ms-actioncenter.png",
+		"path": "ms-actioncenter:///"
+	},
+	{
+		"name": "Available Networks",
+		"keywords": [
+			"available networks",
+			"networks"
+		],
+		"icon": "ms-availablenetworks.png",
+		"path": "ms-availablenetworks:///"
+	},
+	{
+		"name": "Clock",
+		"keywords": [
+			"clock"
+		],
+		"icon": "ms-clock.png",
+		"path": "ms-clock:///"
+	},
+	{
+		"name": "Dev Home",
+		"keywords": [
+			"dev home",
+			"devhome"
+		],
+		"icon": "ms-devhome.png",
+		"path": "ms-devhome:///"
+	},
+	{
+		"name": "Microsoft Excel",
+		"keywords": [
+			"microsoft excel",
+			"excel"
+		],
+		"icon": "msexcel.png",
+		"path": "excel.exe"
+	},
+	{
+		"name": "Tips",
+		"keywords": [
+			"tips"
+		],
+		"icon": "ms-get-started.png",
+		"path": "ms-get-started:///"
+	},
+	{
+		"name": "Media Player",
+		"keywords": [
+			"media player",
+			"player"
+		],
+		"icon": "ms-media-player.png",
+		"path": "ms-media-player:///"
+	},
+	{
+		"name": "Phone Link",
+		"keywords": [
+			"phone link",
+			"phonelink"
+		],
+		"icon": "ms-phone.png",
+		"path": "ms-phone:///"
+	},
+	{
+		"name": "Microsoft PowerPoint",
+		"keywords": [
+			"microsoft powerpoint",
+			"powerpoint"
+		],
+		"icon": "mspowerpoint.png",
+		"path": "powerpnt.exe"
+	},
+	{
+		"name": "Microsoft Publisher",
+		"keywords": [
+			"microsoft publisher",
+			"publisher"
+		],
+		"icon": "mspublisher.png",
+		"path": "mspub.exe"
+	},
+	{
+		"name": "Quick Assist",
+		"keywords": [
+			"quick assist",
+			"quickassist"
+		],
+		"icon": "ms-quick-assist.png",
+		"path": "ms-quick-assist:///"
+	},
+	{
+		"name": "Snipping Tool",
+		"keywords": [
+			"snipping tool",
+			"snippingtool"
+		],
+		"icon": "ms-screenclip.png",
+		"path": "ms-screenclip:///"
+	},
+	{
+		"name": "Snip & Sketch",
+		"keywords": [
+			"snip & sketch",
+			"snipsketch"
+		],
+		"icon": "ms-screensketch.png",
+		"path": "ms-screensketch:///"
+	},
+	{
+		"name": "Windows Settings",
+		"keywords": [
+			"windows settings",
+			"settings"
+		],
+		"icon": "WindowsSettings.png",
+		"path": "ms-settings:///"
+	},
+	{
+		"name": "Microsoft Teams",
+		"keywords": [
+			"microsoft teams",
+			"teams"
+		],
+		"icon": "msteams.png",
+		"path": "msteams:///"
+	},
+	{
+		"name": "Microsoft To-Do",
+		"keywords": [
+			"to-do",
+			"todo"
+		],
+		"icon": "ms-todo.png",
+		"path": "ms-todo:///"
+	},
+	{
+		"name": "Microsoft Store",
+		"keywords": [
+			"microsoft store",
+			"store"
+		],
+		"icon": "ms-windows-store.png",
+		"path": "ms-windows-store:///"
+	},
+	{
+		"name": "Movies & TV",
+		"keywords": [
+			"movies & tv",
+			"movies",
+			"tv"
+		],
+		"icon": "mswindowsvideo.png",
+		"path": "mswindowsvideo:///"
+	},
+	{
+		"name": "Microsoft Word",
+		"keywords": [
+			"microsoft word",
+			"word"
+		],
+		"icon": "msword.png",
+		"path": "winword.exe"
+	},
+	{
+		"name": "Outlook Mail",
+		"keywords": [
+			"outlook mail",
+			"mail"
+		],
+		"icon": "outlookmail.png",
+		"path": "outlookmail:///"
+	},
+	{
+		"name": "Windows Defender",
+		"keywords": [
+			"windows defender",
+			"defender"
+		],
+		"icon": "Windowsdefender.png",
+		"path": "windowsdefender://"
+	},
+	{
+		"name": "Xbox App",
+		"keywords": [
+			"xbox app",
+			"xbox"
+		],
+		"icon": "xbox.png",
+		"path": "xbox:///"
 	},
 	{
 		"name": "Microsoft Configuration",
@@ -435,15 +657,6 @@
 		"path": "C:\\Windows\\System32\\UserAccountControlSettings.exe"
 	},
 	{
-		"name": "Windows Defender",
-		"keywords": [
-			"windows defender",
-			"defender"
-		],
-		"icon": "Windowsdefender.png",
-		"path": "windowsdefender://"
-	},
-	{
 		"name": "Windows Defender Firewall with Advanced Security",
 		"keywords": [
 			"windows defender firewall with advanced security",
@@ -471,5 +684,13 @@
 		],
 		"icon": "wordpad.png",
 		"path": "C:\\Program Files\\Windows NT\\Accessories\\wordpad.exe"
+	},
+	{
+		"name": "Spotify",
+		"keywords": [
+			"spotify"
+		],
+		"icon": "spotify.png",
+		"path": "spotify://"
 	}
 ]

@@ -27,19 +27,15 @@ fn open_application(destination: String) -> Result<(), String> {
       .args(&["/C", "start", &destination])
       .spawn()
       .map_err(|e| format!("Failed to open application: {}", e))?;
-  } else {
+  } else if destination.ends_with(".exe") {
     // Use the provided destination path directly
     let application_path = Path::new(&destination);
 
-    // Check if the application path exists
-    if !application_path.exists() {
-        return Err(format!("The specified path does not exist: {:?}", application_path));
-    }
-
-    // Attempt to launch the application
-    Command::new(application_path)
-        .spawn()
-        .map_err(|e| format!("Failed to open application: {}", e))?;
+    // Use the `start` command to open the application in a new window
+    Command::new("cmd")
+      .args(&["/C", "start", "", application_path.to_str().unwrap()])
+      .spawn()
+      .map_err(|e| format!("Failed to open application: {}", e))?;
   }
 
   Ok(())
