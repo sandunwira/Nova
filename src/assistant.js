@@ -67,6 +67,15 @@ chatForm.addEventListener('submit', function (event) {
 		botResponse.textContent = "Calculating...";
 		const result = calculateNumbers(expression);
 		botResponse.textContent = `The answer of ${expression} is: ${result}`;
+	} else if (userMessage.toLowerCase().includes("news") || userMessage.toLowerCase().includes("headlines") || userMessage.toLowerCase().includes("latest news") || userMessage.toLowerCase().includes("news headlines")) {
+		botResponse.textContent = "Fetching the latest news...";
+		fetchNews().then(newsItems => {
+			let newsText = "Here are the latest news headlines:<br><br>";
+			newsItems.forEach((item, index) => {
+				newsText += `${index + 1}. ${item.title}<br>${item.description}<br><a href="${item.link}" target="_blank">Read more</a><br><br>`;
+			});
+			botResponse.innerHTML = newsText;
+		}).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the latest news.");
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.textContent = response;
@@ -416,6 +425,33 @@ function calculateNumbers(expression) {
 	}
 	catch (error) {
 		console.error('Error in calculateNumbers:', error);
+		throw error;
+	}
+}
+
+
+
+// function to fetch news from rss feed
+async function fetchNews() {
+	try {
+		const response = await fetch('https://api.allorigins.win/get?url=https://abcnews.go.com/abcnews/internationalheadlines');
+		const data = await response.json();
+		const xmlString = data.contents;
+		const parser = new DOMParser();
+		const xml = parser.parseFromString(xmlString, 'text/xml');
+		const items = xml.querySelectorAll('item');
+		const newsItems = [];
+
+		items.forEach(item => {
+			const title = item.querySelector('title').textContent;
+			const description = item.querySelector('description').textContent;
+			const link = item.querySelector('link').textContent;
+			newsItems.push({ title, description, link });
+		});
+
+		return newsItems;
+	} catch (error) {
+		console.error('Error in fetchNews:', error);
 		throw error;
 	}
 }
