@@ -13,10 +13,11 @@ fn main() {
       let main_window = app.get_window("main").unwrap();
         Ok(())
       })
-    .invoke_handler(tauri::generate_handler![open_application])
+    .invoke_handler(tauri::generate_handler![open_application, open_url])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
+
 
 #[tauri::command]
 fn open_application(destination: String) -> Result<(), String> {
@@ -37,6 +38,17 @@ fn open_application(destination: String) -> Result<(), String> {
       .spawn()
       .map_err(|e| format!("Failed to open application: {}", e))?;
   }
+
+  Ok(())
+}
+
+#[tauri::command]
+fn open_url(url: String) -> Result<(), String> {
+  // Use the `start` command to open the URL
+  Command::new("cmd")
+    .args(&["/C", "start", "", &url])
+    .spawn()
+    .map_err(|e| format!("Failed to open URL: {}", e))?;
 
   Ok(())
 }

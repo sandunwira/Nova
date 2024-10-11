@@ -34,7 +34,11 @@ chatForm.addEventListener('submit', function (event) {
 	event.preventDefault();
 	const userMessage = chatMessage.value.trim();
 
-	if (userMessage.startsWith("open") || userMessage.startsWith("launch") || userMessage.startsWith("run") || userMessage.startsWith("start") || userMessage.startsWith("execute")) {
+	if (userMessage.toLowerCase().includes("visit") || userMessage.toLowerCase().includes("go to")) {
+		const url = userMessage.replace("visit", "").replace("go to", "").trim();
+		botResponse.textContent = "Opening " + url + "...";
+		openURL(url).then(() => botResponse.innerHTML = `Opened <a href="https://${url}" target="_blank">https://${url}</a> successfully. Enjoy!`).catch(error => botResponse.textContent = "Sorry, I couldn't open the URL.");
+	} else if (userMessage.startsWith("open") || userMessage.startsWith("launch") || userMessage.startsWith("run") || userMessage.startsWith("start") || userMessage.startsWith("execute")) {
 		const { applicationName, applicationPath } = findApplication(userMessage);
 		botResponse.textContent = "Launching " + applicationName + "...";
 
@@ -169,6 +173,21 @@ function findResponse(requestKeyword) {
 
 	// Return a default response if no match is found
 	return 'Sorry, I don\'t understand that. Please try again.';
+}
+
+
+
+// Function to open a URL
+async function openURL(url) {
+	url = `https://${url}`;
+	try {
+		await window.__TAURI__.invoke('open_url', {
+			url: url
+		});
+	} catch (error) {
+		console.error('Failed to open URL:', error);
+		throw error;
+	}
 }
 
 
