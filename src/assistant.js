@@ -85,6 +85,9 @@ chatForm.addEventListener('submit', function (event) {
 		getImageOfTheDay().then(({ imageTitle, imageUrl, imageCredits }) => {
 			botResponse.innerHTML = `<strong>${imageTitle}</strong><br><img src="${imageUrl}" alt="${imageTitle}" style="max-width: 100%;"><br><small>Image Credits: ${imageCredits}</small>`;
 		}).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the image of the day.");
+	} else if (userMessage.toLowerCase().includes("qotd") || userMessage.toLowerCase().includes("quote of the day") || userMessage.toLowerCase().includes("inspirational quote") || userMessage.toLowerCase().includes("motivational quote")) {
+		botResponse.textContent = "Fetching the quote of the day...";
+		getQuoteOfTheDay().then(quote => botResponse.textContent = quote).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the quote of the day.");
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.textContent = response;
@@ -505,6 +508,34 @@ async function getImageOfTheDay() {
 		return { imageTitle, imageUrl, imageCredits };
 	} catch (error) {
 		console.error('Error in getImageOfTheDay:', error);
+		throw error;
+	}
+}
+
+
+
+// function to get quote of the day
+async function getQuoteOfTheDay() {
+	try {
+		const proxyUrl = 'https://api.allorigins.win/get?url=';
+		const targetUrl = 'https://zenquotes.io/api/today';
+		const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json'
+			}
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		const data = await response.json();
+		const jsonData = JSON.parse(data.contents);
+		const quote = jsonData[0].q + ' - ' + jsonData[0].a;
+		return quote;
+	}
+	catch (error) {
+		console.error('Error in getQuoteOfTheDay:', error);
 		throw error;
 	}
 }
