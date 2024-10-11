@@ -80,6 +80,11 @@ chatForm.addEventListener('submit', function (event) {
 			});
 			botResponse.innerHTML = newsText;
 		}).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the latest news.");
+	} else if (userMessage.toLowerCase().includes("iotd") || userMessage.toLowerCase().includes("image of the day") || userMessage.toLowerCase().includes("bing image") || userMessage.toLowerCase().includes("bing wallpaper")) {
+		botResponse.textContent = "Fetching the image of the day...";
+		getImageOfTheDay().then(({ imageTitle, imageUrl, imageCredits }) => {
+			botResponse.innerHTML = `<strong>${imageTitle}</strong><br><img src="${imageUrl}" alt="${imageTitle}" style="max-width: 100%;"><br><small>Image Credits: ${imageCredits}</small>`;
+		}).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the image of the day.");
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.textContent = response;
@@ -471,6 +476,35 @@ async function fetchNews() {
 		return newsItems;
 	} catch (error) {
 		console.error('Error in fetchNews:', error);
+		throw error;
+	}
+}
+
+
+
+// function to get image of the day
+async function getImageOfTheDay() {
+	try {
+		const proxyUrl = 'https://api.allorigins.win/get?url=';
+		const targetUrl = 'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=en-US';
+		const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json'
+			}
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		const data = await response.json();
+		const jsonData = JSON.parse(data.contents);
+		const imageTitle = jsonData.images[0].title;
+		const imageUrl = "https://www.bing.com" + jsonData.images[0].urlbase + "_1920x1080.jpg";
+		const imageCredits = jsonData.images[0].copyright;
+		return { imageTitle, imageUrl, imageCredits };
+	} catch (error) {
+		console.error('Error in getImageOfTheDay:', error);
 		throw error;
 	}
 }
