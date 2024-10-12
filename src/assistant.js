@@ -116,6 +116,11 @@ chatForm.addEventListener('submit', function (event) {
 		} else {
 			botResponse.textContent = "Sorry, I couldn't understand the translation request. Please use the format: translate [text] to [target_language].";
 		}
+	} else if (userMessage.toLowerCase().startsWith("create qr for")) {
+		const text = userMessage.replace("create qr for", "").trim();
+		const qrCodeElement = createQRCode(text);
+		botResponse.innerHTML = `Here's the QR Code for "${text}":<br><br>`;
+		botResponse.appendChild(qrCodeElement);
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.textContent = response;
@@ -747,4 +752,22 @@ async function translateText(text, targetLanguage) {
 		console.error('Error in translateText:', error);
 		throw error;
 	}
+}
+
+
+
+// function to create qr codes
+function createQRCode(text) {
+	const qrcode = new QRCode(document.createElement('div'), {
+		text: text,
+		width: 128,
+		height: 128
+	});
+
+	const qrCodeImage = qrcode._el.firstChild.toDataURL('image/png');
+	const qrCodeElement = document.createElement('img');
+	qrCodeElement.src = qrCodeImage;
+	qrCodeElement.alt = `QR Code for ${text}`;
+
+	return qrCodeElement;
 }
