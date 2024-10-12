@@ -66,7 +66,7 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("date") || userMessage.toLowerCase().includes("today's date") || userMessage.toLowerCase().includes("what's the date") || userMessage.toLowerCase().includes("tell me the date") || userMessage.toLowerCase().includes("what date is it") || userMessage.toLowerCase().includes("what's today's date")) {
 		botResponse.textContent = "Fetching the date...";
 		const { day, month, year } = getDate();
-		botResponse.textContent = `Today's date is ${day} ${month} ${year}`;
+		botResponse.textContent = `Today's date is ${month} ${day}, ${year}`;
 	} else if (userMessage.toLowerCase().includes("calc") || userMessage.toLowerCase().includes("calculate") || userMessage.toLowerCase().includes("calculator") || userMessage.toLowerCase().includes("math")) {
 		const expression = userMessage.replace("calc", "").replace("calculate", "").replace("calculator", "").replace("math", "").trim();
 		botResponse.textContent = "Calculating...";
