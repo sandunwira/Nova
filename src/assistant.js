@@ -65,7 +65,8 @@ chatForm.addEventListener('submit', function (event) {
 		botResponse.textContent = "Current time is " + getTime();
 	} else if (userMessage.toLowerCase().includes("date") || userMessage.toLowerCase().includes("today's date") || userMessage.toLowerCase().includes("what's the date") || userMessage.toLowerCase().includes("tell me the date") || userMessage.toLowerCase().includes("what date is it") || userMessage.toLowerCase().includes("what's today's date")) {
 		botResponse.textContent = "Fetching the date...";
-		botResponse.textContent = "Today is " + getDate();
+		const { day, month, year } = getDate();
+		botResponse.textContent = `Today's date is ${day} ${month} ${year}`;
 	} else if (userMessage.toLowerCase().includes("calc") || userMessage.toLowerCase().includes("calculate") || userMessage.toLowerCase().includes("calculator") || userMessage.toLowerCase().includes("math")) {
 		const expression = userMessage.replace("calc", "").replace("calculate", "").replace("calculator", "").replace("math", "").trim();
 		botResponse.textContent = "Calculating...";
@@ -88,6 +89,16 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("qotd") || userMessage.toLowerCase().includes("quote of the day") || userMessage.toLowerCase().includes("inspirational quote") || userMessage.toLowerCase().includes("motivational quote")) {
 		botResponse.textContent = "Fetching the quote of the day...";
 		getQuoteOfTheDay().then(quote => botResponse.textContent = quote).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the quote of the day.");
+	} else if (userMessage.toLowerCase().includes("on this day") || userMessage.toLowerCase().includes("on this day events") || userMessage.toLowerCase().includes("on this day in history") || userMessage.toLowerCase().includes("on this day facts")) {
+		botResponse.textContent = "Fetching on this day events...";
+		getOnThisDayEvents().then(events => {
+			const { day, month } = getDate();
+			let eventsText = `Here are some interesting events that happened on ${month} ${day} in history:<br><br>`;
+			events.forEach((event, index) => {
+				eventsText += `${index + 1}. ${event}<br>`;
+			});
+			botResponse.innerHTML = eventsText;
+		}).catch(error => botResponse.textContent = "Sorry, I couldn't fetch on this day events.");
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.textContent = response;
@@ -439,7 +450,7 @@ function getDate() {
 		case 11: month = "December"; break;
 	}
 	let year = date.getFullYear();
-	return `${month} ${day}, ${year}`;
+	return { day, month, year };
 }
 
 
@@ -536,6 +547,36 @@ async function getQuoteOfTheDay() {
 	}
 	catch (error) {
 		console.error('Error in getQuoteOfTheDay:', error);
+		throw error;
+	}
+}
+
+
+
+// function to get on this day events
+async function getOnThisDayEvents() {
+	let month = new Date().getMonth() + 1;
+	let day = new Date().getDate();
+	try {
+		const proxyUrl = 'https://api.allorigins.win/get?url=';
+		const targetUrl = `https://today.zenquotes.io/api/${month}/${day}`;
+		const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json'
+			}
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		const data = await response.json();
+		const jsonData = JSON.parse(data.contents);
+		const events = jsonData.data.Events.map(event => event.text);
+		return events;
+	}
+	catch (error) {
+		console.error('Error in getOnThisDayEvents:', error);
 		throw error;
 	}
 }
