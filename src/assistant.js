@@ -99,6 +99,9 @@ chatForm.addEventListener('submit', function (event) {
 			});
 			botResponse.innerHTML = eventsText;
 		}).catch(error => botResponse.textContent = "Sorry, I couldn't fetch on this day events.");
+	} else if (userMessage.toLowerCase().includes("meal") || userMessage.toLowerCase().includes("recipe") || userMessage.toLowerCase().includes("food") || userMessage.toLowerCase().includes("random meal") || userMessage.toLowerCase().includes("meal recipe") || userMessage.toLowerCase().includes("meal suggestion") || userMessage.toLowerCase().includes("meal recommendation")) {
+		botResponse.textContent = "Fetching a random meal recipe...";
+		getRandomMeal().then(mealDetails => botResponse.innerHTML = mealDetails).catch(error => botResponse.textContent = "Sorry, I couldn't fetch a random meal recipe.");
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.textContent = response;
@@ -577,6 +580,46 @@ async function getOnThisDayEvents() {
 	}
 	catch (error) {
 		console.error('Error in getOnThisDayEvents:', error);
+		throw error;
+	}
+}
+
+
+
+// function to get random meal recipes
+async function getRandomMeal() {
+	try {
+		const response = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
+		const data = await response.json();
+		const meal = data.meals[0];
+		const mealName = meal.strMeal;
+		const mealCategory = meal.strCategory;
+		const mealArea = meal.strArea;
+		const mealInstructions = meal.strInstructions;
+		const mealIngredients = [];
+		for (let i = 1; i <= 20; i++) {
+			const ingredient = meal['strIngredient' + i];
+			const measure = meal['strMeasure' + i];
+			if (ingredient) {
+				mealIngredients.push(`* ${ingredient}: ${measure}`);
+			}
+		}
+		const mealImage = meal.strMealThumb;
+		const mealYoutube = meal.strYoutube;
+		const mealDetails = `
+			${mealName} (${mealCategory}, ${mealArea})<br>
+			<p>Ingredients:<br>
+				${mealIngredients.join('<br>')}
+			</p>
+			<p>Instructions:<br>
+				${mealInstructions}
+			</p>
+			<img src="${mealImage}" alt="${mealName}" style="height: 150px;">
+			<p>YouTube: <a href="${mealYoutube}" target="_blank">${mealYoutube}</a></p>
+		`;
+		return mealDetails;
+	} catch (error) {
+		console.error('Error in getRandomMeal:', error);
 		throw error;
 	}
 }
