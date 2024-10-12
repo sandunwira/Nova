@@ -89,6 +89,9 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("qotd") || userMessage.toLowerCase().includes("quote of the day") || userMessage.toLowerCase().includes("inspirational quote") || userMessage.toLowerCase().includes("motivational quote")) {
 		botResponse.textContent = "Fetching the quote of the day...";
 		getQuoteOfTheDay().then(quote => botResponse.textContent = quote).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the quote of the day.");
+	} else if (userMessage.toLowerCase().includes("random quote") || userMessage.toLowerCase().includes("quote")) {
+		botResponse.textContent = "Fetching a random quote...";
+		getRandomQuote().then(quote => botResponse.textContent = quote).catch(error => botResponse.textContent = "Sorry, I couldn't fetch a random quote.");
 	} else if (userMessage.toLowerCase().includes("on this day") || userMessage.toLowerCase().includes("on this day events") || userMessage.toLowerCase().includes("on this day in history") || userMessage.toLowerCase().includes("on this day facts")) {
 		botResponse.textContent = "Fetching on this day events...";
 		getOnThisDayEvents().then(events => {
@@ -512,7 +515,7 @@ function calculateNumbers(expression) {
 // function to fetch news from rss feed
 async function fetchNews() {
 	try {
-		const response = await fetch('https://api.allorigins.win/get?url=https://abcnews.go.com/abcnews/internationalheadlines');
+		const response = await fetch(`https://api.allorigins.win/get?url=https://abcnews.go.com/abcnews/internationalheadlines?${Date.now()}`);
 		const data = await response.json();
 		const xmlString = data.contents;
 		const parser = new DOMParser();
@@ -571,6 +574,34 @@ async function getQuoteOfTheDay() {
 		const proxyUrl = 'https://api.allorigins.win/get?url=';
 		const targetUrl = 'https://zenquotes.io/api/today';
 		const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json'
+			}
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		const data = await response.json();
+		const jsonData = JSON.parse(data.contents);
+		const quote = jsonData[0].q + ' - ' + jsonData[0].a;
+		return quote;
+	}
+	catch (error) {
+		console.error('Error in getQuoteOfTheDay:', error);
+		throw error;
+	}
+}
+
+
+
+// function to get random quote
+async function getRandomQuote() {
+	try {
+		const proxyUrl = 'https://api.allorigins.win/get?url=';
+		const targetUrl = 'https://zenquotes.io/api/random';
+		const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}?${Date.now()}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
