@@ -102,7 +102,12 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("meal") || userMessage.toLowerCase().includes("recipe") || userMessage.toLowerCase().includes("food") || userMessage.toLowerCase().includes("random meal") || userMessage.toLowerCase().includes("meal recipe") || userMessage.toLowerCase().includes("meal suggestion") || userMessage.toLowerCase().includes("meal recommendation")) {
 		botResponse.textContent = "Fetching a random meal recipe...";
 		getRandomMeal().then(mealDetails => botResponse.innerHTML = mealDetails).catch(error => botResponse.textContent = "Sorry, I couldn't fetch a random meal recipe.");
-	} else {
+	} else if (userMessage.toLowerCase().includes("books about")) {
+		const query = userMessage.replace("books about", "").trim();
+		botResponse.textContent = "Searching for books about " + query + "...";
+		searchBooks(query).then(bookDetails => botResponse.innerHTML = `Here are books that I found for "${query}":<br><br>${bookDetails}`).catch(error => botResponse.textContent = "Sorry, I couldn't find any books about " + query + ".");
+	}
+	else {
 		const response = findResponse(userMessage);
 		botResponse.textContent = response;
 	}
@@ -620,6 +625,51 @@ async function getRandomMeal() {
 		return mealDetails;
 	} catch (error) {
 		console.error('Error in getRandomMeal:', error);
+		throw error;
+	}
+}
+
+
+
+// function to search books
+async function searchBooks(query) {
+	try {
+		const proxyUrl = 'https://api.allorigins.win/get?url=';
+		const targetUrl = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`;
+		const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json'
+			}
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		const data = await response.json();
+		const jsonData = JSON.parse(data.contents);
+		const books = jsonData.items;
+
+		if (books && books.length > 0) {
+			const bookDetails = books.map(book => {
+				const volumeInfo = book.volumeInfo;
+				const authors = volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown Author';
+				return `
+					<a href="${volumeInfo.infoLink}" target="_blank">${volumeInfo.title}</a><br>
+					Authors: ${authors}<br>
+					Publisher: ${volumeInfo.publisher}<br>
+					Published Date: ${volumeInfo.publishedDate}<br>
+					Description: ${volumeInfo.description}<br>
+					${volumeInfo.imageLinks ? `<img src="${volumeInfo.imageLinks.thumbnail}" alt="${volumeInfo.title}">` : ''}<br>
+				`;
+			}).join('<br>');
+			return bookDetails;
+		} else {
+			console.log('No books found');
+			return [];
+		}
+	} catch (error) {
+		console.error('Error fetching or parsing books:', error);
 		throw error;
 	}
 }
