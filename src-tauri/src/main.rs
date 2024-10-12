@@ -6,6 +6,7 @@ use std::env;
 use std::fs;
 use std::process::Command;
 use std::path::Path;
+use winapi::um::winuser::{keybd_event, VK_MEDIA_PLAY_PAUSE, VK_MEDIA_PREV_TRACK, VK_MEDIA_NEXT_TRACK, VK_VOLUME_UP, VK_VOLUME_DOWN, KEYEVENTF_KEYUP};
 
 fn main() {
   tauri::Builder::default()
@@ -13,7 +14,7 @@ fn main() {
       let main_window = app.get_window("main").unwrap();
         Ok(())
       })
-    .invoke_handler(tauri::generate_handler![open_application, open_url])
+    .invoke_handler(tauri::generate_handler![open_application, open_url, play_media, pause_media, previous_media, next_media, increase_volume, decrease_volume])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
@@ -51,4 +52,63 @@ fn open_url(url: String) -> Result<(), String> {
     .map_err(|e| format!("Failed to open URL: {}", e))?;
 
   Ok(())
+}
+
+
+#[tauri::command]
+fn play_media() -> Result<(), String> {
+    unsafe {
+        keybd_event(VK_MEDIA_PLAY_PAUSE as u8, 0, 0, 0);
+        keybd_event(VK_MEDIA_PLAY_PAUSE as u8, 0, KEYEVENTF_KEYUP, 0);
+    }
+    Ok(())
+}
+
+
+#[tauri::command]
+fn pause_media() -> Result<(), String> {
+    unsafe {
+        keybd_event(VK_MEDIA_PLAY_PAUSE as u8, 0, 0, 0);
+        keybd_event(VK_MEDIA_PLAY_PAUSE as u8, 0, KEYEVENTF_KEYUP, 0);
+    }
+    Ok(())
+}
+
+
+#[tauri::command]
+fn previous_media() -> Result<(), String> {
+    unsafe {
+        keybd_event(VK_MEDIA_PREV_TRACK as u8, 0, 0, 0);
+        keybd_event(VK_MEDIA_PREV_TRACK as u8, 0, KEYEVENTF_KEYUP, 0);
+    }
+    Ok(())
+}
+
+
+#[tauri::command]
+fn next_media() -> Result<(), String> {
+    unsafe {
+        keybd_event(VK_MEDIA_NEXT_TRACK as u8, 0, 0, 0);
+        keybd_event(VK_MEDIA_NEXT_TRACK as u8, 0, KEYEVENTF_KEYUP, 0);
+    }
+    Ok(())
+}
+
+
+#[tauri::command]
+fn increase_volume() -> Result<(), String> {
+    unsafe {
+        keybd_event(VK_VOLUME_UP as u8, 0, 0, 0);
+        keybd_event(VK_VOLUME_UP as u8, 0, KEYEVENTF_KEYUP, 0);
+    }
+    Ok(())
+}
+
+#[tauri::command]
+fn decrease_volume() -> Result<(), String> {
+    unsafe {
+        keybd_event(VK_VOLUME_DOWN as u8, 0, 0, 0);
+        keybd_event(VK_VOLUME_DOWN as u8, 0, KEYEVENTF_KEYUP, 0);
+    }
+    Ok(())
 }

@@ -116,6 +116,24 @@ chatForm.addEventListener('submit', function (event) {
 		} else {
 			botResponse.textContent = "Sorry, I couldn't understand the translation request. Please use the format: translate [text] to [target_language].";
 		}
+	} else if (userMessage.toLowerCase().includes("play media")) {
+		botResponse.textContent = "Playing media...";
+		playMedia();
+	} else if (userMessage.toLowerCase().includes("pause media")) {
+		botResponse.textContent = "Pausing media...";
+		pauseMedia();
+	} else if (userMessage.toLowerCase().includes("previous media")) {
+		botResponse.textContent = "Playing previous media...";
+		previousMedia();
+	} else if (userMessage.toLowerCase().includes("next media")) {
+		botResponse.textContent = "Playing next media...";
+		nextMedia();
+	} else if (userMessage.toLowerCase().includes("increase volume")) {
+		botResponse.textContent = "Increasing volume...";
+		increaseVolume();
+	} else if (userMessage.toLowerCase().includes("decrease volume")) {
+		botResponse.textContent = "Decreasing volume...";
+		decreaseVolume();
 	} else if (userMessage.toLowerCase().startsWith("create qr for")) {
 		const text = userMessage.replace("create qr for", "").trim();
 		const qrCodeElement = createQRCode(text);
@@ -770,4 +788,72 @@ function createQRCode(text) {
 	qrCodeElement.alt = `QR Code for ${text}`;
 
 	return qrCodeElement;
+}
+
+
+
+// function to play media
+async function playMedia() {
+	try {
+		await window.__TAURI__.invoke('play_media');
+		botResponse.textContent = "Media is now playing...";
+	} catch (error) {
+		console.error('Failed to play media:', error);
+		botResponse.textContent = "Failed to play media. Please try again later.";
+	}
+}
+
+// function to pause media
+async function pauseMedia() {
+	try {
+		await window.__TAURI__.invoke('pause_media');
+		botResponse.textContent = "Media is now paused...";
+	} catch (error) {
+		console.error('Failed to pause media:', error);
+		botResponse.textContent = "Failed to pause media. Please try again later.";
+	}
+}
+
+// function to play previous media
+async function previousMedia() {
+	try {
+		await window.__TAURI__.invoke('previous_media');
+		botResponse.textContent = "Playing previous media...";
+	} catch (error) {
+		console.error('Failed to play previous media:', error);
+		botResponse.textContent = "Failed to play previous media. Please try again later.";
+	}
+}
+
+// function to play next media
+async function nextMedia() {
+	try {
+		await window.__TAURI__.invoke('next_media');
+		botResponse.textContent = "Playing next media...";
+	} catch (error) {
+		console.error('Failed to play next media:', error);
+		botResponse.textContent = "Failed to play next media. Please try again later.";
+	}
+}
+
+// function to increase volume
+async function increaseVolume() {
+	try {
+		await window.__TAURI__.invoke('increase_volume');
+		botResponse.textContent = "Volume increased...";
+	} catch (error) {
+		console.error('Failed to increase volume:', error);
+		botResponse.textContent = "Failed to increase volume. Please try again later.";
+	}
+}
+
+// function to decrease volume
+async function decreaseVolume() {
+	try {
+		await window.__TAURI__.invoke('decrease_volume');
+		botResponse.textContent = "Volume decreased...";
+	} catch (error) {
+		console.error('Failed to decrease volume:', error);
+		botResponse.textContent = "Failed to decrease volume. Please try again later.";
+	}
 }
