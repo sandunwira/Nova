@@ -106,8 +106,17 @@ chatForm.addEventListener('submit', function (event) {
 		const query = userMessage.replace("books about", "").trim();
 		botResponse.textContent = "Searching for books about " + query + "...";
 		searchBooks(query).then(bookDetails => botResponse.innerHTML = `Here are books that I found for "${query}":<br><br>${bookDetails}`).catch(error => botResponse.textContent = "Sorry, I couldn't find any books about " + query + ".");
-	}
-	else {
+	} else if (userMessage.toLowerCase().startsWith("translate") && userMessage.toLowerCase().includes(" to ")) {
+		const textToTranslate = userMessage.match(/translate (.+) to (.+)/i);
+		if (textToTranslate && textToTranslate.length === 3) {
+			const text = textToTranslate[1].trim();
+			const targetLanguage = textToTranslate[2].trim();
+			botResponse.textContent = "Translating the text...";
+			translateText(text, targetLanguage).then(translatedText => botResponse.textContent = `Translated text: ${translatedText}`).catch(error => botResponse.textContent = "Sorry, I couldn't translate the text.");
+		} else {
+			botResponse.textContent = "Sorry, I couldn't understand the translation request. Please use the format: translate [text] to [target_language].";
+		}
+	} else {
 		const response = findResponse(userMessage);
 		botResponse.textContent = response;
 	}
@@ -670,6 +679,72 @@ async function searchBooks(query) {
 		}
 	} catch (error) {
 		console.error('Error fetching or parsing books:', error);
+		throw error;
+	}
+}
+
+
+
+// function to translate text
+async function translateText(text, targetLanguage) {
+	try {
+		const proxyUrl = `https://auroraproxyserver.onrender.com/`;
+		const targetUrl = 'https://api-free.deepl.com/v2/translate';
+		targetLanguage = targetLanguage.toLowerCase();
+		switch (targetLanguage) {
+			case 'arabic': targetLanguage = 'AR'; break;
+			case 'bulgarian': targetLanguage = 'BG'; break;
+			case 'czech': targetLanguage = 'CS'; break;
+			case 'danish': targetLanguage = 'DA'; break;
+			case 'german': targetLanguage = 'DE'; break;
+			case 'greek': targetLanguage = 'EL'; break;
+			case 'english': targetLanguage = 'EN-US'; break;
+			case 'spanish': targetLanguage = 'ES'; break;
+			case 'estonian': targetLanguage = 'ET'; break;
+			case 'finnish': targetLanguage = 'FI'; break;
+			case 'french': targetLanguage = 'FR'; break;
+			case 'hungarian': targetLanguage = 'HU'; break;
+			case 'indonesian': targetLanguage = 'ID'; break;
+			case 'italian': targetLanguage = 'IT'; break;
+			case 'japanese': targetLanguage = 'JA'; break;
+			case 'korean': targetLanguage = 'KO'; break;
+			case 'lithuanian': targetLanguage = 'LT'; break;
+			case 'latvian': targetLanguage = 'LV'; break;
+			case 'norwegian': targetLanguage = 'NB'; break;
+			case 'dutch': targetLanguage = 'NL'; break;
+			case 'polish': targetLanguage = 'PL'; break;
+			case 'portuguese br': targetLanguage = 'PT-BR'; break;
+			case 'portuguese pt': targetLanguage = 'PT-PT'; break;
+			case 'romanian': targetLanguage = 'RO'; break;
+			case 'russian': targetLanguage = 'RU'; break;
+			case 'slovak': targetLanguage = 'SK'; break;
+			case 'slovenian': targetLanguage = 'SL'; break;
+			case 'swedish': targetLanguage = 'SV'; break;
+			case 'turkish': targetLanguage = 'TR'; break;
+			case 'ukrainian': targetLanguage = 'UK'; break;
+			case 'chinese': targetLanguage = 'ZH'; break;
+			case 'chinese simplified': targetLanguage = 'ZH-HANS'; break;
+			case 'chinese traditional': targetLanguage = 'ZH-HANT'; break;
+		}
+		const response = await fetch(`${proxyUrl}${targetUrl}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': 'DeepL-Auth-Key 93c60809-8f46-4788-b25f-9c73a7122ae8:fx'
+			},
+			body: JSON.stringify({
+				text: [text],
+				target_lang: targetLanguage
+			})
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		const data = await response.json();
+		const translatedText = data.translations[0].text;
+		return translatedText;
+	} catch (error) {
+		console.error('Error in translateText:', error);
 		throw error;
 	}
 }
