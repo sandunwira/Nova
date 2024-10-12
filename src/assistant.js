@@ -617,7 +617,7 @@ async function getRandomQuote() {
 		return quote;
 	}
 	catch (error) {
-		console.error('Error in getQuoteOfTheDay:', error);
+		console.error('Error in getRandomQuote:', error);
 		throw error;
 	}
 }
