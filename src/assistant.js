@@ -56,7 +56,7 @@ chatForm.addEventListener('submit', function (event) {
 		getRandomMovie();
 	} else if (userMessage.toLowerCase().includes("ip address") || userMessage.toLowerCase().includes("ip")) {
 		botResponse.textContent = "Fetching your IP Address...";
-		getIPAddress().then(ipaddress => botResponse.textContent = "Your IP Address is: " + ipaddress).catch(error => botResponse.textContent = "Sorry, I couldn't fetch your IP Address.");
+		getIPAddress().then(({ ipaddress }) => botResponse.textContent = `Your IP Address is: ${ipaddress}`).catch(error => botResponse.textContent = "Sorry, I couldn't fetch your IP Address.");
 	} else if (userMessage.toLowerCase().includes("weather")) {
 		botResponse.textContent = "Fetching the weather...";
 		getWeather().then(weatherDetails => botResponse.textContent = weatherDetails).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the weather data.");
@@ -119,22 +119,25 @@ chatForm.addEventListener('submit', function (event) {
 		} else {
 			botResponse.textContent = "Sorry, I couldn't understand the translation request. Please use the format: translate [text] to [target_language].";
 		}
-	} else if (userMessage.toLowerCase().includes("play media")) {
-		botResponse.textContent = "Playing media...";
+	} else if (userMessage.toLowerCase().includes("disaster") || userMessage.toLowerCase().includes("natural disaster") || userMessage.toLowerCase().includes("disaster alert") || userMessage.toLowerCase().includes("disaster warning")) {
+		botResponse.textContent = "Fetching disaster alerts...";
+		getDisasterAlerts().then(alerts => botResponse.innerHTML = alerts).catch(error => botResponse.textContent = "Sorry, I couldn't fetch disaster alerts.");
+	} else if (userMessage.toLowerCase().includes("play") || userMessage.toLowerCase().includes("resume")) {
+		botResponse.textContent = "Resuming playback...";
 		playMedia();
-	} else if (userMessage.toLowerCase().includes("pause media")) {
-		botResponse.textContent = "Pausing media...";
+	} else if (userMessage.toLowerCase().includes("pause")) {
+		botResponse.textContent = "Pausing playback...";
 		pauseMedia();
-	} else if (userMessage.toLowerCase().includes("previous media")) {
-		botResponse.textContent = "Playing previous media...";
+	} else if (userMessage.toLowerCase().includes("previous")) {
+		botResponse.textContent = "Playing previous track...";
 		previousMedia();
-	} else if (userMessage.toLowerCase().includes("next media")) {
-		botResponse.textContent = "Playing next media...";
+	} else if (userMessage.toLowerCase().includes("skip") || userMessage.toLowerCase().includes("next")) {
+		botResponse.textContent = "Skipping to the next track...";
 		nextMedia();
-	} else if (userMessage.toLowerCase().includes("increase volume")) {
+	} else if (userMessage.toLowerCase().includes("increase volume") || userMessage.toLowerCase().includes("volume up")) {
 		botResponse.textContent = "Increasing volume...";
 		increaseVolume();
-	} else if (userMessage.toLowerCase().includes("decrease volume")) {
+	} else if (userMessage.toLowerCase().includes("decrease volume") || userMessage.toLowerCase().includes("volume down")) {
 		botResponse.textContent = "Decreasing volume...";
 		decreaseVolume();
 	} else if (userMessage.toLowerCase().startsWith("create qr for")) {
@@ -340,8 +343,8 @@ async function getIPAddress() {
 		.then(response => response.json())
 		.then(data => {
 			const ipaddress = data.ip;
-			console.log(ipaddress);
-			return ipaddress;
+			const country = data.country;
+			return { ipaddress, country };
 		})
 		.catch(error => {
 			console.error('Error in getIPAddress:', error);
@@ -827,7 +830,7 @@ function createQRCode(text) {
 async function playMedia() {
 	try {
 		await window.__TAURI__.invoke('play_media');
-		botResponse.textContent = "Media is now playing...";
+		botResponse.textContent = "Resumed playback...";
 	} catch (error) {
 		console.error('Failed to play media:', error);
 		botResponse.textContent = "Failed to play media. Please try again later.";
@@ -838,7 +841,7 @@ async function playMedia() {
 async function pauseMedia() {
 	try {
 		await window.__TAURI__.invoke('pause_media');
-		botResponse.textContent = "Media is now paused...";
+		botResponse.textContent = "Paused playback...";
 	} catch (error) {
 		console.error('Failed to pause media:', error);
 		botResponse.textContent = "Failed to pause media. Please try again later.";
@@ -849,10 +852,10 @@ async function pauseMedia() {
 async function previousMedia() {
 	try {
 		await window.__TAURI__.invoke('previous_media');
-		botResponse.textContent = "Playing previous media...";
+		botResponse.textContent = "Playing previous track...";
 	} catch (error) {
 		console.error('Failed to play previous media:', error);
-		botResponse.textContent = "Failed to play previous media. Please try again later.";
+		botResponse.textContent = "Failed to play previous track. Please try again later.";
 	}
 }
 
@@ -860,10 +863,10 @@ async function previousMedia() {
 async function nextMedia() {
 	try {
 		await window.__TAURI__.invoke('next_media');
-		botResponse.textContent = "Playing next media...";
+		botResponse.textContent = "Playing next track...";
 	} catch (error) {
 		console.error('Failed to play next media:', error);
-		botResponse.textContent = "Failed to play next media. Please try again later.";
+		botResponse.textContent = "Failed to skip to the next track. Please try again later.";
 	}
 }
 
@@ -886,5 +889,157 @@ async function decreaseVolume() {
 	} catch (error) {
 		console.error('Failed to decrease volume:', error);
 		botResponse.textContent = "Failed to decrease volume. Please try again later.";
+	}
+}
+
+
+
+// function to get natural disaster alerts
+async function getDisasterAlerts() {
+	try {
+		const { country } = await getIPAddress();
+		let countryCode = country;
+		switch (country) {
+			case 'AF': countryCode = 'AFG'; break; case 'AX': countryCode = 'ALA'; break; case 'AL': countryCode = 'ALB'; break;
+			case 'DZ': countryCode = 'DZA'; break; case 'AS': countryCode = 'ASM'; break; case 'AD': countryCode = 'AND'; break;
+			case 'AO': countryCode = 'AGO'; break; case 'AI': countryCode = 'AIA'; break; case 'AQ': countryCode = 'ATA'; break;
+			case 'AG': countryCode = 'ATG'; break; case 'AR': countryCode = 'ARG'; break; case 'AM': countryCode = 'ARM'; break;
+			case 'AW': countryCode = 'ABW'; break; case 'AU': countryCode = 'AUS'; break; case 'AT': countryCode = 'AUT'; break;
+			case 'AZ': countryCode = 'AZE'; break; case 'BS': countryCode = 'BHS'; break; case 'BH': countryCode = 'BHR'; break;
+			case 'BD': countryCode = 'BGD'; break; case 'BB': countryCode = 'BRB'; break; case 'BY': countryCode = 'BLR'; break;
+			case 'BE': countryCode = 'BEL'; break; case 'BZ': countryCode = 'BLZ'; break; case 'BJ': countryCode = 'BEN'; break;
+			case 'BM': countryCode = 'BMU'; break; case 'BT': countryCode = 'BTN'; break; case 'BO': countryCode = 'BOL'; break;
+			case 'BA': countryCode = 'BIH'; break; case 'BW': countryCode = 'BWA'; break; case 'BV': countryCode = 'BVT'; break;
+			case 'BR': countryCode = 'BRA'; break; case 'VG': countryCode = 'VGB'; break; case 'IO': countryCode = 'IOT'; break;
+			case 'BN': countryCode = 'BRN'; break; case 'BG': countryCode = 'BGR'; break; case 'BF': countryCode = 'BFA'; break;
+			case 'BI': countryCode = 'BDI'; break; case 'KH': countryCode = 'KHM'; break; case 'CM': countryCode = 'CMR'; break;
+			case 'CA': countryCode = 'CAN'; break; case 'CV': countryCode = 'CPV'; break; case 'KY': countryCode = 'CYM'; break;
+			case 'CF': countryCode = 'CAF'; break; case 'TD': countryCode = 'TCD'; break; case 'CL': countryCode = 'CHL'; break;
+			case 'CN': countryCode = 'CHN'; break; case 'HK': countryCode = 'HKG'; break; case 'MO': countryCode = 'MAC'; break;
+			case 'CX': countryCode = 'CXR'; break; case 'CC': countryCode = 'CCK'; break; case 'CO': countryCode = 'COL'; break;
+			case 'KM': countryCode = 'COM'; break; case 'CG': countryCode = 'COG'; break; case 'CD': countryCode = 'COD'; break;
+			case 'CK': countryCode = 'COK'; break; case 'CR': countryCode = 'CRI'; break; case 'CI': countryCode = 'CIV'; break;
+			case 'HR': countryCode = 'HRV'; break; case 'CU': countryCode = 'CUB'; break; case 'CY': countryCode = 'CYP'; break;
+			case 'CZ': countryCode = 'CZE'; break; case 'DK': countryCode = 'DNK'; break; case 'DJ': countryCode = 'DJI'; break;
+			case 'DM': countryCode = 'DMA'; break; case 'DO': countryCode = 'DOM'; break; case 'EC': countryCode = 'ECU'; break;
+			case 'EG': countryCode = 'EGY'; break; case 'SV': countryCode = 'SLV'; break; case 'GQ': countryCode = 'GNQ'; break;
+			case 'ER': countryCode = 'ERI'; break; case 'EE': countryCode = 'EST'; break; case 'ET': countryCode = 'ETH'; break;
+			case 'FK': countryCode = 'FLK'; break; case 'FO': countryCode = 'FRO'; break; case 'FJ': countryCode = 'FJI'; break;
+			case 'FI': countryCode = 'FIN'; break; case 'FR': countryCode = 'FRA'; break; case 'GF': countryCode = 'GUF'; break;
+			case 'PF': countryCode = 'PYF'; break; case 'TF': countryCode = 'ATF'; break; case 'GA': countryCode = 'GAB'; break;
+			case 'GM': countryCode = 'GMB'; break; case 'GE': countryCode = 'GEO'; break; case 'DE': countryCode = 'DEU'; break;
+			case 'GH': countryCode = 'GHA'; break; case 'GI': countryCode = 'GIB'; break; case 'GR': countryCode = 'GRC'; break;
+			case 'GL': countryCode = 'GRL'; break; case 'GD': countryCode = 'GRD'; break; case 'GP': countryCode = 'GLP'; break;
+			case 'GU': countryCode = 'GUM'; break; case 'GT': countryCode = 'GTM'; break; case 'GG': countryCode = 'GGY'; break;
+			case 'GN': countryCode = 'GIN'; break; case 'GW': countryCode = 'GNB'; break; case 'GY': countryCode = 'GUY'; break;
+			case 'HT': countryCode = 'HTI'; break; case 'HM': countryCode = 'HMD'; break; case 'VA': countryCode = 'VAT'; break;
+			case 'HN': countryCode = 'HND'; break; case 'HU': countryCode = 'HUN'; break; case 'IS': countryCode = 'ISL'; break;
+			case 'IN': countryCode = 'IND'; break; case 'ID': countryCode = 'IDN'; break; case 'IR': countryCode = 'IRN'; break;
+			case 'IQ': countryCode = 'IRQ'; break; case 'IE': countryCode = 'IRL'; break; case 'IM': countryCode = 'IMN'; break;
+			case 'IL': countryCode = 'ISR'; break; case 'IT': countryCode = 'ITA'; break; case 'JM': countryCode = 'JAM'; break;
+			case 'JP': countryCode = 'JPN'; break; case 'JE': countryCode = 'JEY'; break; case 'JO': countryCode = 'JOR'; break;
+			case 'KZ': countryCode = 'KAZ'; break; case 'KE': countryCode = 'KEN'; break; case 'KI': countryCode = 'KIR'; break;
+			case 'KP': countryCode = 'PRK'; break; case 'KR': countryCode = 'KOR'; break; case 'KW': countryCode = 'KWT'; break;
+			case 'KG': countryCode = 'KGZ'; break; case 'LA': countryCode = 'LAO'; break; case 'LV': countryCode = 'LVA'; break;
+			case 'LB': countryCode = 'LBN'; break; case 'LS': countryCode = 'LSO'; break; case 'LR': countryCode = 'LBR'; break;
+			case 'LY': countryCode = 'LBY'; break; case 'LI': countryCode = 'LIE'; break; case 'LT': countryCode = 'LTU'; break;
+			case 'LU': countryCode = 'LUX'; break; case 'MK': countryCode = 'MKD'; break; case 'MG': countryCode = 'MDG'; break;
+			case 'MW': countryCode = 'MWI'; break; case 'MY': countryCode = 'MYS'; break; case 'MV': countryCode = 'MDV'; break;
+			case 'ML': countryCode = 'MLI'; break; case 'MT': countryCode = 'MLT'; break; case 'MH': countryCode = 'MHL'; break;
+			case 'MQ': countryCode = 'MTQ'; break; case 'MR': countryCode = 'MRT'; break; case 'MU': countryCode = 'MUS'; break;
+			case 'YT': countryCode = 'MYT'; break; case 'MX': countryCode = 'MEX'; break; case 'FM': countryCode = 'FSM'; break;
+			case 'MD': countryCode = 'MDA'; break; case 'MC': countryCode = 'MCO'; break; case 'MN': countryCode = 'MNG'; break;
+			case 'ME': countryCode = 'MNE'; break; case 'MS': countryCode = 'MSR'; break; case 'MA': countryCode = 'MAR'; break;
+			case 'MZ': countryCode = 'MOZ'; break; case 'MM': countryCode = 'MMR'; break; case 'NA': countryCode = 'NAM'; break;
+			case 'NR': countryCode = 'NRU'; break; case 'NP': countryCode = 'NPL'; break; case 'NL': countryCode = 'NLD'; break;
+			case 'AN': countryCode = 'ANT'; break; case 'NC': countryCode = 'NCL'; break; case 'NZ': countryCode = 'NZL'; break;
+			case 'NI': countryCode = 'NIC'; break; case 'NE': countryCode = 'NER'; break; case 'NG': countryCode = 'NGA'; break;
+			case 'NU': countryCode = 'NIU'; break; case 'NF': countryCode = 'NFK'; break; case 'MP': countryCode = 'MNP'; break;
+			case 'NO': countryCode = 'NOR'; break; case 'OM': countryCode = 'OMN'; break; case 'PK': countryCode = 'PAK'; break;
+			case 'PW': countryCode = 'PLW'; break; case 'PS': countryCode = 'PSE'; break; case 'PA': countryCode = 'PAN'; break;
+			case 'PG': countryCode = 'PNG'; break; case 'PY': countryCode = 'PRY'; break; case 'PE': countryCode = 'PER'; break;
+			case 'PH': countryCode = 'PHL'; break; case 'PN': countryCode = 'PCN'; break; case 'PL': countryCode = 'POL'; break;
+			case 'PT': countryCode = 'PRT'; break; case 'PR': countryCode = 'PRI'; break; case 'QA': countryCode = 'QAT'; break;
+			case 'RE': countryCode = 'REU'; break; case 'RO': countryCode = 'ROU'; break; case 'RU': countryCode = 'RUS'; break;
+			case 'RW': countryCode = 'RWA'; break; case 'BL': countryCode = 'BLM'; break; case 'SH': countryCode = 'SHN'; break;
+			case 'KN': countryCode = 'KNA'; break; case 'LC': countryCode = 'LCA'; break; case 'MF': countryCode = 'MAF'; break;
+			case 'PM': countryCode = 'SPM'; break; case 'VC': countryCode = 'VCT'; break; case 'WS': countryCode = 'WSM'; break;
+			case 'SM': countryCode = 'SMR'; break; case 'ST': countryCode = 'STP'; break; case 'SA': countryCode = 'SAU'; break;
+			case 'SN': countryCode = 'SEN'; break; case 'RS': countryCode = 'SRB'; break; case 'SC': countryCode = 'SYC'; break;
+			case 'SL': countryCode = 'SLE'; break; case 'SG': countryCode = 'SGP'; break; case 'SK': countryCode = 'SVK'; break;
+			case 'SI': countryCode = 'SVN'; break; case 'SB': countryCode = 'SLB'; break; case 'SO': countryCode = 'SOM'; break;
+			case 'ZA': countryCode = 'ZAF'; break; case 'GS': countryCode = 'SGS'; break; case 'SS': countryCode = 'SSD'; break;
+			case 'ES': countryCode = 'ESP'; break; case 'LK': countryCode = 'LKA'; break; case 'SD': countryCode = 'SDN'; break;
+			case 'SR': countryCode = 'SUR'; break; case 'SJ': countryCode = 'SJM'; break; case 'SZ': countryCode = 'SWZ'; break;
+			case 'SE': countryCode = 'SWE'; break; case 'CH': countryCode = 'CHE'; break; case 'SY': countryCode = 'SYR'; break;
+			case 'TW': countryCode = 'TWN'; break; case 'TJ': countryCode = 'TJK'; break; case 'TZ': countryCode = 'TZA'; break;
+			case 'TH': countryCode = 'THA'; break; case 'TL': countryCode = 'TLS'; break; case 'TG': countryCode = 'TGO'; break;
+			case 'TK': countryCode = 'TKL'; break; case 'TO': countryCode = 'TON'; break; case 'TT': countryCode = 'TTO'; break;
+			case 'TN': countryCode = 'TUN'; break; case 'TR': countryCode = 'TUR'; break; case 'TM': countryCode = 'TKM'; break;
+			case 'TC': countryCode = 'TCA'; break; case 'TV': countryCode = 'TUV'; break; case 'UG': countryCode = 'UGA'; break;
+			case 'UA': countryCode = 'UKR'; break; case 'AE': countryCode = 'ARE'; break; case 'GB': countryCode = 'GBR'; break;
+			case 'US': countryCode = 'USA'; break; case 'UM': countryCode = 'UMI'; break; case 'UY': countryCode = 'URY'; break;
+			case 'UZ': countryCode = 'UZB'; break; case 'VU': countryCode = 'VUT'; break; case 'VE': countryCode = 'VEN'; break;
+			case 'VN': countryCode = 'VNM'; break; case 'VI': countryCode = 'VIR'; break; case 'WF': countryCode = 'WLF'; break;
+			case 'EH': countryCode = 'ESH'; break; case 'YE': countryCode = 'YEM'; break; case 'ZM': countryCode = 'ZMB'; break;
+			case 'ZW': countryCode = 'ZWE'; break; case 'XK': countryCode = 'XKX'; break;
+		}
+		const proxyUrl = 'https://proxy.cors.sh/';
+		const targetUrl = `https://api.ambeedata.com/disasters/latest/by-country-code?countryCode=${countryCode}&limit=50&page=1`;
+		const response = await fetch(`${proxyUrl}${targetUrl}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'x-cors-api-key': 'temp_926ec718593f306b641bb1f09a4a203b',
+				'x-api-key': '44a116d525bd4f6d1e8fb69870e74616e3006cb3e9cabfbf12b78e5c29db1a49'
+			},
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		const data = await response.json();
+
+		if (data.message === 'Data not available!' || !data.result || data.result.length === 0) {
+			return `There are no currently reported alerts for your location (${countryCode})`;
+		}
+
+		const alerts = data.result;
+		const alertDetails = alerts.map(alert => {
+			let alertType = alert.event_type;
+			switch (alertType) {
+				case 'EQ': alertType = 'Earthquake'; break;
+				case 'TC': alertType = 'Tropical Cyclone'; break;
+				case 'WF': alertType = 'Wildfire'; break;
+				case 'FL': alertType = 'Flood'; break;
+				case 'ET': alertType = 'Extreme Temperature'; break;
+				case 'DR': alertType = 'Drought'; break;
+				case 'SW': alertType = 'Severe Weather'; break;
+				case 'SI': alertType = 'Sea ice'; break;
+				case 'VO': alertType = 'Volcano'; break;
+				case 'LS': alertType = 'Landslide'; break;
+				case 'TN': alertType = 'Tsunami'; break;
+				case 'Misc': alertType = 'Miscellaneous'; break;
+			}
+
+			let alertLocation = alert.event_name;
+			alertLocation = alertLocation.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+
+			let alertDate = alert.date;
+			let alertLatitude = alert.lat;
+			let alertLongitude = alert.lng;
+
+			return `
+				Location: ${alertLocation}<br>
+				Alert Type: ${alertType}<br>
+				Date: ${alertDate}<br>
+				Latitude: ${alertLatitude}<br>
+				Longitude: ${alertLongitude}<br>
+			`;
+		}).join('<br>');
+
+		return `Here are the currently reported alerts for your location (${countryCode}) [limited for 50 results]:<br><br>${alertDetails}`;
+	} catch (error) {
+		console.error('Error in getDisasterAlerts:', error);
+		throw error;
 	}
 }
