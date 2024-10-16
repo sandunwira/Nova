@@ -7,15 +7,21 @@
 			"hey",
 			"hi there",
 			"hello there",
-			"hey there"
+			"hey there",
+			"whats up",
+			"howdy",
+			"bonjour",
+			"salut",
+			"namaste",
+			"is anyone there",
+			"good day"
 		]
 	},
 	{
 		"intent": "morning",
 		"requests": [
 			"good morning",
-			"morning",
-			"good day"
+			"morning"
 		]
 	},
 	{
@@ -24,9 +30,7 @@
 			"good afternoon",
 			"afternoon",
 			"good noon",
-			"noon",
-			"good day",
-			"good day to you"
+			"noon"
 		]
 	},
 	{
