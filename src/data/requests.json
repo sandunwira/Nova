@@ -13,7 +13,7 @@
 			"bonjour",
 			"salut",
 			"namaste",
-			"is anyone there",
+			"anyone there",
 			"good day"
 		]
 	},
@@ -65,7 +65,14 @@
 			"adios",
 			"later",
 			"c u",
-			"see u"
+			"see u",
+			"ttyl",
+			"talk to you later",
+			"talk to u later",
+			"c ya",
+			"i got to go",
+			"gtg",
+			"im leaving"
 		]
 	},
 	{
