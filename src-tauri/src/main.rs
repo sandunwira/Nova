@@ -14,7 +14,16 @@ fn main() {
       let main_window = app.get_window("main").unwrap();
         Ok(())
       })
-    .invoke_handler(tauri::generate_handler![open_application, open_url, play_media, pause_media, previous_media, next_media, increase_volume, decrease_volume])
+    .invoke_handler(tauri::generate_handler![
+      open_application,
+      open_url,
+      play_media,
+      pause_media,
+      previous_media,
+      next_media,
+      increase_volume,
+      decrease_volume
+    ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
