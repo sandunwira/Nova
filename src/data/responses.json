@@ -25,16 +25,20 @@
 	{
 		"intent": "morning",
 		"responses": [
-			"Good morning [name]! How can I help you today?",
-			"Hello there [name]! What a beautiful morning. How can I assist you?",
-			"Good morning [name]! It's a lovely day. What would you like to do?",
-			"Good morning [name]! What a bright and sunny day. How can I help you?",
-			"Hello [name]! It's a beautiful morning. What can I do for you today?",
-			"Good morning [name]! What a wonderful day to start. How can I assist you?",
-			"Hello [name]! It's a beautiful morning. Is there anything I can help you with?",
-			"Good morning [name]! What a lovely day to be alive. What can I do for you?",
-			"Hello [name]! It's a beautiful morning. How can I be of service to you today?",
-			"Good morning [name]! What a great day to start. What can I help you with?"
+			"Morning [name]! Let's make today awesome.",
+			"Rise and shine [name], my favorite teammate!",
+			"Hey there [name], ready for another adventure?",
+			"Morning [name]! Let's make today count",
+			"Good morning [name]! let's conquer the day!",
+			"Top of the morning [name]! I'm here with you.",
+			"Morning [name]! Let's get this day started.",
+			"Hey, morning [name]! What's on our agenda today?",
+			"Good morning [name]! Let's seize the day together.",
+			"Good morning [name]! Ready to tackle the day together?",
+			"Hey [name], sleep well?",
+			"Morning, sleepyhead! Ready to start the day [name]?",
+			"Good morning [name]! How did you sleep?",
+			"Morning [name]! Ready to take on the day?"
 		]
 	},
 	{
