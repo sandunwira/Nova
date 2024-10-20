@@ -22,7 +22,8 @@ fn main() {
       previous_media,
       next_media,
       increase_volume,
-      decrease_volume
+      decrease_volume,
+      get_system_info
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
@@ -120,4 +121,42 @@ fn decrease_volume() -> Result<(), String> {
         keybd_event(VK_VOLUME_DOWN as u8, 0, KEYEVENTF_KEYUP, 0);
     }
     Ok(())
+}
+
+
+use sysinfo::{Components, Disks, Networks, System};
+
+#[tauri::command]
+fn get_system_info() -> Result<String, String> {
+    let mut sys = System::new_all();
+    sys.refresh_all();
+
+    let mut info = String::new();
+
+    info.push_str("System:\n");
+    info.push_str(&format!("Total Memory: {} bytes\n", sys.total_memory()));
+    info.push_str(&format!("Used Memory: {} bytes\n", sys.used_memory()));
+    info.push_str(&format!("Total Swap: {} bytes\n", sys.total_swap()));
+    info.push_str(&format!("Used Swap: {} bytes\n", sys.used_swap()));
+
+    info.push_str(&format!("System Name: {:?}\n", System::name()));
+    info.push_str(&format!("System OS Build Version: {:?}\n", System::kernel_version()));
+    info.push_str(&format!("System OS Version: {:?}\n", System::os_version()));
+    info.push_str(&format!("System Host Name: {:?}\n", System::host_name()));
+
+    info.push_str(&format!("NB CPUs: {}\n", sys.cpus().len()));
+
+    info.push_str("Disks:\n");
+    let disks = Disks::new_with_refreshed_list();
+    for disk in &disks {
+        info.push_str(&format!("{:?}\n", disk));
+    }
+
+    info.push_str("Components:\n");
+    let components = Components::new_with_refreshed_list();
+    for component in &components {
+        info.push_str(&format!("{:?}\n", component));
+    }
+
+    Ok(info)
 }

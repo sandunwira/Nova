@@ -19,6 +19,7 @@ tauri-bundler = "1.4.5"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.8.0", features = [ "dialog-all", "os-all", "notification-all", "fs-all", "shell-open"] }
 winapi = { version = "0.3", features = ["winuser"] }
+sysinfo = "0.32.0"
 
 
 [features]

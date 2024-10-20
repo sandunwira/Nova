@@ -1,4 +1,5 @@
 const { appWindow } = window.__TAURI__.window;
+const { invoke } = window.__TAURI__.tauri;
 
 const chatForm = document.getElementById('chatForm');
 const chatMessage = document.getElementById('chatMessage');
@@ -163,6 +164,9 @@ chatForm.addEventListener('submit', function (event) {
 		} else {
 			botResponse.textContent = "Sorry, I couldn't understand the conversion request. Please use the format: convert [amount][base_currency] to [target_currency].";
 		}
+	} else if (userMessage.toLowerCase().includes("pc info")) {
+		botResponse.textContent = "Fetching system information...";
+		getSystemInfo().then(systemInfo => botResponse.textContent = systemInfo).catch(error => botResponse.textContent = "Sorry, I couldn't fetch system information.");
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.innerHTML = response;
@@ -1109,4 +1113,20 @@ async function convertCurrency(amount, fromCurrency, toCurrency) {
 		console.error('Error in convertCurrency:', error);
 		throw error;
 	}
+}
+
+
+
+// Function to get and display system information
+async function getSystemInfo() {
+    const botResponse = document.getElementById('botResponse');
+    try {
+        console.log('Invoking get_system_info');
+        const systemInfo = await invoke('get_system_info');
+        console.log('System info received:', systemInfo);
+        return systemInfo;
+    } catch (error) {
+        console.error('Error getting system information:', error);
+        botResponse.textContent = 'Failed to get system information. Please try again later.';
+    }
 }
