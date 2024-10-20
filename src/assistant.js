@@ -59,7 +59,7 @@ chatForm.addEventListener('submit', function (event) {
 		getIPAddress().then(({ ipaddress }) => botResponse.textContent = `Your IP Address is: ${ipaddress}`).catch(error => botResponse.textContent = "Sorry, I couldn't fetch your IP Address.");
 	} else if (userMessage.toLowerCase().includes("weather")) {
 		botResponse.textContent = "Fetching the weather...";
-		getWeather().then(weatherDetails => botResponse.textContent = weatherDetails).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the weather data.");
+		getWeather().then(weatherDetails => botResponse.textContent = weatherDetails).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the weather.");
 	} else if (userMessage.toLowerCase().includes("time") || userMessage.toLowerCase().includes("clock") || userMessage.toLowerCase().includes("current time") || userMessage.toLowerCase().includes("what's the time") || userMessage.toLowerCase().includes("what time is it") || userMessage.toLowerCase().includes("tell me the time")) {
 		botResponse.textContent = "Fetching the time...";
 		botResponse.textContent = "Current time is " + getTime();
@@ -147,7 +147,7 @@ chatForm.addEventListener('submit', function (event) {
 		botResponse.appendChild(qrCodeElement);
 	} else {
 		const response = findResponse(userMessage);
-		botResponse.textContent = response;
+		botResponse.innerHTML = response;
 	}
 });
 
@@ -188,6 +188,7 @@ function replaceDynamicVariables(response) {
 	const customData = {
 		// Custom data
 		name: "Adam",
+		feedback_url: `<a href="https://forms.gle/77MP5rjGaXWLjhmcA">https://forms.gle/77MP5rjGaXWLjhmcA</a>`,
 	};
 
 	return response.replace(/\[([^\]]+)\]/g, (match, variable) => {
@@ -357,9 +358,9 @@ async function getIPAddress() {
 // function to get the weather
 async function getWeather() {
 	try {
-		const ipaddressforlocation = await getIPAddress();
-		console.log(`IP Address for Location: ${ipaddressforlocation}`);
-		const location = await fetch(`https://ipinfo.io/${ipaddressforlocation}/city?token=a6384bf1fee5c5`)
+		const { ipaddress } = await getIPAddress();
+		console.log(`IP Address for Location: ${ipaddress}`);
+		const location = await fetch(`https://ipinfo.io/${ipaddress}/city?token=a6384bf1fee5c5`)
 			.then(response => response.text());
 		console.log(`Location: ${location}`);
 		const weatherData = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=2e65cf86daa6dc72fef7c3f47c32788e`)
@@ -370,6 +371,7 @@ async function getWeather() {
 		return weatherDetails;
 	} catch (error) {
 		console.error('Error in getWeather:', error);
+		throw error;
 	}
 }
 

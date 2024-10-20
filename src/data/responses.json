@@ -375,18 +375,27 @@
 		]
 	},
 	{
+		"intent": "feedback",
+		"responses": [
+			"You can submit feedback by clicking on the profile icon and selecting 'Feedback' or by visiting [feedback_url], [name].",
+			"Your feedback is important to us, [name]. You can submit it by clicking on the profile icon and selecting 'Feedback' or by visiting [feedback_url].",
+			"You can provide feedback by clicking on the profile icon and selecting 'Feedback' or by visiting [feedback_url], [name].",
+			"Your feedback is valuable to us, [name]. You can submit it by clicking on the profile icon and selecting 'Feedback' or by visiting [feedback_url]."
+		]
+	},
+	{
 		"intent": "emergency",
 		"responses": [
-			"Emergency? Please state the nature of the emergency [name]. I'll do my best to assist you.",
-			"Emergency detected. Please provide more details so I can help you effectively [name].",
-			"Is this an emergency [name]? Please describe the situation so I can offer appropriate assistance.",
-			"Emergency situation. Please provide as much information as possible so I can help you [name].",
-			"Is there an immediate threatn[name]? Please describe the emergency in detail.",
-			"Emergency mode activated. Please provide the necessary information [name].",
-			"I'm here to help in this emergency [name]. Please describe the situation.",
-			"Emergency assistance is on standby [name]. Please provide the details.",
-			"Is this a life-threatening emergency [name]? Please describe the situation.",
-			"Emergency protocol initiated. Please provide the necessary information [name]."
+			"Emergency? Please state the nature of the emergency [name]. I'll do my best to assist you. Do you want me to provide emergency services? I can direct you to the nearest emergency services, [name].",
+			"Emergency detected. Please provide more details so I can help you effectively [name]. Do you require immediate assistance? I can contact emergency services for you, [name].",
+			"Is this an emergency [name]? Please describe the situation so I can offer appropriate assistance. Do you need me to contact emergency services for you, [name]? I can direct you to the nearest emergency services.",
+			"Emergency situation. Please provide as much information as possible so I can help you [name]. Do you require immediate assistance? I can contact emergency services for you, [name]. I can direct you to the nearest emergency services.",
+			"Is there an immediate threat [name]? Please describe the emergency in detail. Do you need me to contact emergency services for you, [name]? I can direct you to the nearest emergency services.",
+			"Emergency mode activated. Please provide the necessary information [name]. Do you require immediate assistance? I can contact emergency services for you, [name]. I can direct you to the nearest emergency services.",
+			"I'm here to help in this emergency [name]. Please describe the situation. Do you need me to contact emergency services for you, [name]? I can direct you to the nearest emergency services.",
+			"Emergency assistance is on standby [name]. Please provide the details. Do you need me to contact emergency services for you, [name]? I can direct you to the nearest emergency services.",
+			"Is this a life-threatening emergency [name]? Please describe the situation. Do you need me to contact emergency services for you, [name]? I can direct you to the nearest emergency services.",
+			"Emergency protocol initiated. Please provide the necessary information [name]. Do you require immediate assistance? I can contact emergency services for you, [name]."
 		]
 	},
 	{

@@ -168,6 +168,7 @@
 	{
 		"intent": "tasks",
 		"requests": [
+			"your tasks",
 			"what can you do",
 			"what do you do",
 			"what tasks you can do",
@@ -189,6 +190,7 @@
 	{
 		"intent": "happy",
 		"requests": [
+			"happy",
 			"im happy",
 			"im feeling happy",
 			"im feeling good",
@@ -208,6 +210,7 @@
 	{
 		"intent": "sad",
 		"requests": [
+			"sad",
 			"im sad",
 			"im feeling sad",
 			"im feeling down",
@@ -229,6 +232,7 @@
 	{
 		"intent": "angry",
 		"requests": [
+			"angry",
 			"im angry",
 			"im feeling angry",
 			"im feeling mad",
@@ -242,6 +246,7 @@
 	{
 		"intent": "agree",
 		"requests": [
+			"agree",
 			"i agree",
 			"i totally agree",
 			"i completely agree",
@@ -254,6 +259,7 @@
 	{
 		"intent": "disagree",
 		"requests": [
+			"disagree",
 			"i disagree",
 			"i totally disagree",
 			"i completely disagree",
@@ -267,6 +273,12 @@
 		"intent": "help",
 		"requests": [
 			"help",
+			"problem",
+			"issue",
+			"trouble",
+			"question",
+			"need help",
+			"need assistance",
 			"can you help me",
 			"can you help me with something",
 			"can you help me with this",
@@ -274,6 +286,41 @@
 			"can you assist me",
 			"can you assist me with something",
 			"can you assist me with this"
+		]
+	},
+	{
+		"intent": "feedback",
+		"requests": [
+			"feedback",
+			"give feedback",
+			"provide feedback",
+			"send feedback",
+			"report a problem",
+			"report an issue",
+			"report a bug",
+			"submit a support ticket",
+			"submit feedback",
+			"how do i give feedback",
+			"how can i give feedback",
+			"how to give feedback",
+			"how do i provide feedback",
+			"how can i provide feedback",
+			"how to provide feedback",
+			"how do i send feedback",
+			"i want to provide feedback",
+			"i want to give feedback",
+			"i want to send feedback",
+			"how can i report a problem",
+			"how do i report a problem",
+			"how to report a problem",
+			"how can i report an issue",
+			"how do i report an issue",
+			"how to report an issue",
+			"how can i report a bug",
+			"how do i submit a support ticket",
+			"how to submit a support ticket",
+			"how can i submit a support ticket",
+			"how do i submit a bug"
 		]
 	},
 	{
@@ -306,9 +353,7 @@
 			"tell a fact",
 			"give me a fact",
 			"a fact",
-			"fact",
-			"random fact",
-			"random fact please"
+			"fact"
 		]
 	},
 	{
