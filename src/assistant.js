@@ -145,6 +145,24 @@ chatForm.addEventListener('submit', function (event) {
 		const qrCodeElement = createQRCode(text);
 		botResponse.innerHTML = `Here's the QR Code for "${text}":<br><br>`;
 		botResponse.appendChild(qrCodeElement);
+	} else if (userMessage.toLowerCase().startsWith("convert")) {
+		const match = userMessage.match(/convert (\d+)([a-zA-Z]+) to ([a-zA-Z]+)/);
+		if (match) {
+			const amount = parseFloat(match[1]);
+			const fromCurrency = match[2].toUpperCase();
+			const toCurrency = match[3].toUpperCase();
+			let formattedAmount = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+			botResponse.textContent = `Converting ${formattedAmount} ${fromCurrency} to ${toCurrency}...`;
+			convertCurrency(amount, fromCurrency, toCurrency)
+				.then(convertedAmount => {
+					botResponse.textContent = `${convertedAmount} as of ${getDate().month} ${getDate().day}, ${getDate().year} at ${getTime()}`;
+				})
+				.catch(error => {
+					botResponse.textContent = "Sorry, I couldn't convert the currency.";
+				});
+		} else {
+			botResponse.textContent = "Sorry, I couldn't understand the conversion request. Please use the format: convert [amount][base_currency] to [target_currency].";
+		}
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.innerHTML = response;
@@ -1042,6 +1060,40 @@ async function getDisasterAlerts() {
 		return `Here are the currently reported alerts for your location (${countryCode}) [limited for 50 results]:<br><br>${alertDetails}`;
 	} catch (error) {
 		console.error('Error in getDisasterAlerts:', error);
+		throw error;
+	}
+}
+
+
+
+// function to convert currencies
+async function convertCurrency(amount, fromCurrency, toCurrency) {
+	try {
+		const proxyUrl = 'https://api.allorigins.win/get?url=';
+		const targetUrl = `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${fromCurrency.toLowerCase()}.json`;
+		const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json'
+			}
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		const data = await response.json();
+		const jsonData = JSON.parse(data.contents);
+		const exchangeRate = jsonData[fromCurrency.toLowerCase()][toCurrency.toLowerCase()];
+		if (!exchangeRate) {
+			throw new Error(`Exchange rate not found for ${fromCurrency} to ${toCurrency}`);
+		}
+		let convertedAmount = (amount * exchangeRate).toFixed(2);
+		// format the amount to have commas
+		amount = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		convertedAmount = convertedAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		return `${amount} ${fromCurrency} = ${convertedAmount} ${toCurrency}`;
+	} catch (error) {
+		console.error('Error in convertCurrency:', error);
 		throw error;
 	}
 }
