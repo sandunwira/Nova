@@ -2,24 +2,15 @@
 	{
 		"intent": "greeting",
 		"responses": [
-			"Hey, [name]! nice to see you!",
-			"Hello, [name]! nice to see you!",
-			"Hi, [name]! nice to see you!",
-			"Hello, [name]! how can I help you?",
-			"Hi there, [name]! how can I help you?",
-			"Hey there, [name]! how can I help you?",
-			"Hi there, [name]! How can I help you today?",
-			"Hello, [name]! What can I do for you?",
-			"Hey, [name]! How may I assist you today?",
-			"Hey, [name]! Good to see you! What can I do for you?",
-			"Hey there, [name]! What's up?",
-			"Hi there, [name]! It's a pleasure to see you again. How can I help you today?",
-			"Hey, [name]! Nova here! What can I do for you?",
-			"Hi there! How may I assist you today, [name]? It's always a joy to be of service.",
-			"Good to see you, [name]! What can I do for you today? I'm ready to assist.",
-			"Hey there, [name]! I'm here to support you.",
-			"Hey there, [name]! What's up? I'm here to assist you in any way I can.",
-			"Hi, [name]! nice to see you again! How can I help you today?"
+			"Hi there, [name]! How's your day been so far? I've missed talking to you!",
+			"Hello, [name]! It's always great to hear from you! How have you been?",
+			"Hey there, [name]! Always glad to hear from you! How have you been?",
+			"Heyyy! It's so good to hear from you, [name]! How's everything going?",
+			"Hey! How are you doing, [name]? What's been going on with you lately?",
+			"Hey there, [name]! I'm really glad we're chatting. What's been happening in your world lately?",
+			"Hey, [name], I've missed you! How have you been?",
+			"Hey there, [name]! It's nice to hear from you. How's everything going?",
+			"Hey, [name]! How's everything going? I've been thinking about you."
 		]
 	},
 	{
