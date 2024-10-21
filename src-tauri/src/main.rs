@@ -1,6 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayEvent};
 use tauri::Manager;
 use std::env;
 use std::fs;
@@ -9,7 +10,48 @@ use std::path::Path;
 use winapi::um::winuser::{keybd_event, VK_MEDIA_PLAY_PAUSE, VK_MEDIA_PREV_TRACK, VK_MEDIA_NEXT_TRACK, VK_VOLUME_UP, VK_VOLUME_DOWN, KEYEVENTF_KEYUP};
 
 fn main() {
+  // Create the system tray menu items
+  let quit = CustomMenuItem::new("quit".to_string(), "Quit");
+  let tray_menu = SystemTrayMenu::new()
+    .add_item(quit);
+
+  // Create the system tray
+  let system_tray = SystemTray::new().with_menu(tray_menu);
+
   tauri::Builder::default()
+    .system_tray(system_tray)
+    .on_system_tray_event(|app, event| match event {
+      SystemTrayEvent::LeftClick {
+        position: _,
+        size: _,
+        ..
+      } => {
+        println!("system tray received a left click");
+      }
+      SystemTrayEvent::RightClick {
+        position: _,
+        size: _,
+        ..
+      } => {
+        println!("system tray received a right click");
+      }
+      SystemTrayEvent::DoubleClick {
+        position: _,
+        size: _,
+        ..
+      } => {
+        println!("system tray received a double click");
+      }
+      SystemTrayEvent::MenuItemClick { id, .. } => {
+        match id.as_str() {
+          "quit" => {
+            std::process::exit(0);
+          }
+          _ => {}
+        }
+      }
+      _ => {}
+    })
     .setup(|app| {
       let main_window = app.get_window("main").unwrap();
         Ok(())
