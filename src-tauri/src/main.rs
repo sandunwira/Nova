@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayEvent};
-use tauri::Manager;
+use tauri::{Manager, WindowEvent};
 use std::env;
 use std::fs;
 use std::process::Command;
@@ -41,6 +41,9 @@ fn main() {
         ..
       } => {
         println!("system tray received a double click");
+        let main_window = app.get_window("main").unwrap();
+        main_window.show().expect("failed to show main window");
+        println!("Main window is shown");
       }
       SystemTrayEvent::MenuItemClick { id, .. } => {
         match id.as_str() {
@@ -54,8 +57,18 @@ fn main() {
     })
     .setup(|app| {
       let main_window = app.get_window("main").unwrap();
-        Ok(())
-      })
+      let main_window_clone = main_window.clone();
+      // Listen for the close event on the main window
+      main_window.on_window_event(move |event| {
+        if let WindowEvent::CloseRequested { api, .. } = event {
+          // Prevent the window from closing and hide it instead
+          api.prevent_close();
+          main_window_clone.hide().expect("failed to hide main window");
+          println!("Main window is hidden");
+        }
+      });
+      Ok(())
+    })
     .invoke_handler(tauri::generate_handler![
       open_application,
       open_url,
