@@ -141,6 +141,12 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("decrease volume") || userMessage.toLowerCase().includes("volume down")) {
 		botResponse.textContent = "Decreasing volume...";
 		decreaseVolume();
+	} else if (userMessage.toLowerCase().startsWith("mute")) {
+		botResponse.textContent = "Muting the volume...";
+		muteVolume();
+	} else if (userMessage.toLowerCase().startsWith("unmute")) {
+		botResponse.textContent = "Unmuting the volume...";
+		unmuteVolume();
 	} else if (userMessage.toLowerCase().startsWith("create qr for")) {
 		const text = userMessage.replace("create qr for", "").trim();
 		const qrCodeElement = createQRCode(text);
@@ -926,6 +932,28 @@ async function decreaseVolume() {
 	} catch (error) {
 		console.error('Failed to decrease volume:', error);
 		botResponse.textContent = "Failed to decrease volume. Please try again later.";
+	}
+}
+
+// function to toggle mute
+async function muteVolume() {
+	try {
+		await window.__TAURI__.invoke('toggle_mute');
+		botResponse.textContent = "Volume muted...";
+	} catch (error) {
+		console.error('Failed to mute volume:', error);
+		botResponse.textContent = "Failed to mute volume. Please try again later.";
+	}
+}
+
+// function to toggle unmute
+async function unmuteVolume() {
+	try {
+		await window.__TAURI__.invoke('toggle_mute');
+		botResponse.textContent = "Volume unmuted...";
+	} catch (error) {
+		console.error('Failed to unmute volume:', error);
+		botResponse.textContent = "Failed to unmute volume. Please try again later.";
 	}
 }
 
