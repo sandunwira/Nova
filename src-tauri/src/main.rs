@@ -6,6 +6,7 @@ use tauri::{Manager, WindowEvent};
 use std::env;
 use std::fs;
 use std::process::Command;
+use runas::Command as RunasCommand;
 use std::path::Path;
 use winapi::um::winuser::{keybd_event, VK_MEDIA_PLAY_PAUSE, VK_MEDIA_PREV_TRACK, VK_MEDIA_NEXT_TRACK, VK_VOLUME_UP, VK_VOLUME_DOWN, KEYEVENTF_KEYUP, VK_VOLUME_MUTE};
 
@@ -79,6 +80,8 @@ fn main() {
       increase_volume,
       decrease_volume,
       toggle_mute,
+      turn_on_wifi,
+      turn_off_wifi,
       get_system_info
     ])
     .run(tauri::generate_context!())
@@ -186,6 +189,37 @@ fn toggle_mute() -> Result<(), String> {
     keybd_event(VK_VOLUME_MUTE as u8, 0, KEYEVENTF_KEYUP, 0);
   }
   Ok(())
+}
+
+
+#[tauri::command]
+fn turn_on_wifi() -> Result<(), String> {
+    let status = RunasCommand::new("powershell")
+        .args(&["netsh", "interface", "set", "interface", "Wi-Fi", "enabled"])
+        .show(false)
+        .status()
+        .map_err(|e| e.to_string())?;
+
+    if status.success() {
+        Ok(())
+    } else {
+        Err("Failed to turn on WiFi".to_string())
+    }
+}
+
+#[tauri::command]
+fn turn_off_wifi() -> Result<(), String> {
+    let status = RunasCommand::new("powershell")
+        .args(&["netsh", "interface", "set", "interface", "Wi-Fi", "disabled"])
+        .show(false)
+        .status()
+        .map_err(|e| e.to_string())?;
+
+    if status.success() {
+        Ok(())
+    } else {
+        Err("Failed to turn off WiFi".to_string())
+    }
 }
 
 

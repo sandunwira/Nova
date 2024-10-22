@@ -147,6 +147,12 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().startsWith("unmute")) {
 		botResponse.textContent = "Unmuting the volume...";
 		unmuteVolume();
+	} else if (userMessage.toLowerCase().includes("on wifi") || userMessage.toLowerCase().includes("wifi on")) {
+		botResponse.textContent = "Turning on Wi-Fi...";
+		turnOnWiFi();
+	} else if (userMessage.toLowerCase().includes("off wifi") || userMessage.toLowerCase().includes("wifi off")) {
+		botResponse.textContent = "Turning off Wi-Fi...";
+		turnOffWiFi();
 	} else if (userMessage.toLowerCase().startsWith("create qr for")) {
 		const text = userMessage.replace("create qr for", "").trim();
 		const qrCodeElement = createQRCode(text);
@@ -955,6 +961,30 @@ async function unmuteVolume() {
 		console.error('Failed to unmute volume:', error);
 		botResponse.textContent = "Failed to unmute volume. Please try again later.";
 	}
+}
+
+
+
+// function to turn on wifi
+async function turnOnWiFi() {
+    try {
+        await window.__TAURI__.invoke('turn_on_wifi');
+        botResponse.textContent = "WiFi turned on...";
+    } catch (error) {
+        console.error('Failed to turn on WiFi:', error);
+        botResponse.textContent = "Failed to turn on WiFi. Please try again later.";
+    }
+}
+
+// function to turn off wifi
+async function turnOffWiFi() {
+    try {
+        await window.__TAURI__.invoke('turn_off_wifi');
+        botResponse.textContent = "WiFi turned off...";
+    } catch (error) {
+        console.error('Failed to turn off WiFi:', error);
+        botResponse.textContent = "Failed to turn off WiFi. Please try again later.";
+    }
 }
 
 
