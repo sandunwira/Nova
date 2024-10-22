@@ -17,7 +17,7 @@ tauri-build = { version = "1.5.5", features = [] }
 serde_json = "1.0"
 tauri-bundler = "1.4.5"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.8.0", features = [ "system-tray", "dialog-all", "os-all", "notification-all", "fs-all", "shell-open"] }
+tauri = { version = "1.8.0", features = [ "window-start-dragging", "window-set-decorations", "window-set-resizable", "window-close", "window-set-title", "window-set-closable", "window-set-always-on-top", "window-center", "window-set-size", "window-create", "system-tray", "dialog-all", "os-all", "notification-all", "fs-all", "shell-open"] }
 winapi = { version = "0.3", features = ["winuser"] }
 sysinfo = "0.32.0"
 runas = "1.2.0"

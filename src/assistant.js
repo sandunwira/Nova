@@ -1,4 +1,4 @@
-const { appWindow } = window.__TAURI__.window;
+const { appWindow, WebviewWindow } = window.__TAURI__.window;
 const { invoke } = window.__TAURI__.tauri;
 
 const chatForm = document.getElementById('chatForm');
@@ -123,6 +123,10 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("disaster") || userMessage.toLowerCase().includes("natural disaster") || userMessage.toLowerCase().includes("disaster alert") || userMessage.toLowerCase().includes("disaster warning")) {
 		botResponse.textContent = "Fetching disaster alerts...";
 		getDisasterAlerts().then(alerts => botResponse.innerHTML = alerts).catch(error => botResponse.textContent = "Sorry, I couldn't fetch disaster alerts.");
+	} else if (userMessage.toLowerCase().includes("play") && userMessage.toLowerCase().includes("by")) {
+		botResponse.textContent = "Opening YouTube Music...";
+		const query = userMessage.replace("play", "").trim();
+		openYTMusic(query).then(() => botResponse.textContent = "Opened YouTube Music").catch(error => botResponse.textContent = "Sorry, I couldn't open YouTube Music.");
 	} else if (userMessage.toLowerCase().includes("play") || userMessage.toLowerCase().includes("resume")) {
 		botResponse.textContent = "Resuming playback...";
 		playMedia();
@@ -875,6 +879,40 @@ function createQRCode(text) {
 
 
 
+// function to open_ytmusic
+async function openYTMusic(query) {
+	try {
+		let ytplayerstatus = "Opening YouTube Music...";
+
+		const newWindow = new WebviewWindow('ytmusic_window', {
+			url: 'https://music.youtube.com/search?q=' + query,
+			title: 'YouTube Music',
+			decorations: true,
+			height: 400,
+			width: 400,
+			resizable: false,
+			maximizable: false,
+			x: 10,
+			y: 10,
+			fileDropEnabled: false,
+			alwaysOnTop: true,
+		});
+
+		newWindow.once('tauri://created', () => {
+			ytplayerstatus = "Opened YouTube Music";
+			console.log(ytplayerstatus);
+		});
+	} catch (error) {
+		newWindow.once('tauri://error', (error) => {
+			ytplayerstatus = "Failed to open YouTube Music";
+			console.error(ytplayerstatus, error);
+		});
+
+		throw error;
+	}
+}
+
+
 // function to play media
 async function playMedia() {
 	try {
@@ -967,24 +1005,24 @@ async function unmuteVolume() {
 
 // function to turn on wifi
 async function turnOnWiFi() {
-    try {
-        await window.__TAURI__.invoke('turn_on_wifi');
-        botResponse.textContent = "WiFi turned on...";
-    } catch (error) {
-        console.error('Failed to turn on WiFi:', error);
-        botResponse.textContent = "Failed to turn on WiFi. Please try again later.";
-    }
+	try {
+		await window.__TAURI__.invoke('turn_on_wifi');
+		botResponse.textContent = "WiFi turned on...";
+	} catch (error) {
+		console.error('Failed to turn on WiFi:', error);
+		botResponse.textContent = "Failed to turn on WiFi. Please try again later.";
+	}
 }
 
 // function to turn off wifi
 async function turnOffWiFi() {
-    try {
-        await window.__TAURI__.invoke('turn_off_wifi');
-        botResponse.textContent = "WiFi turned off...";
-    } catch (error) {
-        console.error('Failed to turn off WiFi:', error);
-        botResponse.textContent = "Failed to turn off WiFi. Please try again later.";
-    }
+	try {
+		await window.__TAURI__.invoke('turn_off_wifi');
+		botResponse.textContent = "WiFi turned off...";
+	} catch (error) {
+		console.error('Failed to turn off WiFi:', error);
+		botResponse.textContent = "Failed to turn off WiFi. Please try again later.";
+	}
 }
 
 
@@ -1177,14 +1215,14 @@ async function convertCurrency(amount, fromCurrency, toCurrency) {
 
 // Function to get and display system information
 async function getSystemInfo() {
-    const botResponse = document.getElementById('botResponse');
-    try {
-        console.log('Invoking get_system_info');
-        const systemInfo = await invoke('get_system_info');
-        console.log('System info received:', systemInfo);
-        return systemInfo;
-    } catch (error) {
-        console.error('Error getting system information:', error);
-        botResponse.textContent = 'Failed to get system information. Please try again later.';
-    }
+	const botResponse = document.getElementById('botResponse');
+	try {
+		console.log('Invoking get_system_info');
+		const systemInfo = await invoke('get_system_info');
+		console.log('System info received:', systemInfo);
+		return systemInfo;
+	} catch (error) {
+		console.error('Error getting system information:', error);
+		botResponse.textContent = 'Failed to get system information. Please try again later.';
+	}
 }

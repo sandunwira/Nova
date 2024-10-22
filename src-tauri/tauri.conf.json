@@ -28,6 +28,25 @@
       },
       "os": {
         "all": true
+      },
+      "window": {
+        "all": false,
+        "create": true,
+        "close": true,
+        "center": true,
+        "print": false,
+        "minimize": false,
+        "maximize": false,
+        "setAlwaysOnTop": true,
+        "setClosable": true,
+        "setResizable": true,
+        "setFocus": false,
+        "setTitle": true,
+        "setDecorations": true,
+        "setSize": true,
+        "startDragging": true,
+        "unmaximize": false,
+        "unminimize": false
       }
     },
     "bundle": {
