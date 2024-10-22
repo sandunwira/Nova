@@ -194,7 +194,7 @@ fn toggle_mute() -> Result<(), String> {
 
 #[tauri::command]
 fn turn_on_wifi() -> Result<(), String> {
-    let status = RunasCommand::new("powershell")
+    let status = RunasCommand::new("cmd")
         .args(&["netsh", "interface", "set", "interface", "Wi-Fi", "enabled"])
         .show(false)
         .status()
@@ -209,7 +209,7 @@ fn turn_on_wifi() -> Result<(), String> {
 
 #[tauri::command]
 fn turn_off_wifi() -> Result<(), String> {
-    let status = RunasCommand::new("powershell")
+    let status = RunasCommand::new("cmd")
         .args(&["netsh", "interface", "set", "interface", "Wi-Fi", "disabled"])
         .show(false)
         .status()
