@@ -123,11 +123,16 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("disaster") || userMessage.toLowerCase().includes("natural disaster") || userMessage.toLowerCase().includes("disaster alert") || userMessage.toLowerCase().includes("disaster warning")) {
 		botResponse.textContent = "Fetching disaster alerts...";
 		getDisasterAlerts().then(alerts => botResponse.innerHTML = alerts).catch(error => botResponse.textContent = "Sorry, I couldn't fetch disaster alerts.");
-	} else if (userMessage.toLowerCase().includes("play") && userMessage.toLowerCase().includes("by")) {
-		botResponse.textContent = "Opening YouTube Music...";
+	} else if (userMessage.toLowerCase().includes("play")) {
 		const query = userMessage.replace("play", "").trim();
-		openYTMusic(query).then(() => botResponse.textContent = "Opened YouTube Music").catch(error => botResponse.textContent = "Sorry, I couldn't open YouTube Music.");
-	} else if (userMessage.toLowerCase().includes("play") || userMessage.toLowerCase().includes("resume")) {
+		if (query === "") {
+			botResponse.innerHTML = "Please provide a song name or artist to play.<br>Hint: play Believer by Imagine Dragons";
+			return;
+		} else {
+			botResponse.textContent = "Opening YouTube Music...";
+			openYTMusic(query).then(() => botResponse.textContent = "Opened YouTube Music").catch(error => botResponse.textContent = "Sorry, I couldn't open YouTube Music.");
+		}
+	} else if (userMessage.toLowerCase().includes("resume")) {
 		botResponse.textContent = "Resuming playback...";
 		playMedia();
 	} else if (userMessage.toLowerCase().includes("pause")) {
@@ -882,9 +887,9 @@ function createQRCode(text) {
 // function to open_ytmusic
 async function openYTMusic(query) {
 	try {
-		let ytplayerstatus = "Opening YouTube Music...";
+		console.log("Opening YouTube Music...");
 
-		const newWindow = new WebviewWindow('ytmusic_window', {
+		const ytmusic_window = new WebviewWindow('ytmusic_window', {
 			url: 'https://music.youtube.com/search?q=' + query,
 			title: 'YouTube Music',
 			decorations: true,
@@ -895,17 +900,15 @@ async function openYTMusic(query) {
 			x: 10,
 			y: 10,
 			fileDropEnabled: false,
-			alwaysOnTop: true,
+			alwaysOnTop: false,
 		});
 
-		newWindow.once('tauri://created', () => {
-			ytplayerstatus = "Opened YouTube Music";
-			console.log(ytplayerstatus);
+		ytmusic_window.once('tauri://created', () => {
+			console.log("Opened YouTube Music");
 		});
 	} catch (error) {
-		newWindow.once('tauri://error', (error) => {
-			ytplayerstatus = "Failed to open YouTube Music";
-			console.error(ytplayerstatus, error);
+		ytmusic_window.once('tauri://error', (error) => {
+			console.error("Failed to open YouTube Music:", error);
 		});
 
 		throw error;
