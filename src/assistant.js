@@ -8,6 +8,7 @@ const botResponse = document.getElementById('botResponse');
 let requestsData = [];
 let responsesData = [];
 let applicationsData = [];
+let bugcodesData = [];
 
 
 // Fetch the JSON files
@@ -27,6 +28,12 @@ fetch('data/applications.json')
 	.then(response => response.json())
 	.then(data => {
 		applicationsData = data;
+	});
+
+fetch('data/bugcodes.json')
+	.then(response => response.json())
+	.then(data => {
+		bugcodesData = data;
 	});
 
 
@@ -188,6 +195,25 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("pc info")) {
 		botResponse.textContent = "Fetching system information...";
 		getSystemInfo().then(systemInfo => botResponse.textContent = systemInfo).catch(error => botResponse.textContent = "Sorry, I couldn't fetch system information.");
+	} else if (userMessage.toLowerCase().includes("bug code") || userMessage.toLowerCase().includes("error")) {
+		const bugCode = userMessage.match(/bug code 0x([0-9a-fA-F]+)/) || userMessage.match(/0x([0-9a-fA-F]+) error/);
+		if (bugCode) {
+			const bugCodeDetails = findBugCodeDetails(bugCode[1].toUpperCase());
+			if (bugCodeDetails) {
+				botResponse.innerHTML = `
+					Here are the details for the bug code:<br><br>
+					Bug Code: ${bugCodeDetails.code}<br>
+					Code Name: ${bugCodeDetails.code_name}<br>
+					Description: ${bugCodeDetails.description}<br>
+					Solutions:<br>
+					${bugCodeDetails.solutions.map(solution => `- ${solution}`).join('<br>')}
+				`;
+			} else {
+				botResponse.textContent = "Sorry, I couldn't find any details for the bug code.";
+			}
+		} else {
+			botResponse.textContent = "Sorry, I couldn't find any bug code in the request.";
+		}
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.innerHTML = response;
@@ -1227,5 +1253,21 @@ async function getSystemInfo() {
 	} catch (error) {
 		console.error('Error getting system information:', error);
 		botResponse.textContent = 'Failed to get system information. Please try again later.';
+	}
+}
+
+
+
+// function to find the bug code details
+function findBugCodeDetails(bugCode) {
+	bugCode = bugCode.toUpperCase();
+	bugCode = "0x" + bugCode;
+	const bugCodeDetails = bugcodesData.find(bugcode => bugcode.code === bugCode);
+	if (bugCodeDetails) {
+		console.log('Bug Code Details:\n\n' + 'Code: ' + bugCodeDetails.code + '\n\n' + 'Code Name: ' + bugCodeDetails.code_name + '\n\n' + 'Description: ' + bugCodeDetails.description + '\n\n' + 'Solutions: \n' + bugCodeDetails.solutions.map(solution => `- ${solution}`).join('\n'));
+		return bugCodeDetails;
+	} else {
+		console.log('Bug Code not found:', bugCode);
+		return null;
 	}
 }
