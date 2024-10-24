@@ -10,9 +10,8 @@
 	<script src="js/qrcode.min.js" defer></script>
 
 	<style>
-		input[type="text"] {
+		input[type="text"], input[type="email"], input[type="password"] {
 			width: 50%;
-			resize: none;
 		}
 	</style>
 </head>
@@ -23,7 +22,7 @@
 	<form id="chatForm">
 		<label for="chatMessage">Message:</label><br>
 		<input type="text" id="chatMessage" name="message" autocomplete="off"><br><br>
-		<input type="submit" value="Submit">
+		<input type="submit" id="chatFormSubmitBtn" value="Submit">
 	</form>
 
 	<p id="botResponse"></p>

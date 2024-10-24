@@ -4,6 +4,8 @@ const { invoke } = window.__TAURI__.tauri;
 const chatForm = document.getElementById('chatForm');
 const chatMessage = document.getElementById('chatMessage');
 const botResponse = document.getElementById('botResponse');
+const chatFormSubmitBtn = document.getElementById('chatFormSubmitBtn');
+
 
 let requestsData = [];
 let responsesData = [];
@@ -214,6 +216,9 @@ chatForm.addEventListener('submit', function (event) {
 		} else {
 			botResponse.textContent = "Sorry, I couldn't find any bug code in the request.";
 		}
+	} else if (userMessage.toLowerCase().includes("send email")) {
+		botResponse.textContent = "Opening the email client...";
+		sendEmail();
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.innerHTML = response;
@@ -1271,5 +1276,65 @@ function findBugCodeDetails(bugCode) {
 	} else {
 		console.log('Bug Code not found:', bugCode);
 		return null;
+	}
+}
+
+
+
+// function to send email
+async function sendEmail() {
+	try {
+		chatMessage.setAttribute('disabled', true);
+		chatFormSubmitBtn.disabled = true;
+		botResponse.innerHTML = "Enter the email details here:<br><br>";
+
+		const emailForm = document.createElement('form');
+		emailForm.id = 'emailForm';
+		emailForm.innerHTML = `
+			<label for="emailTo">To:</label><br>
+			<input type="email" id="emailTo" name="emailTo" required><br>
+			<label for="emailSubject">Subject:</label><br>
+			<input type="text" id="emailSubject" name="emailSubject" required><br>
+			<label for="emailBody">Body:</label><br>
+			<input type="text" id="emailBody" name="emailBody" required><br><br>
+			<input type="submit" value="Send Email">
+			<button type="button" onclick="document.getElementById('emailForm').remove(); chatFormSubmitBtn.disabled = false; botResponse.textContent = ''; chatMessage.removeAttribute('disabled', false); chatMessage.focus();">Close Form</button><br><br>
+		`;
+
+		botResponse.appendChild(emailForm);
+
+		document.getElementById('emailTo').focus();
+
+		emailForm.addEventListener('submit', async (event) => {
+			event.preventDefault();
+
+			const emailTo = emailForm.emailTo.value;
+			const emailSubject = emailForm.emailSubject.value;
+			const emailBody = emailForm.emailBody.value;
+
+			const mailtolink = `mailto:${emailTo}?subject=${emailSubject}&body=${emailBody}`;
+
+			try {
+				await window.__TAURI__.invoke('open_url', { url: mailtolink });
+				botResponse.textContent = "Opened email client. Please click send to send the email.";
+				alert('Opened email client. Please click send to send the email.');
+				chatFormSubmitBtn.disabled = false;
+				chatMessage.disabled = false;
+			} catch (error) {
+				console.error('Failed to send email:', error);
+				botResponse.textContent = "Failed to send email. Please try again later.";
+				alert('Failed to send email. Please try again later.');
+				chatFormSubmitBtn.disabled = false;
+				chatMessage.disabled = false;
+			}
+		});
+	} catch (error) {
+		console.error('Error in sendEmail:', error);
+		botResponse.textContent = "Failed to send email. Please try again later.";
+		alert('Failed to send email. Please try again later.');
+		chatFormSubmitBtn.disabled = false;
+		userMessage.disabled = false;
+
+		throw error;
 	}
 }
