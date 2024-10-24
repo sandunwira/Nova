@@ -369,10 +369,10 @@
 	{
 		"intent": "feedback",
 		"responses": [
-			"You can submit feedback by clicking on the profile icon and selecting 'Feedback' or by visiting [feedback_url], [name].",
-			"Your feedback is important to us, [name]. You can submit it by clicking on the profile icon and selecting 'Feedback' or by visiting [feedback_url].",
-			"You can provide feedback by clicking on the profile icon and selecting 'Feedback' or by visiting [feedback_url], [name].",
-			"Your feedback is valuable to us, [name]. You can submit it by clicking on the profile icon and selecting 'Feedback' or by visiting [feedback_url]."
+			"You can submit feedback by clicking on the profile icon and selecting 'Feedback' or by visiting <a href=\"[feedback_url]\" target=\"_blank\">here</a>, [name].",
+			"Your feedback is important to us, [name]. You can submit it by clicking on the profile icon and selecting 'Feedback' or by visiting <a href=\"[feedback_url]\" target=\"_blank\">here</a>.",
+			"You can provide feedback by clicking on the profile icon and selecting 'Feedback' or by visiting <a href=\"[feedback_url]\" target=\"_blank\">here</a>, [name].",
+			"Your feedback is valuable to us, [name]. You can submit it by clicking on the profile icon and selecting 'Feedback' or by visiting <a href=\"[feedback_url]\" target=\"_blank\">here</a>."
 		]
 	},
 	{

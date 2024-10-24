@@ -257,7 +257,7 @@ function replaceDynamicVariables(response) {
 	const customData = {
 		// Custom data
 		name: "Adam",
-		feedback_url: `<a href="https://forms.gle/77MP5rjGaXWLjhmcA">https://forms.gle/77MP5rjGaXWLjhmcA</a>`,
+		feedback_url: "https://forms.gle/77MP5rjGaXWLjhmcA",
 	};
 
 	return response.replace(/\[([^\]]+)\]/g, (match, variable) => {
@@ -1147,7 +1147,7 @@ async function getDisasterAlerts() {
 			case 'ZW': countryCode = 'ZWE'; break; case 'XK': countryCode = 'XKX'; break;
 		}
 		const proxyUrl = 'https://proxy.cors.sh/';
-		const targetUrl = `https://api.ambeedata.com/disasters/latest/by-country-code?countryCode=${countryCode}&limit=50&page=1`;
+		const targetUrl = `https://api.ambeedata.com/disasters/latest/by-country-code?countryCode=${countryCode}&limit=10&page=1`;
 		const response = await fetch(`${proxyUrl}${targetUrl}`, {
 			method: 'GET',
 			headers: {
@@ -1196,10 +1196,12 @@ async function getDisasterAlerts() {
 				Date: ${alertDate}<br>
 				Latitude: ${alertLatitude}<br>
 				Longitude: ${alertLongitude}<br>
+				Map:<br>
+				<iframe src="https://maps.google.com/maps?q=${alertLatitude},${alertLongitude}&hl=en;z=5&amp;output=embed" width="300" height="200" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy" aria-hidden="false" tabindex="0"></iframe><br>
 			`;
 		}).join('<br>');
 
-		return `Here are the currently reported alerts for your location (${countryCode}) [limited for 50 results]:<br><br>${alertDetails}`;
+		return `Here are the currently reported alerts for your location (Showing only up to 10 results in your location - ${countryCode}):<br><br>${alertDetails}`;
 	} catch (error) {
 		console.error('Error in getDisasterAlerts:', error);
 		throw error;
