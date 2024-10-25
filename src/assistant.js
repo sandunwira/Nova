@@ -220,10 +220,9 @@ chatForm.addEventListener('submit', function (event) {
 		botResponse.textContent = "Opening the email client...";
 		sendEmail();
 	} else if (userMessage.toLowerCase().startsWith("find")) {
-		const fileName = userMessage.replace("find ", "");
-		console.log(fileName);
-		botResponse.textContent = `Searching for "${fileName}"...`;
-		searchFile(fileName);
+		const searchTerms = userMessage.replace("find ", "");
+		botResponse.textContent = `Searching for "${searchTerms}"...`;
+		searchFile(searchTerms);
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.innerHTML = response;
@@ -1347,26 +1346,60 @@ async function sendEmail() {
 
 
 // function to search files
-async function searchFile(fileName) {
+async function searchFile(searchTerms) {
 	try {
-		botResponse.textContent = `Searching for "${fileName}" across all drives... This may take a while.`;
+		const searchDisplay = `"${searchTerms}"`;
+
+		botResponse.textContent = `Searching for files matching ${searchDisplay} across all drives... This may take a while.`;
+
+		let startTime = new Date().getTime();
+
+		new Notification('File Search in Progress', {
+			body: `Searching for files matching ${searchDisplay} across all drives... This may take a while. Do not close the app.`,
+			icon: 'assets/images/icon.png'
+		});
 
 		const results = await window.__TAURI__.invoke('search_file', {
-			fileName: fileName
+			searchTerms: searchTerms
 		});
+
+		let endTime = new Date().getTime();
+		let searchTime = (endTime - startTime) / 1000;
+		searchTime = searchTime.toFixed(0);
+
+		if (searchTime > 60) {
+			let minutes = Math.floor(searchTime / 60);
+			let seconds = searchTime % 60;
+			searchTime = `${minutes} minutes and ${seconds} seconds`;
+		} else {
+			searchTime = `${searchTime} seconds`;
+		}
 
 		if (results.length > 0) {
 			console.log('File(s) found:', results);
-			const formattedResults = results.map(result =>
-				`- ${result.path}`
-			).join('<br>');
-			botResponse.innerHTML = `Found ${results.length} match(es) for "${fileName}":<br><br>${formattedResults}`;
+
+			const formattedResults = results.map(result => {
+				const folderPath = result.path.substring(0, result.path.lastIndexOf('\\')).replace(/\\/g, '\\\\');
+				return `- ${result.path} <button onclick="window.__TAURI__.invoke('open_folder', { filePath: '${folderPath}' })">Open Folder</button>`;
+			}).join('<br>');
+
+			botResponse.innerHTML = `Found ${results.length} file(s) matching ${searchDisplay}:<br><br>${formattedResults}<br><br>Search took ${searchTime}.`;
+
+			new Notification('File Search Finished', {
+				body: `Found ${results.length} file(s) matching ${searchDisplay}. Search took ${searchTime}.`,
+				icon: 'assets/images/icon.png'
+			});
 		} else {
-			console.log('File not found');
-			botResponse.textContent = 'File not found on any drive';
+			console.log('No matching files found');
+			botResponse.textContent = `No files found matching ${searchDisplay}`;
+
+			new Notification('File Search Finished', {
+				body: `No files found matching ${searchDisplay}.`,
+				icon: 'assets/images/icon.png'
+			});
 		}
 	} catch (error) {
-		console.error('Error searching for file:', error);
+		console.error('Error searching for files:', error);
 		botResponse.textContent = `Error: ${error}`;
 	}
 }

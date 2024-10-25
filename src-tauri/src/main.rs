@@ -94,7 +94,8 @@ fn main() {
       turn_on_wifi,
       turn_off_wifi,
       get_system_info,
-      search_file
+      search_file,
+      open_folder
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
@@ -275,7 +276,7 @@ fn get_system_info() -> Result<String, String> {
 
 fn get_windows_drives() -> Vec<String> {
   let mut drives = Vec::new();
-  
+
   // Get all available drives using wmic
   if let Ok(output) = Command::new("wmic")
       .args(["logicaldisk", "get", "name"])
@@ -290,20 +291,27 @@ fn get_windows_drives() -> Vec<String> {
           }
       }
   }
-  
+
   // If wmic command fails, fallback to C: drive
   if drives.is_empty() {
       drives.push("C:\\".to_string());
   }
-  
+
   drives
 }
 
 #[tauri::command]
-fn search_file(fileName: String) -> Result<Vec<SearchResult>, String> {
+fn search_file(search_terms: String) -> Result<Vec<SearchResult>, String> {
     let mut results = Vec::new();
     let drives = get_windows_drives();
-    
+
+    // Convert search terms to lowercase for case-insensitive comparison
+    let keywords: Vec<String> = search_terms
+        .to_lowercase()
+        .split_whitespace()
+        .map(String::from)
+        .collect();
+
     // Common Windows folders to skip for better performance
     let skip_folders = [
         "Windows",
@@ -330,18 +338,33 @@ fn search_file(fileName: String) -> Result<Vec<SearchResult>, String> {
             })
             .filter_map(|e| e.ok())
         {
-            if entry.file_type().is_file() && 
-               entry.file_name().to_string_lossy().eq_ignore_ascii_case(&fileName) {
+          if entry.file_type().is_file() {
+            let filename = entry.file_name().to_string_lossy().to_lowercase();
+            
+            // Check if all keywords are present in the filename
+            if keywords.iter().all(|keyword| filename.contains(keyword)) {
                 results.push(SearchResult {
                     path: entry.path().display().to_string(),
                 });
             }
         }
+        }
     }
-    
+
     if results.is_empty() {
-        Err(format!("File not found: {}", fileName))
-    } else {
-        Ok(results)
-    }
+      Err(format!("No files found matching: {}", search_terms))
+  } else {
+      Ok(results)
+  }
+}
+
+
+#[tauri::command]
+fn open_folder(filePath: String) -> Result<(), String> {
+    let path = Path::new(&filePath);
+
+    let command = Command::new("explorer").arg(&path).spawn();
+
+    command.map_err(|e| format!("Failed to open folder: {}", e))?;
+    Ok(())
 }
