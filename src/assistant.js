@@ -219,6 +219,11 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("send email")) {
 		botResponse.textContent = "Opening the email client...";
 		sendEmail();
+	} else if (userMessage.toLowerCase().startsWith("find")) {
+		const fileName = userMessage.replace("find ", "");
+		console.log(fileName);
+		botResponse.textContent = `Searching for "${fileName}"...`;
+		searchFile(fileName);
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.innerHTML = response;
@@ -1336,5 +1341,32 @@ async function sendEmail() {
 		userMessage.disabled = false;
 
 		throw error;
+	}
+}
+
+
+
+// function to search files
+async function searchFile(fileName) {
+	try {
+		botResponse.textContent = `Searching for "${fileName}" across all drives... This may take a while.`;
+
+		const results = await window.__TAURI__.invoke('search_file', {
+			fileName: fileName
+		});
+
+		if (results.length > 0) {
+			console.log('File(s) found:', results);
+			const formattedResults = results.map(result =>
+				`- ${result.path}`
+			).join('<br>');
+			botResponse.innerHTML = `Found ${results.length} match(es) for "${fileName}":<br><br>${formattedResults}`;
+		} else {
+			console.log('File not found');
+			botResponse.textContent = 'File not found on any drive';
+		}
+	} catch (error) {
+		console.error('Error searching for file:', error);
+		botResponse.textContent = `Error: ${error}`;
 	}
 }

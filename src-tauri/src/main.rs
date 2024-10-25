@@ -9,6 +9,17 @@ use std::process::Command;
 use runas::Command as RunasCommand;
 use std::path::Path;
 use winapi::um::winuser::{keybd_event, VK_MEDIA_PLAY_PAUSE, VK_MEDIA_PREV_TRACK, VK_MEDIA_NEXT_TRACK, VK_VOLUME_UP, VK_VOLUME_DOWN, KEYEVENTF_KEYUP, VK_VOLUME_MUTE};
+use tauri::command;
+use walkdir::WalkDir;
+use std::path::PathBuf;
+use serde::Serialize;
+
+
+#[derive(Serialize)]
+struct SearchResult {
+    path: String,
+}
+
 
 fn main() {
   // Create the system tray menu items
@@ -82,7 +93,8 @@ fn main() {
       toggle_mute,
       turn_on_wifi,
       turn_off_wifi,
-      get_system_info
+      get_system_info,
+      search_file
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
@@ -258,4 +270,78 @@ fn get_system_info() -> Result<String, String> {
     }
 
     Ok(info)
+}
+
+
+fn get_windows_drives() -> Vec<String> {
+  let mut drives = Vec::new();
+  
+  // Get all available drives using wmic
+  if let Ok(output) = Command::new("wmic")
+      .args(["logicaldisk", "get", "name"])
+      .output() 
+  {
+      if let Ok(output_str) = String::from_utf8(output.stdout) {
+          for line in output_str.lines() {
+              let drive = line.trim();
+              if drive.len() == 2 && drive.ends_with(':') {
+                  drives.push(format!("{}\\", drive));
+              }
+          }
+      }
+  }
+  
+  // If wmic command fails, fallback to C: drive
+  if drives.is_empty() {
+      drives.push("C:\\".to_string());
+  }
+  
+  drives
+}
+
+#[tauri::command]
+fn search_file(fileName: String) -> Result<Vec<SearchResult>, String> {
+    let mut results = Vec::new();
+    let drives = get_windows_drives();
+    
+    // Common Windows folders to skip for better performance
+    let skip_folders = [
+        "Windows",
+        "$Recycle.Bin",
+        "Program Files",
+        "Program Files (x86)",
+        "ProgramData",
+        "System Volume Information"
+    ];
+
+    for drive in drives {
+        for entry in WalkDir::new(&drive)
+            .follow_links(true)
+            .into_iter()
+            .filter_entry(|e| {
+                // Skip system folders and hidden files
+                if let Some(path) = e.path().to_str() {
+                    !skip_folders.iter().any(|folder| path.contains(folder)) &&
+                    !path.contains("AppData") &&
+                    !path.contains("$Recycle.Bin")
+                } else {
+                    true
+                }
+            })
+            .filter_map(|e| e.ok())
+        {
+            if entry.file_type().is_file() && 
+               entry.file_name().to_string_lossy().eq_ignore_ascii_case(&fileName) {
+                results.push(SearchResult {
+                    path: entry.path().display().to_string(),
+                });
+            }
+        }
+    }
+    
+    if results.is_empty() {
+        Err(format!("File not found: {}", fileName))
+    } else {
+        Ok(results)
+    }
 }

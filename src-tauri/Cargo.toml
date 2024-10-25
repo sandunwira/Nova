@@ -21,6 +21,7 @@ tauri = { version = "1.8.0", features = [ "window-start-dragging", "window-set-d
 winapi = { version = "0.3", features = ["winuser"] }
 sysinfo = "0.32.0"
 runas = "1.2.0"
+walkdir = "2.5.0"
 
 
 [features]
