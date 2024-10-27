@@ -101,7 +101,11 @@ fn main() {
       set_light_mode,
       set_dark_mode,
       take_screenshot,
-      random_wallpaper
+      change_wallpaper,
+      shutdown_pc,
+      restart_pc,
+      lock_pc,
+      sleep_pc
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
@@ -448,7 +452,7 @@ fn take_screenshot() -> Result<(), String> {
 use wallpaper;
 
 #[tauri::command]
-fn random_wallpaper(image_path: String) -> Result<(), String> {
+fn change_wallpaper(image_path: String) -> Result<(), String> {
   // Returns the wallpaper of the current desktop.
   println!("{:?}", wallpaper::get());
 
@@ -463,5 +467,62 @@ fn random_wallpaper(image_path: String) -> Result<(), String> {
           Ok(())
       },
       Err(e) => Err(e.to_string()),
+  }
+}
+
+
+#[tauri::command]
+fn shutdown_pc() -> Result<(), String> {
+  let status = Command::new("cmd")
+      .args(&["/C", "start", "", "shutdown", "/s", "/t", "10"])
+      .status()
+      .map_err(|e| e.to_string())?;
+
+  if status.success() {
+      Ok(())
+  } else {
+      Err("Failed to shutdown PC".to_string())
+  }
+}
+
+#[tauri::command]
+fn restart_pc() -> Result<(), String> {
+  let status = Command::new("cmd")
+      .args(&["/C", "start", "", "shutdown", "/r", "/t", "10"])
+      .status()
+      .map_err(|e| e.to_string())?;
+
+  if status.success() {
+      Ok(())
+  } else {
+      Err("Failed to restart PC".to_string())
+  }
+}
+
+#[tauri::command]
+fn lock_pc() -> Result<(), String> {
+  let status = Command::new("cmd")
+      .args(&["/C", "start", "", "rundll32.exe", "user32.dll,LockWorkStation"])
+      .status()
+      .map_err(|e| e.to_string())?;
+
+  if status.success() {
+      Ok(())
+  } else {
+      Err("Failed to log off PC".to_string())
+  }
+}
+
+#[tauri::command]
+fn sleep_pc() -> Result<(), String> {
+  let status = Command::new("cmd")
+      .args(&["/C", "start", "", "rundll32.exe", "powrprof.dll,SetSuspendState", "0,1,0"])
+      .status()
+      .map_err(|e| e.to_string())?;
+
+  if status.success() {
+      Ok(())
+  } else {
+      Err("Failed to put PC to sleep".to_string())
   }
 }

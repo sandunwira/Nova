@@ -242,6 +242,18 @@ chatForm.addEventListener('submit', function (event) {
 		} else {
 			botResponse.textContent = "Sorry, I couldn't find any wallpaper to change.";
 		}
+	} else if (userMessage.toLowerCase().includes("shutdown pc") || userMessage.toLowerCase().includes("turn off pc")) {
+		botResponse.textContent = "Shutting down the PC...";
+		shutdown_pc().then(() => botResponse.textContent = "PC is shutting down...").catch(error => botResponse.textContent = "Sorry, I couldn't shut down the PC.");
+	} else if (userMessage.toLowerCase().includes("restart pc") || userMessage.toLowerCase().includes("reboot pc")) {
+		botResponse.textContent = "Restarting the PC...";
+		restart_pc().then(() => botResponse.textContent = "PC is restarting...").catch(error => botResponse.textContent = "Sorry, I couldn't restart the PC.");
+	} else if (userMessage.toLowerCase().includes("lock pc") || userMessage.toLowerCase().includes("lock computer")) {
+		botResponse.textContent = "Locking the PC...";
+		lock_pc().then(() => botResponse.textContent = "PC is locked...").catch(error => botResponse.textContent = "Sorry, I couldn't lock the PC.");
+	} else if (userMessage.toLowerCase().includes("sleep pc") || userMessage.toLowerCase().includes("sleep computer")) {
+		botResponse.textContent = "Putting the PC to sleep...";
+		sleep_pc().then(() => botResponse.textContent = "PC is going to sleep...").catch(error => botResponse.textContent = "Sorry, I couldn't put the PC to sleep.");
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.innerHTML = response;
@@ -1467,9 +1479,112 @@ async function changeWallpaper(category) {
 		const data = await response.json();
 		const wallpaper = data[0].urls.raw + '&dpr=2';
 		const imagePath = wallpaper;
-		await invoke('random_wallpaper', { imagePath: imagePath });
+
+		new Notification('Downloading Wallpaper', {
+			body: 'Please wait while the wallpaper is downloaded and set as your desktop background...',
+			icon: 'assets/images/icon.png'
+		});
+
+		await invoke('change_wallpaper', { imagePath: imagePath });
 		console.log('Wallpaper changed', wallpaper);
+
+		new Notification('Wallpaper Changed', {
+			body: 'Wallpaper changed successfully. Enjoy your new wallpaper ;)',
+			icon: 'assets/images/icon.png'
+		});
 	} catch (error) {
 		console.error('Failed to change wallpaper:', error);
+
+		new Notification('Failed to Change Wallpaper', {
+			body: 'Failed to change wallpaper. Please try again later.',
+			icon: 'assets/images/icon.png'
+		});
+	}
+}
+
+
+
+// function to shutdown the system
+async function shutdown_pc() {
+	try {
+		await invoke('shutdown_pc');
+
+		new Notification('System Shutdown Initiated', {
+			body: 'Your system will be shutting down in 10 seconds...',
+			icon: 'assets/images/icon.png'
+		});
+
+		console.log('System shutdown initiated');
+	} catch (error) {
+		console.error('Failed to shutdown system:', error);
+
+		new Notification('Failed to Shutdown System', {
+			body: 'Failed to shutdown system. Please try again later.',
+			icon: 'assets/images/icon.png'
+		});
+	}
+}
+
+// function to restart the system
+async function restart_pc() {
+	try {
+		await invoke('restart_pc');
+
+		new Notification('System Restart Initiated', {
+			body: 'Your system will be restarting in 10 seconds...',
+			icon: 'assets/images/icon.png'
+		});
+
+		console.log('System restart initiated');
+	} catch (error) {
+		console.error('Failed to restart system:', error);
+
+		new Notification('Failed to Restart System', {
+			body: 'Failed to restart system. Please try again later.',
+			icon: 'assets/images/icon.png'
+		});
+	}
+}
+
+// function to log off the system
+async function lock_pc() {
+	try {
+		await invoke('lock_pc');
+
+		new Notification('System Lock Initiated', {
+			body: 'Your system is locked!',
+			icon: 'assets/images/icon.png'
+		});
+
+		console.log('System lock initiated');
+	}
+	catch (error) {
+		console.error('Failed to lock system:', error);
+
+		new Notification('Failed to Lock System', {
+			body: 'Failed to lock system. Please try again later.',
+			icon: 'assets/images/icon.png'
+		});
+	}
+}
+
+// function to sleep the system
+async function sleep_pc() {
+	try {
+		await invoke('sleep_pc');
+
+		new Notification('System Sleep Initiated', {
+			body: 'Your system will be going to sleep in moments...',
+			icon: 'assets/images/icon.png'
+		});
+
+		console.log('System sleep initiated');
+	} catch (error) {
+		console.error('Failed to sleep system:', error);
+
+		new Notification('Failed to Sleep System', {
+			body: 'Failed to sleep system. Please try again later.',
+			icon: 'assets/images/icon.png'
+		});
 	}
 }
