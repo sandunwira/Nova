@@ -23,6 +23,9 @@ sysinfo = "0.32.0"
 runas = "1.2.0"
 walkdir = "2.5.0"
 winreg = "0.52.0"
+screenshot_desktop = "0.1.0"
+dirs = "5.0.1"
+chrono = "0.4.38"
 
 
 [features]

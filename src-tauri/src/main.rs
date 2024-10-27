@@ -99,7 +99,8 @@ fn main() {
       search_file,
       open_folder,
       set_light_mode,
-      set_dark_mode
+      set_dark_mode,
+      take_screenshot
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
@@ -344,7 +345,7 @@ fn search_file(search_terms: String) -> Result<Vec<SearchResult>, String> {
         {
           if entry.file_type().is_file() {
             let filename = entry.file_name().to_string_lossy().to_lowercase();
-            
+
             // Check if all keywords are present in the filename
             if keywords.iter().all(|keyword| filename.contains(keyword)) {
                 results.push(SearchResult {
@@ -410,5 +411,35 @@ fn set_dark_mode() -> Result<(), String> {
           Ok(())
       }
       Err(e) => Err(format!("Failed to access registry: {}", e))
+  }
+}
+
+
+
+#[tauri::command]
+fn take_screenshot() -> Result<(), String> {
+  use chrono::Local;
+  use dirs;
+  use screenshot_desktop::Screenshot;
+
+  // Get the path to the desktop directory
+  let mut desktop_path = match dirs::home_dir() {
+    Some(path) => path,
+    None => return Err("Failed to get home directory".to_string()),
+  };
+  desktop_path.push("Desktop");
+
+  // Generate the filename with the current date and time
+  let timestamp = Local::now().format("%Y-%m-%d %H%M%S").to_string();
+  let file_name = format!("Screenshot {}.png", timestamp);
+  desktop_path.push(file_name);
+
+  match Screenshot::new() {
+      Ok(screenshot) => {
+          screenshot.save(&desktop_path).map_err(|e| e.to_string())
+      },
+      Err(_) => {
+          Err("Failed to capture screenshot".to_string())
+      },
   }
 }

@@ -229,6 +229,9 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("switch to dark mode")) {
 		botResponse.textContent = "Switching to Dark Mode...";
 		switchToDark().then(() => botResponse.textContent = "Switched to Dark Mode successfully!").catch(error => botResponse.textContent = "Sorry, I couldn't switch to Dark Mode.");
+	} else if (userMessage.toLowerCase().includes("screenshot") || userMessage.toLowerCase().includes("take a screenshot")) {
+		botResponse.textContent = "Taking a screenshot...";
+		takeScreenshot().then(() => botResponse.textContent = "Screenshot successfully saved to Desktop!").catch(error => botResponse.textContent = "Sorry, I couldn't take a screenshot.");
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.innerHTML = response;
@@ -1429,5 +1432,18 @@ async function switchToDark() {
 		console.log('Switched to dark mode');
 	} catch (error) {
 		console.error('Failed to switch to dark mode:', error);
+	}
+}
+
+
+
+// function to take a screenshot
+async function takeScreenshot() {
+	try {
+		const screenshot = await invoke('take_screenshot');
+		console.log('Screenshot taken:', screenshot);
+		return screenshot;
+	} catch (error) {
+		console.error('Failed to take screenshot:', error);
 	}
 }
