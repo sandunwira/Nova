@@ -100,7 +100,8 @@ fn main() {
       open_folder,
       set_light_mode,
       set_dark_mode,
-      take_screenshot
+      take_screenshot,
+      random_wallpaper
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
@@ -441,5 +442,26 @@ fn take_screenshot() -> Result<(), String> {
       Err(_) => {
           Err("Failed to capture screenshot".to_string())
       },
+  }
+}
+
+use wallpaper;
+
+#[tauri::command]
+fn random_wallpaper(image_path: String) -> Result<(), String> {
+  // Returns the wallpaper of the current desktop.
+  println!("{:?}", wallpaper::get());
+
+  // Sets the wallpaper for the current desktop from a URL.
+  match wallpaper::set_from_url(&image_path) {
+      Ok(_) => {
+          // Set the wallpaper mode to Crop
+          wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
+
+          // Returns the wallpaper of the current desktop.
+          println!("{:?}", wallpaper::get());
+          Ok(())
+      },
+      Err(e) => Err(e.to_string()),
   }
 }

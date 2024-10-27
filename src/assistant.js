@@ -232,6 +232,16 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("screenshot") || userMessage.toLowerCase().includes("take a screenshot")) {
 		botResponse.textContent = "Taking a screenshot...";
 		takeScreenshot().then(() => botResponse.textContent = "Screenshot successfully saved to Desktop!").catch(error => botResponse.textContent = "Sorry, I couldn't take a screenshot.");
+	} else if (userMessage.toLowerCase().includes("wallpaper")) {
+		const query = userMessage.match(/(?:set a |)([a-zA-Z]+) wallpaper/);
+
+		if (query && query[1]) {
+			const category = query[1];
+			botResponse.textContent = "Changing the wallpaper...";
+			changeWallpaper(category).then(() => botResponse.textContent = `${category.charAt(0).toUpperCase() + category.slice(1)} wallpaper changed successfully!`).catch(error => botResponse.textContent = "Sorry, I couldn't change the wallpaper.");
+		} else {
+			botResponse.textContent = "Sorry, I couldn't find any wallpaper to change.";
+		}
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.innerHTML = response;
@@ -1445,5 +1455,21 @@ async function takeScreenshot() {
 		return screenshot;
 	} catch (error) {
 		console.error('Failed to take screenshot:', error);
+	}
+}
+
+
+
+// function to change wallpaper
+async function changeWallpaper(category) {
+	try {
+		const response = await fetch(`https://api.unsplash.com/photos/random?query=${category}&count=1&orientation=landscape&client_id=aXEHFMJhuEQoof-Sm66CGSaq41BYMrH_LwBTL1XRiwY`);
+		const data = await response.json();
+		const wallpaper = data[0].urls.raw + '&dpr=2';
+		const imagePath = wallpaper;
+		await invoke('random_wallpaper', { imagePath: imagePath });
+		console.log('Wallpaper changed', wallpaper);
+	} catch (error) {
+		console.error('Failed to change wallpaper:', error);
 	}
 }

@@ -26,6 +26,7 @@ winreg = "0.52.0"
 screenshot_desktop = "0.1.0"
 dirs = "5.0.1"
 chrono = "0.4.38"
+wallpaper = { version = "3.2.0", features = ["from_url"] }
 
 
 [features]
