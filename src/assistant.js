@@ -223,6 +223,12 @@ chatForm.addEventListener('submit', function (event) {
 		const searchTerms = userMessage.replace("find ", "");
 		botResponse.textContent = `Searching for "${searchTerms}"...`;
 		searchFile(searchTerms);
+	} else if (userMessage.toLowerCase().includes("switch to light mode")) {
+		botResponse.textContent = "Switching to Light Mode...";
+		switchToLight().then(() => botResponse.textContent = "Switched to Light Mode successfully!").catch(error => botResponse.textContent = "Sorry, I couldn't switch to Light Mode.");
+	} else if (userMessage.toLowerCase().includes("switch to dark mode")) {
+		botResponse.textContent = "Switching to Dark Mode...";
+		switchToDark().then(() => botResponse.textContent = "Switched to Dark Mode successfully!").catch(error => botResponse.textContent = "Sorry, I couldn't switch to Dark Mode.");
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.innerHTML = response;
@@ -1401,5 +1407,27 @@ async function searchFile(searchTerms) {
 	} catch (error) {
 		console.error('Error searching for files:', error);
 		botResponse.textContent = `Error: ${error}`;
+	}
+}
+
+
+
+// function to switch to light mode
+async function switchToLight() {
+	try {
+		await invoke('set_light_mode');
+		console.log('Switched to light mode');
+	} catch (error) {
+		console.error('Failed to switch to light mode:', error);
+	}
+}
+
+// function to switch to dark mode
+async function switchToDark() {
+	try {
+		await invoke('set_dark_mode');
+		console.log('Switched to dark mode');
+	} catch (error) {
+		console.error('Failed to switch to dark mode:', error);
 	}
 }

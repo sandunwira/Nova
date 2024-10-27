@@ -22,6 +22,7 @@ winapi = { version = "0.3", features = ["winuser"] }
 sysinfo = "0.32.0"
 runas = "1.2.0"
 walkdir = "2.5.0"
+winreg = "0.52.0"
 
 
 [features]

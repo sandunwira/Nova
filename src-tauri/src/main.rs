@@ -13,6 +13,8 @@ use tauri::command;
 use walkdir::WalkDir;
 use std::path::PathBuf;
 use serde::Serialize;
+use winreg::enums::*;
+use winreg::RegKey;
 
 
 #[derive(Serialize)]
@@ -95,7 +97,9 @@ fn main() {
       turn_off_wifi,
       get_system_info,
       search_file,
-      open_folder
+      open_folder,
+      set_light_mode,
+      set_dark_mode
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
@@ -367,4 +371,44 @@ fn open_folder(filePath: String) -> Result<(), String> {
 
     command.map_err(|e| format!("Failed to open folder: {}", e))?;
     Ok(())
+}
+
+
+#[tauri::command]
+fn set_light_mode() -> Result<(), String> {
+  let hkcu = RegKey::predef(HKEY_CURRENT_USER);
+  let path = "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+
+  match hkcu.open_subkey_with_flags(path, KEY_READ | KEY_WRITE) {
+      Ok(key) => {
+          // Set both app and system theme to light (1)
+          key.set_value("AppsUseLightTheme", &1u32)
+              .map_err(|e| format!("Failed to set app theme: {}", e))?;
+          key.set_value("SystemUsesLightTheme", &1u32)
+              .map_err(|e| format!("Failed to set system theme: {}", e))?;
+
+          Ok(())
+      }
+      Err(e) => Err(format!("Failed to access registry: {}", e))
+  }
+}
+
+
+#[tauri::command]
+fn set_dark_mode() -> Result<(), String> {
+  let hkcu = RegKey::predef(HKEY_CURRENT_USER);
+  let path = "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+
+  match hkcu.open_subkey_with_flags(path, KEY_READ | KEY_WRITE) {
+      Ok(key) => {
+          // Set both app and system theme to dark (0)
+          key.set_value("AppsUseLightTheme", &0u32)
+              .map_err(|e| format!("Failed to set app theme: {}", e))?;
+          key.set_value("SystemUsesLightTheme", &0u32)
+              .map_err(|e| format!("Failed to set system theme: {}", e))?;
+
+          Ok(())
+      }
+      Err(e) => Err(format!("Failed to access registry: {}", e))
+  }
 }
