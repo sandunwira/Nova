@@ -254,6 +254,9 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("sleep pc") || userMessage.toLowerCase().includes("sleep computer")) {
 		botResponse.textContent = "Putting the PC to sleep...";
 		sleep_pc().then(() => botResponse.textContent = "PC is going to sleep...").catch(error => botResponse.textContent = "Sorry, I couldn't put the PC to sleep.");
+	} else if (userMessage.toLowerCase().includes("get installed apps") || userMessage.toLowerCase().includes("installed applications") || userMessage.toLowerCase().includes("installed apps")) {
+		botResponse.textContent = "Fetching installed applications...";
+		get_installed_apps().then(apps => botResponse.textContent = apps).catch(error => botResponse.textContent = "Sorry, I couldn't fetch installed applications.");
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.innerHTML = response;
@@ -1586,5 +1589,18 @@ async function sleep_pc() {
 			body: 'Failed to sleep system. Please try again later.',
 			icon: 'assets/images/icon.png'
 		});
+	}
+}
+
+
+
+// function to get installed apps
+async function get_installed_apps() {
+	try {
+		const installedApps = await invoke('get_installed_apps');
+		console.log('Installed apps:', installedApps);
+		return installedApps;
+	} catch (error) {
+		console.error('Failed to get installed apps:', error);
 	}
 }

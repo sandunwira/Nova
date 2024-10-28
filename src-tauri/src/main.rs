@@ -1,18 +1,33 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use tauri::command;
 use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayEvent};
 use tauri::{Manager, WindowEvent};
+
 use std::env;
 use std::fs;
+use std::path::Path;
+use std::path::PathBuf;
+
 use std::process::Command;
 use runas::Command as RunasCommand;
-use std::path::Path;
+
 use winapi::um::winuser::{keybd_event, VK_MEDIA_PLAY_PAUSE, VK_MEDIA_PREV_TRACK, VK_MEDIA_NEXT_TRACK, VK_VOLUME_UP, VK_VOLUME_DOWN, KEYEVENTF_KEYUP, VK_VOLUME_MUTE};
-use tauri::command;
+
+use sysinfo::{Components, Disks, Networks, System};
+
+use dirs::*;
 use walkdir::WalkDir;
-use std::path::PathBuf;
+
+use chrono::Local;
+use screenshot_desktop::Screenshot;
+
+use wallpaper;
+
 use serde::Serialize;
+use serde_json::json;
+
 use winreg::enums::*;
 use winreg::RegKey;
 
@@ -105,7 +120,8 @@ fn main() {
       shutdown_pc,
       restart_pc,
       lock_pc,
-      sleep_pc
+      sleep_pc,
+      get_installed_apps
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
@@ -246,7 +262,7 @@ fn turn_off_wifi() -> Result<(), String> {
 }
 
 
-use sysinfo::{Components, Disks, Networks, System};
+
 
 #[tauri::command]
 fn get_system_info() -> Result<String, String> {
@@ -423,10 +439,6 @@ fn set_dark_mode() -> Result<(), String> {
 
 #[tauri::command]
 fn take_screenshot() -> Result<(), String> {
-  use chrono::Local;
-  use dirs;
-  use screenshot_desktop::Screenshot;
-
   // Get the path to the desktop directory
   let mut desktop_path = match dirs::home_dir() {
     Some(path) => path,
@@ -449,7 +461,6 @@ fn take_screenshot() -> Result<(), String> {
   }
 }
 
-use wallpaper;
 
 #[tauri::command]
 fn change_wallpaper(image_path: String) -> Result<(), String> {
@@ -525,4 +536,51 @@ fn sleep_pc() -> Result<(), String> {
   } else {
       Err("Failed to put PC to sleep".to_string())
   }
+}
+
+
+// get installed applications form the start menu and save the shortcut links to a json file
+#[tauri::command]
+fn get_installed_apps() -> Result<(), String> {
+  let paths = vec![
+      PathBuf::from("C:\\ProgramData\\Microsoft\\Windows\\Start Menu"),
+      PathBuf::from("C:\\Users\\Sandun\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs"),
+  ];
+
+  let mut apps = Vec::new();
+
+  for path in paths {
+      for entry in WalkDir::new(&path)
+          .follow_links(true)
+          .into_iter()
+          .filter_map(|e| e.ok())
+      {
+          let extension = entry.path().extension().unwrap_or_default();
+          if (path.starts_with("C:\\ProgramData") || path.starts_with("C:\\Users")) && extension == "lnk" {
+              let app_name = entry.path().file_stem().unwrap_or_default().to_string_lossy().to_string();
+              if !app_name.to_lowercase().contains("uninstall") {
+                  let app_path = entry.path().display().to_string();
+                  apps.push(json!({
+                      "name": app_name,
+                      "path": app_path
+                  }));
+              }
+          }
+      }
+  }
+
+  let json = serde_json::to_string(&apps).map_err(|e| e.to_string())?;
+
+  // Get the user's home directory and construct the output path
+  let home_dir = home_dir().ok_or("Could not get home directory")?;
+  let output_dir = home_dir.join("Documents").join("Nova");
+
+  // Ensure the directory exists
+  if !output_dir.exists() {
+      fs::create_dir_all(&output_dir).map_err(|e| e.to_string())?;
+  }
+
+  fs::write(output_dir.join("applications.json"), json).map_err(|e| e.to_string())?;
+
+  Ok(())
 }
