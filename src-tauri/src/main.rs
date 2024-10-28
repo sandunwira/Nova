@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::command;
-use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayEvent};
+use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu};
 use tauri::{Manager, WindowEvent};
 
 use std::env;
@@ -10,10 +10,13 @@ use std::fs;
 use std::path::Path;
 use std::path::PathBuf;
 
-use std::process::Command;
 use runas::Command as RunasCommand;
+use std::process::Command;
 
-use winapi::um::winuser::{keybd_event, VK_MEDIA_PLAY_PAUSE, VK_MEDIA_PREV_TRACK, VK_MEDIA_NEXT_TRACK, VK_VOLUME_UP, VK_VOLUME_DOWN, KEYEVENTF_KEYUP, VK_VOLUME_MUTE};
+use winapi::um::winuser::{
+    keybd_event, KEYEVENTF_KEYUP, VK_MEDIA_NEXT_TRACK, VK_MEDIA_PLAY_PAUSE, VK_MEDIA_PREV_TRACK,
+    VK_VOLUME_DOWN, VK_VOLUME_MUTE, VK_VOLUME_UP,
+};
 
 use sysinfo::{Components, Disks, Networks, System};
 
@@ -31,136 +34,137 @@ use serde_json::json;
 use winreg::enums::*;
 use winreg::RegKey;
 
-
 #[derive(Serialize)]
 struct SearchResult {
     path: String,
 }
 
 
+
 fn main() {
-  // Create the system tray menu items
-  let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-  let tray_menu = SystemTrayMenu::new()
-    .add_item(quit);
+    // Create the system tray menu items
+    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
+    let tray_menu = SystemTrayMenu::new().add_item(quit);
 
-  // Create the system tray
-  let system_tray = SystemTray::new().with_menu(tray_menu);
+    // Create the system tray
+    let system_tray = SystemTray::new().with_menu(tray_menu);
 
-  tauri::Builder::default()
-    .system_tray(system_tray)
-    .on_system_tray_event(|app, event| match event {
-      SystemTrayEvent::LeftClick {
-        position: _,
-        size: _,
-        ..
-      } => {
-        println!("system tray received a left click");
-      }
-      SystemTrayEvent::RightClick {
-        position: _,
-        size: _,
-        ..
-      } => {
-        println!("system tray received a right click");
-      }
-      SystemTrayEvent::DoubleClick {
-        position: _,
-        size: _,
-        ..
-      } => {
-        println!("system tray received a double click");
-        let main_window = app.get_window("main").unwrap();
-        main_window.show().expect("failed to show main window");
-        println!("Main window is shown");
-      }
-      SystemTrayEvent::MenuItemClick { id, .. } => {
-        match id.as_str() {
-          "quit" => {
-            std::process::exit(0);
-          }
-          _ => {}
-        }
-      }
-      _ => {}
-    })
-    .setup(|app| {
-      let main_window = app.get_window("main").unwrap();
-      let main_window_clone = main_window.clone();
-      // Listen for the close event on the main window
-      main_window.on_window_event(move |event| {
-        if let WindowEvent::CloseRequested { api, .. } = event {
-          // Prevent the window from closing and hide it instead
-          api.prevent_close();
-          main_window_clone.hide().expect("failed to hide main window");
-          println!("Main window is hidden");
-        }
-      });
-      Ok(())
-    })
-    .invoke_handler(tauri::generate_handler![
-      open_application,
-      open_url,
-      play_media,
-      pause_media,
-      previous_media,
-      next_media,
-      increase_volume,
-      decrease_volume,
-      toggle_mute,
-      turn_on_wifi,
-      turn_off_wifi,
-      get_system_info,
-      search_file,
-      open_folder,
-      set_light_mode,
-      set_dark_mode,
-      take_screenshot,
-      change_wallpaper,
-      shutdown_pc,
-      restart_pc,
-      lock_pc,
-      sleep_pc,
-      get_installed_apps
-    ])
-    .run(tauri::generate_context!())
-    .expect("error while running tauri application");
+    tauri::Builder::default()
+        .system_tray(system_tray)
+        .on_system_tray_event(|app, event| match event {
+            SystemTrayEvent::LeftClick {
+                position: _,
+                size: _,
+                ..
+            } => {
+                println!("system tray received a left click");
+            }
+            SystemTrayEvent::RightClick {
+                position: _,
+                size: _,
+                ..
+            } => {
+                println!("system tray received a right click");
+            }
+            SystemTrayEvent::DoubleClick {
+                position: _,
+                size: _,
+                ..
+            } => {
+                println!("system tray received a double click");
+                let main_window = app.get_window("main").unwrap();
+                main_window.show().expect("failed to show main window");
+                println!("Main window is shown");
+            }
+            SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
+                "quit" => {
+                    std::process::exit(0);
+                }
+                _ => {}
+            },
+            _ => {}
+        })
+        .setup(|app| {
+            let main_window = app.get_window("main").unwrap();
+            let main_window_clone = main_window.clone();
+            // Listen for the close event on the main window
+            main_window.on_window_event(move |event| {
+                if let WindowEvent::CloseRequested { api, .. } = event {
+                    // Prevent the window from closing and hide it instead
+                    api.prevent_close();
+                    main_window_clone
+                        .hide()
+                        .expect("failed to hide main window");
+                    println!("Main window is hidden");
+                }
+            });
+            Ok(())
+        })
+        .invoke_handler(tauri::generate_handler![
+            open_application,
+            open_url,
+            play_media,
+            pause_media,
+            previous_media,
+            next_media,
+            increase_volume,
+            decrease_volume,
+            toggle_mute,
+            turn_on_wifi,
+            turn_off_wifi,
+            get_system_info,
+            search_file,
+            open_folder,
+            set_light_mode,
+            set_dark_mode,
+            take_screenshot,
+            change_wallpaper,
+            shutdown_pc,
+            restart_pc,
+            lock_pc,
+            sleep_pc,
+            get_installed_apps
+        ])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
 }
+
 
 
 #[tauri::command]
 fn open_application(destination: String) -> Result<(), String> {
-  // Check if the destination is a protocol
-  if destination.contains("://") {
-    // Use the `start` command to open the protocol
-    Command::new("cmd")
-      .args(&["/C", "start", &destination])
-      .spawn()
-      .map_err(|e| format!("Failed to open application: {}", e))?;
-  } else if destination.ends_with(".exe") {
-    // Use the provided destination path directly
-    let application_path = Path::new(&destination);
+    // Check if the destination is a protocol
+    if destination.contains("://") {
+        // Use the `start` command to open the protocol
+        Command::new("cmd")
+            .args(&["/C", "start", &destination])
+            .spawn()
+            .map_err(|e| format!("Failed to open application: {}", e))?;
+    } else if destination.ends_with(".exe") {
+        // Use the provided destination path directly
+        let application_path = Path::new(&destination);
 
-    // Use the `start` command to open the application in a new window
-    Command::new("cmd")
-      .args(&["/C", "start", "", application_path.to_str().unwrap()])
-      .spawn()
-      .map_err(|e| format!("Failed to open application: {}", e))?;
-  }
+        // Use the `start` command to open the application in a new window
+        Command::new("cmd")
+            .args(&["/C", "start", "", application_path.to_str().unwrap()])
+            .spawn()
+            .map_err(|e| format!("Failed to open application: {}", e))?;
+    }
 
-  Ok(())
+    Ok(())
 }
 
 #[tauri::command]
 fn open_url(url: String) -> Result<(), String> {
-  // Use the `start` command to open the URL
-  Command::new("cmd")
-    .args(&["/C", "start", "", &url])
-    .spawn()
-    .map_err(|e| format!("Failed to open URL: {}", e))?;
+    // Use the `start` command to open the URL
+    Command::new("cmd")
+        .args(&["/C", "start", "", &url])
+        .spawn()
+        .map_err(|e| format!("Failed to open URL: {}", e))?;
 
-  Ok(())
+    Ok(())
 }
+
 
 
 #[tauri::command]
@@ -172,7 +176,6 @@ fn play_media() -> Result<(), String> {
     Ok(())
 }
 
-
 #[tauri::command]
 fn pause_media() -> Result<(), String> {
     unsafe {
@@ -181,7 +184,6 @@ fn pause_media() -> Result<(), String> {
     }
     Ok(())
 }
-
 
 #[tauri::command]
 fn previous_media() -> Result<(), String> {
@@ -192,7 +194,6 @@ fn previous_media() -> Result<(), String> {
     Ok(())
 }
 
-
 #[tauri::command]
 fn next_media() -> Result<(), String> {
     unsafe {
@@ -201,7 +202,6 @@ fn next_media() -> Result<(), String> {
     }
     Ok(())
 }
-
 
 #[tauri::command]
 fn increase_volume() -> Result<(), String> {
@@ -223,12 +223,13 @@ fn decrease_volume() -> Result<(), String> {
 
 #[tauri::command]
 fn toggle_mute() -> Result<(), String> {
-  unsafe {
-    keybd_event(VK_VOLUME_MUTE as u8, 0, 0, 0);
-    keybd_event(VK_VOLUME_MUTE as u8, 0, KEYEVENTF_KEYUP, 0);
-  }
-  Ok(())
+    unsafe {
+        keybd_event(VK_VOLUME_MUTE as u8, 0, 0, 0);
+        keybd_event(VK_VOLUME_MUTE as u8, 0, KEYEVENTF_KEYUP, 0);
+    }
+    Ok(())
 }
+
 
 
 #[tauri::command]
@@ -263,7 +264,6 @@ fn turn_off_wifi() -> Result<(), String> {
 
 
 
-
 #[tauri::command]
 fn get_system_info() -> Result<String, String> {
     let mut sys = System::new_all();
@@ -278,7 +278,10 @@ fn get_system_info() -> Result<String, String> {
     info.push_str(&format!("Used Swap: {} bytes\n", sys.used_swap()));
 
     info.push_str(&format!("System Name: {:?}\n", System::name()));
-    info.push_str(&format!("System OS Build Version: {:?}\n", System::kernel_version()));
+    info.push_str(&format!(
+        "System OS Build Version: {:?}\n",
+        System::kernel_version()
+    ));
     info.push_str(&format!("System OS Version: {:?}\n", System::os_version()));
     info.push_str(&format!("System Host Name: {:?}\n", System::host_name()));
 
@@ -300,30 +303,31 @@ fn get_system_info() -> Result<String, String> {
 }
 
 
+
 fn get_windows_drives() -> Vec<String> {
-  let mut drives = Vec::new();
+    let mut drives = Vec::new();
 
-  // Get all available drives using wmic
-  if let Ok(output) = Command::new("wmic")
-      .args(["logicaldisk", "get", "name"])
-      .output() 
-  {
-      if let Ok(output_str) = String::from_utf8(output.stdout) {
-          for line in output_str.lines() {
-              let drive = line.trim();
-              if drive.len() == 2 && drive.ends_with(':') {
-                  drives.push(format!("{}\\", drive));
-              }
-          }
-      }
-  }
+    // Get all available drives using wmic
+    if let Ok(output) = Command::new("wmic")
+        .args(["logicaldisk", "get", "name"])
+        .output()
+    {
+        if let Ok(output_str) = String::from_utf8(output.stdout) {
+            for line in output_str.lines() {
+                let drive = line.trim();
+                if drive.len() == 2 && drive.ends_with(':') {
+                    drives.push(format!("{}\\", drive));
+                }
+            }
+        }
+    }
 
-  // If wmic command fails, fallback to C: drive
-  if drives.is_empty() {
-      drives.push("C:\\".to_string());
-  }
+    // If wmic command fails, fallback to C: drive
+    if drives.is_empty() {
+        drives.push("C:\\".to_string());
+    }
 
-  drives
+    drives
 }
 
 #[tauri::command]
@@ -345,7 +349,7 @@ fn search_file(search_terms: String) -> Result<Vec<SearchResult>, String> {
         "Program Files",
         "Program Files (x86)",
         "ProgramData",
-        "System Volume Information"
+        "System Volume Information",
     ];
 
     for drive in drives {
@@ -355,35 +359,34 @@ fn search_file(search_terms: String) -> Result<Vec<SearchResult>, String> {
             .filter_entry(|e| {
                 // Skip system folders and hidden files
                 if let Some(path) = e.path().to_str() {
-                    !skip_folders.iter().any(|folder| path.contains(folder)) &&
-                    !path.contains("AppData") &&
-                    !path.contains("$Recycle.Bin")
+                    !skip_folders.iter().any(|folder| path.contains(folder))
+                        && !path.contains("AppData")
+                        && !path.contains("$Recycle.Bin")
                 } else {
                     true
                 }
             })
             .filter_map(|e| e.ok())
         {
-          if entry.file_type().is_file() {
-            let filename = entry.file_name().to_string_lossy().to_lowercase();
+            if entry.file_type().is_file() {
+                let filename = entry.file_name().to_string_lossy().to_lowercase();
 
-            // Check if all keywords are present in the filename
-            if keywords.iter().all(|keyword| filename.contains(keyword)) {
-                results.push(SearchResult {
-                    path: entry.path().display().to_string(),
-                });
+                // Check if all keywords are present in the filename
+                if keywords.iter().all(|keyword| filename.contains(keyword)) {
+                    results.push(SearchResult {
+                        path: entry.path().display().to_string(),
+                    });
+                }
             }
-        }
         }
     }
 
     if results.is_empty() {
-      Err(format!("No files found matching: {}", search_terms))
-  } else {
-      Ok(results)
-  }
+        Err(format!("No files found matching: {}", search_terms))
+    } else {
+        Ok(results)
+    }
 }
-
 
 #[tauri::command]
 fn open_folder(filePath: String) -> Result<(), String> {
@@ -396,191 +399,212 @@ fn open_folder(filePath: String) -> Result<(), String> {
 }
 
 
+
 #[tauri::command]
 fn set_light_mode() -> Result<(), String> {
-  let hkcu = RegKey::predef(HKEY_CURRENT_USER);
-  let path = "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+    let hkcu = RegKey::predef(HKEY_CURRENT_USER);
+    let path = "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
 
-  match hkcu.open_subkey_with_flags(path, KEY_READ | KEY_WRITE) {
-      Ok(key) => {
-          // Set both app and system theme to light (1)
-          key.set_value("AppsUseLightTheme", &1u32)
-              .map_err(|e| format!("Failed to set app theme: {}", e))?;
-          key.set_value("SystemUsesLightTheme", &1u32)
-              .map_err(|e| format!("Failed to set system theme: {}", e))?;
+    match hkcu.open_subkey_with_flags(path, KEY_READ | KEY_WRITE) {
+        Ok(key) => {
+            // Set both app and system theme to light (1)
+            key.set_value("AppsUseLightTheme", &1u32)
+                .map_err(|e| format!("Failed to set app theme: {}", e))?;
+            key.set_value("SystemUsesLightTheme", &1u32)
+                .map_err(|e| format!("Failed to set system theme: {}", e))?;
 
-          Ok(())
-      }
-      Err(e) => Err(format!("Failed to access registry: {}", e))
-  }
+            Ok(())
+        }
+        Err(e) => Err(format!("Failed to access registry: {}", e)),
+    }
 }
-
 
 #[tauri::command]
 fn set_dark_mode() -> Result<(), String> {
-  let hkcu = RegKey::predef(HKEY_CURRENT_USER);
-  let path = "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+    let hkcu = RegKey::predef(HKEY_CURRENT_USER);
+    let path = "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
 
-  match hkcu.open_subkey_with_flags(path, KEY_READ | KEY_WRITE) {
-      Ok(key) => {
-          // Set both app and system theme to dark (0)
-          key.set_value("AppsUseLightTheme", &0u32)
-              .map_err(|e| format!("Failed to set app theme: {}", e))?;
-          key.set_value("SystemUsesLightTheme", &0u32)
-              .map_err(|e| format!("Failed to set system theme: {}", e))?;
+    match hkcu.open_subkey_with_flags(path, KEY_READ | KEY_WRITE) {
+        Ok(key) => {
+            // Set both app and system theme to dark (0)
+            key.set_value("AppsUseLightTheme", &0u32)
+                .map_err(|e| format!("Failed to set app theme: {}", e))?;
+            key.set_value("SystemUsesLightTheme", &0u32)
+                .map_err(|e| format!("Failed to set system theme: {}", e))?;
 
-          Ok(())
-      }
-      Err(e) => Err(format!("Failed to access registry: {}", e))
-  }
+            Ok(())
+        }
+        Err(e) => Err(format!("Failed to access registry: {}", e)),
+    }
 }
 
 
 
 #[tauri::command]
 fn take_screenshot() -> Result<(), String> {
-  // Get the path to the desktop directory
-  let mut desktop_path = match dirs::home_dir() {
-    Some(path) => path,
-    None => return Err("Failed to get home directory".to_string()),
-  };
-  desktop_path.push("Desktop");
+    // Get the path to the desktop directory
+    let mut desktop_path = match dirs::home_dir() {
+        Some(path) => path,
+        None => return Err("Failed to get home directory".to_string()),
+    };
+    desktop_path.push("Desktop");
 
-  // Generate the filename with the current date and time
-  let timestamp = Local::now().format("%Y-%m-%d %H%M%S").to_string();
-  let file_name = format!("Screenshot {}.png", timestamp);
-  desktop_path.push(file_name);
+    // Generate the filename with the current date and time
+    let timestamp = Local::now().format("%Y-%m-%d %H%M%S").to_string();
+    let file_name = format!("Screenshot {}.png", timestamp);
+    desktop_path.push(file_name);
 
-  match Screenshot::new() {
-      Ok(screenshot) => {
-          screenshot.save(&desktop_path).map_err(|e| e.to_string())
-      },
-      Err(_) => {
-          Err("Failed to capture screenshot".to_string())
-      },
-  }
+    match Screenshot::new() {
+        Ok(screenshot) => screenshot.save(&desktop_path).map_err(|e| e.to_string()),
+        Err(_) => Err("Failed to capture screenshot".to_string()),
+    }
 }
+
 
 
 #[tauri::command]
 fn change_wallpaper(image_path: String) -> Result<(), String> {
-  // Returns the wallpaper of the current desktop.
-  println!("{:?}", wallpaper::get());
+    // Returns the wallpaper of the current desktop.
+    println!("{:?}", wallpaper::get());
 
-  // Sets the wallpaper for the current desktop from a URL.
-  match wallpaper::set_from_url(&image_path) {
-      Ok(_) => {
-          // Set the wallpaper mode to Crop
-          wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
+    // Sets the wallpaper for the current desktop from a URL.
+    match wallpaper::set_from_url(&image_path) {
+        Ok(_) => {
+            // Set the wallpaper mode to Crop
+            wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
 
-          // Returns the wallpaper of the current desktop.
-          println!("{:?}", wallpaper::get());
-          Ok(())
-      },
-      Err(e) => Err(e.to_string()),
-  }
+            // Returns the wallpaper of the current desktop.
+            println!("{:?}", wallpaper::get());
+            Ok(())
+        }
+        Err(e) => Err(e.to_string()),
+    }
 }
+
 
 
 #[tauri::command]
 fn shutdown_pc() -> Result<(), String> {
-  let status = Command::new("cmd")
-      .args(&["/C", "start", "", "shutdown", "/s", "/t", "10"])
-      .status()
-      .map_err(|e| e.to_string())?;
+    let status = Command::new("cmd")
+        .args(&["/C", "start", "", "shutdown", "/s", "/t", "10"])
+        .status()
+        .map_err(|e| e.to_string())?;
 
-  if status.success() {
-      Ok(())
-  } else {
-      Err("Failed to shutdown PC".to_string())
-  }
+    if status.success() {
+        Ok(())
+    } else {
+        Err("Failed to shutdown PC".to_string())
+    }
 }
 
 #[tauri::command]
 fn restart_pc() -> Result<(), String> {
-  let status = Command::new("cmd")
-      .args(&["/C", "start", "", "shutdown", "/r", "/t", "10"])
-      .status()
-      .map_err(|e| e.to_string())?;
+    let status = Command::new("cmd")
+        .args(&["/C", "start", "", "shutdown", "/r", "/t", "10"])
+        .status()
+        .map_err(|e| e.to_string())?;
 
-  if status.success() {
-      Ok(())
-  } else {
-      Err("Failed to restart PC".to_string())
-  }
+    if status.success() {
+        Ok(())
+    } else {
+        Err("Failed to restart PC".to_string())
+    }
 }
 
 #[tauri::command]
 fn lock_pc() -> Result<(), String> {
-  let status = Command::new("cmd")
-      .args(&["/C", "start", "", "rundll32.exe", "user32.dll,LockWorkStation"])
-      .status()
-      .map_err(|e| e.to_string())?;
+    let status = Command::new("cmd")
+        .args(&[
+            "/C",
+            "start",
+            "",
+            "rundll32.exe",
+            "user32.dll,LockWorkStation",
+        ])
+        .status()
+        .map_err(|e| e.to_string())?;
 
-  if status.success() {
-      Ok(())
-  } else {
-      Err("Failed to log off PC".to_string())
-  }
+    if status.success() {
+        Ok(())
+    } else {
+        Err("Failed to log off PC".to_string())
+    }
 }
 
 #[tauri::command]
 fn sleep_pc() -> Result<(), String> {
-  let status = Command::new("cmd")
-      .args(&["/C", "start", "", "rundll32.exe", "powrprof.dll,SetSuspendState", "0,1,0"])
-      .status()
-      .map_err(|e| e.to_string())?;
+    let status = Command::new("cmd")
+        .args(&[
+            "/C",
+            "start",
+            "",
+            "rundll32.exe",
+            "powrprof.dll,SetSuspendState",
+            "0,1,0",
+        ])
+        .status()
+        .map_err(|e| e.to_string())?;
 
-  if status.success() {
-      Ok(())
-  } else {
-      Err("Failed to put PC to sleep".to_string())
-  }
+    if status.success() {
+        Ok(())
+    } else {
+        Err("Failed to put PC to sleep".to_string())
+    }
 }
+
 
 
 // get installed applications form the start menu and save the shortcut links to a json file
 #[tauri::command]
 fn get_installed_apps() -> Result<(), String> {
-  let paths = vec![
-      PathBuf::from("C:\\ProgramData\\Microsoft\\Windows\\Start Menu"),
-      PathBuf::from("C:\\Users\\Sandun\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs"),
-  ];
+    let paths = vec![
+        PathBuf::from("C:\\ProgramData\\Microsoft\\Windows\\Start Menu"),
+        PathBuf::from(
+            "C:\\Users\\Sandun\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs",
+        ),
+    ];
 
-  let mut apps = Vec::new();
+    let mut apps = Vec::new();
 
-  for path in paths {
-      for entry in WalkDir::new(&path)
-          .follow_links(true)
-          .into_iter()
-          .filter_map(|e| e.ok())
-      {
-          let extension = entry.path().extension().unwrap_or_default();
-          if (path.starts_with("C:\\ProgramData") || path.starts_with("C:\\Users")) && extension == "lnk" {
-              let app_name = entry.path().file_stem().unwrap_or_default().to_string_lossy().to_string();
-              if !app_name.to_lowercase().contains("uninstall") {
-                  let app_path = entry.path().display().to_string();
-                  apps.push(json!({
-                      "name": app_name,
-                      "path": app_path
-                  }));
-              }
-          }
-      }
-  }
+    for path in paths {
+        for entry in WalkDir::new(&path)
+            .follow_links(true)
+            .into_iter()
+            .filter_map(|e| e.ok())
+        {
+            let extension = entry.path().extension().unwrap_or_default();
+            if (path.starts_with("C:\\ProgramData") || path.starts_with("C:\\Users"))
+                && extension == "lnk"
+            {
+                let app_name = entry
+                    .path()
+                    .file_stem()
+                    .unwrap_or_default()
+                    .to_string_lossy()
+                    .to_string();
+                if !app_name.to_lowercase().contains("uninstall") {
+                    let app_path = entry.path().display().to_string();
+                    apps.push(json!({
+                        "name": app_name,
+                        "path": app_path
+                    }));
+                }
+            }
+        }
+    }
 
-  let json = serde_json::to_string(&apps).map_err(|e| e.to_string())?;
+    let json = serde_json::to_string(&apps).map_err(|e| e.to_string())?;
 
-  // Get the user's home directory and construct the output path
-  let home_dir = home_dir().ok_or("Could not get home directory")?;
-  let output_dir = home_dir.join("Documents").join("Nova");
+    // Get the user's home directory and construct the output path
+    let home_dir = home_dir().ok_or("Could not get home directory")?;
+    let output_dir = home_dir.join("Documents").join("Nova");
 
-  // Ensure the directory exists
-  if !output_dir.exists() {
-      fs::create_dir_all(&output_dir).map_err(|e| e.to_string())?;
-  }
+    // Ensure the directory exists
+    if !output_dir.exists() {
+        fs::create_dir_all(&output_dir).map_err(|e| e.to_string())?;
+    }
 
-  fs::write(output_dir.join("applications.json"), json).map_err(|e| e.to_string())?;
+    fs::write(output_dir.join("applications.json"), json).map_err(|e| e.to_string())?;
 
-  Ok(())
+    Ok(())
 }
