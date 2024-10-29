@@ -9,7 +9,6 @@ const chatFormSubmitBtn = document.getElementById('chatFormSubmitBtn');
 
 let requestsData = [];
 let responsesData = [];
-let applicationsData = [];
 let bugcodesData = [];
 
 
@@ -26,17 +25,38 @@ fetch('data/responses.json')
 		responsesData = data;
 	});
 
-fetch('data/applications.json')
-	.then(response => response.json())
-	.then(data => {
-		applicationsData = data;
-	});
-
 fetch('data/bugcodes.json')
 	.then(response => response.json())
 	.then(data => {
 		bugcodesData = data;
 	});
+
+
+
+// function to get installed apps
+async function get_installed_apps() {
+	try {
+		const installedApps = await invoke('get_installed_apps');
+		return installedApps;
+	} catch (error) {
+		console.error('Failed to get installed apps:', error);
+	}
+}
+get_installed_apps();
+
+// function to send default applications to rust
+async function sendApplicationsJsonToRust() {
+	try {
+		applicationsData = await fetch('data/default_applications.json').then(response => response.json());
+		console.log(applicationsData);
+		await invoke('receive_applications_json', { json: applicationsData });
+		console.log('Default Applications JSON sent to Rust successfully.');
+	} catch (error) {
+		console.error('Failed to read or send applications.json:', error);
+	}
+}
+sendApplicationsJsonToRust();
+
 
 
 // startup function
@@ -70,7 +90,7 @@ window.onload = function () {
 		}).catch(error => {
 			console.error('Error in getting weather:', error);
 		});
-	}, 30000);
+	}, 60000);
 }
 
 
@@ -84,15 +104,8 @@ chatForm.addEventListener('submit', function (event) {
 		botResponse.textContent = "Opening " + url + "...";
 		openURL(url).then(() => botResponse.innerHTML = `Opened <a href="https://${url}" target="_blank">https://${url}</a> successfully. Enjoy!`).catch(error => botResponse.textContent = "Sorry, I couldn't open the URL.");
 	} else if (userMessage.startsWith("open") || userMessage.startsWith("launch") || userMessage.startsWith("run") || userMessage.startsWith("start") || userMessage.startsWith("execute")) {
-		const { applicationName, applicationPath } = findApplication(userMessage);
-		botResponse.textContent = "Launching " + applicationName + "...";
-
-		if (applicationPath) {
-			openApplication(applicationPath, applicationName);
-		} else {
-			console.log("No application name detected");
-			botResponse.textContent = "Sorry, I couldn't detect any applications by that name.";
-		}
+		const appName = userMessage.replace('open', '').trim() || userMessage.replace('launch', '').trim() || userMessage.replace('run', '').trim() || userMessage.replace('start', '').trim() || userMessage.replace('execute', '').trim();
+		openApplication(appName);
 	} else if (userMessage.toLowerCase().includes("search")) {
 		botResponse.textContent = "Searching the web...";
 		searchWeb(userMessage).then(snippetText => botResponse.textContent = snippetText).catch(error => botResponse.textContent = "Sorry, I couldn't find any relevant information. Please try again in a bit or try a different search query.");
@@ -289,9 +302,6 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("sleep pc") || userMessage.toLowerCase().includes("sleep computer")) {
 		botResponse.textContent = "Putting the PC to sleep...";
 		sleep_pc().then(() => botResponse.textContent = "PC is going to sleep...").catch(error => botResponse.textContent = "Sorry, I couldn't put the PC to sleep.");
-	} else if (userMessage.toLowerCase().includes("get installed apps") || userMessage.toLowerCase().includes("installed applications") || userMessage.toLowerCase().includes("installed apps")) {
-		botResponse.textContent = "Fetching installed applications...";
-		get_installed_apps().then(apps => botResponse.textContent = apps).catch(error => botResponse.textContent = "Sorry, I couldn't fetch installed applications.");
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.innerHTML = response;
@@ -405,45 +415,38 @@ async function openURL(url) {
 
 
 
-let applicationPrefix = ["open ", "launch ", "run ", "start ", "execute "]
-
-// Function to find the application name from the user message
-function findApplication(requestKeyword) {
-	let applicationName = null;
-	let matchedApplicationName = null;
-	let applicationPath = null;
-
-	for (const prefix of applicationPrefix) {
-		if (requestKeyword.startsWith(prefix)) {
-			applicationName = requestKeyword.replace(prefix, '').trim();
-			const matchedApplication = applicationsData.find(app =>
-				app.keywords && app.keywords.some(keyword => keyword.toLowerCase() === applicationName.toLowerCase())
-			);
-			if (matchedApplication) {
-				matchedApplicationName = matchedApplication.name;
-				applicationPath = matchedApplication.path;
-				console.log(`Detected Application Name: ${matchedApplication.name}`);
-			}
-		}
-	}
-
-	return { applicationName: matchedApplicationName, applicationPath };
-}
-
-// Open the application if the user message contains the application name
-async function openApplication(applicationPath, applicationName) {
+// Function to open applications
+async function openApplication(appName) {
 	try {
-		await window.__TAURI__.invoke('open_application', {
-			destination: applicationPath
+		const response = await window.__TAURI__.invoke('open_application', {
+			appName: appName
 		});
-		botResponse.textContent = `${applicationName} launched successfully. Enjoy!`;
+
+		switch (response.status) {
+			case 'success':
+				new Notification('Application Launched', {
+					body: `${response.launched_app} launched successfully. Enjoy!`,
+					sound: 'Default'
+				});
+				botResponse.innerHTML = `${response.launched_app} launched successfully. Enjoy!`;
+				break;
+
+			case 'error':
+				console.error('Application error:', response.message);
+				new Notification('Application Error', {
+					body: response.message,
+					sound: 'Default'
+				});
+				botResponse.textContent = response.message;
+				break;
+		}
 	} catch (error) {
-		console.error('Failed to open application:', error);
-		new Notification('Failed to open the application', {
-			body: 'Failed to open the application. Please try again later',
+		console.error('Failed to execute command:', error);
+		new Notification('System Error', {
+			body: 'Failed to process the request. Please try again later.',
 			sound: 'Default'
 		});
-		botResponse.textContent = `Failed to open ${applicationName}. Please try again later.`;
+		botResponse.textContent = 'Sorry, I encountered a system error. Please try again later.';
 	}
 }
 
@@ -1084,6 +1087,7 @@ async function openYTMusic(query) {
 }
 
 
+
 // function to play media
 async function playMedia() {
 	try {
@@ -1688,18 +1692,5 @@ async function sleep_pc() {
 			body: 'Failed to sleep system. Please try again later.',
 			icon: 'assets/images/icon.png'
 		});
-	}
-}
-
-
-
-// function to get installed apps
-async function get_installed_apps() {
-	try {
-		const installedApps = await invoke('get_installed_apps');
-		console.log('Installed apps:', installedApps);
-		return installedApps;
-	} catch (error) {
-		console.error('Failed to get installed apps:', error);
 	}
 }

@@ -30,6 +30,7 @@ use wallpaper;
 
 use serde::Serialize;
 use serde_json::json;
+use serde_json::Value;
 
 use winreg::enums::*;
 use winreg::RegKey;
@@ -123,7 +124,8 @@ fn main() {
             restart_pc,
             lock_pc,
             sleep_pc,
-            get_installed_apps
+            get_installed_apps,
+            receive_applications_json
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -131,28 +133,120 @@ fn main() {
 
 
 
-#[tauri::command]
-fn open_application(destination: String) -> Result<(), String> {
-    // Check if the destination is a protocol
-    if destination.contains("://") {
-        // Use the `start` command to open the protocol
-        Command::new("cmd")
-            .args(&["/C", "start", &destination])
-            .spawn()
-            .map_err(|e| format!("Failed to open application: {}", e))?;
-    } else if destination.ends_with(".exe") {
-        // Use the provided destination path directly
-        let application_path = Path::new(&destination);
+static mut RECEIVED_APPLICATIONS: Option<Vec<Value>> = None;
 
-        // Use the `start` command to open the application in a new window
-        Command::new("cmd")
-            .args(&["/C", "start", "", application_path.to_str().unwrap()])
-            .spawn()
-            .map_err(|e| format!("Failed to open application: {}", e))?;
+#[command]
+fn receive_applications_json(json: Vec<Value>) -> Result<(), String> {
+    println!("Received applications JSON: {:?}", json);
+    // Store the received JSON array in a static variable
+    unsafe {
+        RECEIVED_APPLICATIONS = Some(json);
     }
-
     Ok(())
 }
+
+
+
+#[tauri::command]
+fn open_application(app_name: String) -> Result<Value, String> {
+    // Get home directory using dirs crate
+    let home_dir = dirs::home_dir()
+        .ok_or_else(|| "Failed to get home directory".to_string())?;
+    
+    let json_path = home_dir
+        .join("Documents")
+        .join("Nova")
+        .join("applications.json");
+
+    // Read and parse the JSON file
+    let json_content = fs::read_to_string(&json_path)
+        .map_err(|e| format!("Failed to read applications.json: {}", e))?;
+
+    let apps: Value = serde_json::from_str(&json_content)
+        .map_err(|e| format!("Failed to parse applications.json: {}", e))?;
+
+    // Check if the applications is an array
+    let applications = apps.as_array()
+        .ok_or_else(|| "Invalid applications.json format: expected an array".to_string())?;
+
+    let search_term = app_name.to_lowercase();
+    let mut matches = Vec::new();
+
+    // Look for exact matching applications in the JSON file
+    for app in applications {
+        if let Some(name) = app["name"].as_str() {
+            if name.to_lowercase() == search_term {
+                if let Some(path) = app["path"].as_str() {
+                    matches.push((name.to_string(), path.to_string()));
+                }
+            }
+        }
+    }
+
+    // If no matches found, check the received applications
+    if matches.is_empty() {
+        unsafe {
+            if let Some(received_apps) = &RECEIVED_APPLICATIONS {
+                for app in received_apps {
+                    if let Some(name) = app["name"].as_str() {
+                        if name.to_lowercase() == search_term {
+                            if let Some(path) = app["path"].as_str() {
+                                matches.push((name.to_string(), path.to_string()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    match matches.len() {
+        0 => Ok(json!({
+            "status": "error",
+            "message": format!("No application found matching '{}'", app_name)
+        })),
+        1 => {
+            // If only one match is found, launch it
+            let (name, path) = &matches[0];
+
+            // Launch the application based on path type
+            let launch_result = if path.contains("://") {
+                Command::new("cmd")
+                    .args(&["/C", "start", path])
+                    .spawn()
+                    .map_err(|e| format!("Failed to open protocol: {}", e))
+            } else {
+                let application_path = Path::new(path);
+                Command::new("cmd")
+                    .args(&["/C", "start", "", application_path.to_str().unwrap()])
+                    .spawn()
+                    .map_err(|e| format!("Failed to open application: {}", e))
+            };
+
+            // Return appropriate response based on launch result
+            match launch_result {
+                Ok(_) => Ok(json!({
+                    "status": "success",
+                    "message": format!("Successfully launched '{}'", name),
+                    "launched_app": name
+                })),
+                Err(e) => Ok(json!({
+                    "status": "error",
+                    "message": format!("Failed to launch '{}': {}", name, e)
+                }))
+            }
+        },
+        _ => {
+            // If multiple matches are found, return an error
+            Ok(json!({
+                "status": "error",
+                "message": format!("Multiple applications found matching '{}'", app_name)
+            }))
+        }
+    }
+}
+
+
 
 #[tauri::command]
 fn open_url(url: String) -> Result<(), String> {
@@ -554,7 +648,6 @@ fn sleep_pc() -> Result<(), String> {
 
 
 
-// get installed applications form the start menu and save the shortcut links to a json file
 #[tauri::command]
 fn get_installed_apps() -> Result<(), String> {
     let paths = vec![

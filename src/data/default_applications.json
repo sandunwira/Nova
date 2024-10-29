@@ -1,0 +1,318 @@
+[
+	{
+		"name": "Calculator",
+		"path": "calculator:///"
+	},
+	{
+		"name": "Character Map",
+		"path": "C:\\Windows\\System32\\charmap.exe"
+	},
+	{
+		"name": "Clean Manager",
+		"path": "C:\\Windows\\System32\\cleanmgr.exe"
+	},
+	{
+		"name": "Command Prompt",
+		"path": "C:\\Windows\\System32\\cmd.exe"
+	},
+	{
+		"name": "Computer Defaults",
+		"path": "C:\\Windows\\System32\\ComputerDefaults.exe"
+	},
+	{
+		"name": "Control Panel",
+		"path": "C:\\Windows\\System32\\control.exe"
+	},
+	{
+		"name": "Display Color Calibration",
+		"path": "C:\\Windows\\System32\\dccw.exe"
+	},
+	{
+		"name": "Device Manager",
+		"path": "C:\\Windows\\System32\\devmgmt.msc"
+	},
+	{
+		"name": "Drive Optimizer",
+		"path": "C:\\Windows\\System32\\dfrgui.exe"
+	},
+	{
+		"name": "Disk Management",
+		"path": "C:\\Windows\\System32\\diskmgmt.msc"
+	},
+	{
+		"name": "Display Settings",
+		"path": "C:\\Windows\\System32\\DpiScaling.exe"
+	},
+	{
+		"name": "DirectX Properties",
+		"path": "C:\\Windows\\System32\\DXCpl.exe"
+	},
+	{
+		"name": "DirectX Diagnostic Tool",
+		"path": "C:\\Windows\\System32\\dxdiag.exe"
+	},
+	{
+		"name": "Private Character Editor",
+		"path": "C:\\Windows\\System32\\eudcedit.exe"
+	},
+	{
+		"name": "File Explorer",
+		"path": "C:\\Windows\\explorer.exe"
+	},
+	{
+		"name": "Feedback Hub",
+		"path": "feedback-hub:///"
+	},
+	{
+		"name": "Bluetooth File Transfer",
+		"path": "C:\\Windows\\System32\\fsquirt.exe"
+	},
+	{
+		"name": "Language Pack Installer",
+		"path": "C:\\Windows\\System32\\lpksetup.exe"
+	},
+	{
+		"name": "Magnifier",
+		"path": "C:\\Windows\\System32\\Magnify.exe"
+	},
+	{
+		"name": "Windows Mobility Center",
+		"path": "C:\\Windows\\System32\\mblctr.exe"
+	},
+	{
+		"name": "Camera",
+		"path": "microsoft.windows.camera:///"
+	},
+	{
+		"name": "Windows Malicious Software Removal Tool",
+		"path": "C:\\Windows\\System32\\MRT.exe"
+	},
+	{
+		"name": "Microsoft Access",
+		"path": "msaccess.exe"
+	},
+	{
+		"name": "Action Center",
+		"path": "ms-actioncenter:///"
+	},
+	{
+		"name": "Available Networks",
+		"path": "ms-availablenetworks:///"
+	},
+	{
+		"name": "Clock",
+		"path": "ms-clock:///"
+	},
+	{
+		"name": "Dev Home",
+		"path": "ms-devhome:///"
+	},
+	{
+		"name": "Microsoft Excel",
+		"path": "excel.exe"
+	},
+	{
+		"name": "Tips",
+		"path": "ms-get-started:///"
+	},
+	{
+		"name": "Media Player",
+		"path": "ms-media-player:///"
+	},
+	{
+		"name": "Phone Link",
+		"path": "ms-phone:///"
+	},
+	{
+		"name": "Microsoft PowerPoint",
+		"path": "powerpnt.exe"
+	},
+	{
+		"name": "Microsoft Publisher",
+		"path": "mspub.exe"
+	},
+	{
+		"name": "Quick Assist",
+		"path": "ms-quick-assist:///"
+	},
+	{
+		"name": "Snipping Tool",
+		"path": "ms-screenclip:///"
+	},
+	{
+		"name": "Snip & Sketch",
+		"path": "ms-screensketch:///"
+	},
+	{
+		"name": "Windows Settings",
+		"path": "ms-settings:///"
+	},
+	{
+		"name": "Microsoft Teams",
+		"path": "msteams:///"
+	},
+	{
+		"name": "Microsoft To-Do",
+		"path": "ms-todo:///"
+	},
+	{
+		"name": "Microsoft Store",
+		"path": "ms-windows-store:///"
+	},
+	{
+		"name": "Movies & TV",
+		"path": "mswindowsvideo:///"
+	},
+	{
+		"name": "Microsoft Word",
+		"path": "winword.exe"
+	},
+	{
+		"name": "Outlook Mail",
+		"path": "outlookmail:///"
+	},
+	{
+		"name": "Windows Defender",
+		"path": "windowsdefender://"
+	},
+	{
+		"name": "Xbox App",
+		"path": "xbox:///"
+	},
+	{
+		"name": "Microsoft Configuration",
+		"path": "C:\\Windows\\System32\\msconfig.exe"
+	},
+	{
+		"name": "System Information",
+		"path": "C:\\Windows\\System32\\msinfo32.exe"
+	},
+	{
+		"name": "Paint",
+		"path": "C:\\Windows\\System32\\mspaint.exe"
+	},
+	{
+		"name": "Windows Remote Assistance",
+		"path": "C:\\Windows\\System32\\msra.exe"
+	},
+	{
+		"name": "Windows Remote Desktop Connection",
+		"path": "C:\\Windows\\System32\\mstsc.exe"
+	},
+	{
+		"name": "Narrator",
+		"path": "C:\\Windows\\System32\\Narrator.exe"
+	},
+	{
+		"name": "Advanced User Accounts Control Panel",
+		"path": "C:\\Windows\\System32\\Netplwiz.exe"
+	},
+	{
+		"name": "Notepad",
+		"path": "C:\\Windows\\System32\\notepad.exe"
+	},
+	{
+		"name": "ODBC Data Source Administrator",
+		"path": "C:\\Windows\\System32\\odbcad32.exe"
+	},
+	{
+		"name": "Windows Optional Features",
+		"path": "C:\\Windows\\System32\\OptionalFeatures.exe"
+	},
+	{
+		"name": "On Screen Keyboard",
+		"path": "C:\\Windows\\System32\\osk.exe"
+	},
+	{
+		"name": "Performance Monitor",
+		"path": "C:\\Windows\\System32\\perfmon.exe"
+	},
+	{
+		"name": "Steps Recorder",
+		"path": "C:\\Windows\\System32\\psr.exe"
+	},
+	{
+		"name": "Quick Assist",
+		"path": "C:\\Windows\\System32\\quickassist.exe"
+	},
+	{
+		"name": "Recovery Media Creator",
+		"path": "C:\\Windows\\System32\\RecoveryDrive.exe"
+	},
+	{
+		"name": "Registry Editor",
+		"path": "C:\\Windows\\regedit.exe"
+	},
+	{
+		"name": "Resource Monitor",
+		"path": "C:\\Windows\\System32\\resmon.exe"
+	},
+	{
+		"name": "Windows System Restore",
+		"path": "C:\\Windows\\System32\\rstrui.exe"
+	},
+	{
+		"name": "Windows System Backup",
+		"path": "C:\\Windows\\System32\\sdclt.exe"
+	},
+	{
+		"name": "Windows Services",
+		"path": "C:\\Windows\\System32\\services.msc"
+	},
+	{
+		"name": "Create A Shared Folder Wizard",
+		"path": "C:\\Windows\\System32\\shrpubw.exe"
+	},
+	{
+		"name": "Volume Mixer",
+		"path": "C:\\Windows\\System32\\SndVol.exe"
+	},
+	{
+		"name": "Snipping Tool",
+		"path": "C:\\Windows\\System32\\SnippingTool.exe"
+	},
+	{
+		"name": "SQL Server Configuration Manager",
+		"path": "C:\\Windows\\System32\\SQLServerManager16.msc"
+	},
+	{
+		"name": "Advanced System Properties",
+		"path": "C:\\Windows\\System32\\SystemPropertiesComputerName.exe"
+	},
+	{
+		"name": "Performance Options",
+		"path": "C:\\Windows\\System32\\SystemPropertiesPerformance.exe"
+	},
+	{
+		"name": "Windows System Reset",
+		"path": "C:\\Windows\\System32\\systemreset.exe"
+	},
+	{
+		"name": "Task Manager",
+		"path": "C:\\Windows\\System32\\Taskmgr.exe"
+	},
+	{
+		"name": "Task Scheduler",
+		"path": "C:\\Windows\\System32\\taskschd.msc"
+	},
+	{
+		"name": "User Account Control Settings",
+		"path": "C:\\Windows\\System32\\UserAccountControlSettings.exe"
+	},
+	{
+		"name": "Windows Defender Firewall with Advanced Security",
+		"path": "C:\\Windows\\System32\\WF.msc"
+	},
+	{
+		"name": "Windows Fax and Scan",
+		"path": "C:\\Windows\\System32\\WFS.exe"
+	},
+	{
+		"name": "WordPad",
+		"path": "C:\\Program Files\\Windows NT\\Accessories\\wordpad.exe"
+	},
+	{
+		"name": "Spotify",
+		"path": "spotify://"
+	}
+]
