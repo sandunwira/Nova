@@ -146,10 +146,10 @@ chatForm.addEventListener('submit', function (event) {
 		}).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the image of the day.");
 	} else if (userMessage.toLowerCase().includes("qotd") || userMessage.toLowerCase().includes("quote of the day") || userMessage.toLowerCase().includes("inspirational quote") || userMessage.toLowerCase().includes("motivational quote")) {
 		botResponse.textContent = "Fetching the quote of the day...";
-		getQuoteOfTheDay().then(quote => botResponse.textContent = quote).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the quote of the day.");
+		getQuoteOfTheDay().then(({ quote, author }) => botResponse.innerHTML = `Quote of the day is:<br><br>${quote}<br>- ${author}`).catch(error => botResponse.textContent = "Sorry, I couldn't fetch the quote of the day.");
 	} else if (userMessage.toLowerCase().includes("random quote") || userMessage.toLowerCase().includes("quote")) {
 		botResponse.textContent = "Fetching a random quote...";
-		getRandomQuote().then(quote => botResponse.textContent = quote).catch(error => botResponse.textContent = "Sorry, I couldn't fetch a random quote.");
+		getRandomQuote().then(({ quote, author }) => botResponse.innerHTML = `Here's a quote I found for you:<br><br>${quote}<br>- ${author}`).catch(error => botResponse.textContent = "Sorry, I couldn't fetch a random quote.");
 	} else if (userMessage.toLowerCase().includes("on this day") || userMessage.toLowerCase().includes("on this day events") || userMessage.toLowerCase().includes("on this day in history") || userMessage.toLowerCase().includes("on this day facts")) {
 		botResponse.textContent = "Fetching on this day events...";
 		getOnThisDayEvents().then(events => {
@@ -817,8 +817,10 @@ async function getQuoteOfTheDay() {
 		}
 		const data = await response.json();
 		const jsonData = JSON.parse(data.contents);
-		const quote = jsonData[0].q + ' - ' + jsonData[0].a;
-		return quote;
+		const quote = jsonData[0].q;
+		const author = jsonData[0].a;
+		const fullQuote = quote + ' - ' + author;
+		return { fullQuote, quote, author };
 	}
 	catch (error) {
 		console.error('Error in getQuoteOfTheDay:', error);
@@ -845,8 +847,10 @@ async function getRandomQuote() {
 		}
 		const data = await response.json();
 		const jsonData = JSON.parse(data.contents);
-		const quote = jsonData[0].q + ' - ' + jsonData[0].a;
-		return quote;
+		const quote = jsonData[0].q;
+		const author = jsonData[0].a;
+		const fullQuote = quote + ' - ' + author;
+		return { fullQuote, quote, author };
 	}
 	catch (error) {
 		console.error('Error in getRandomQuote:', error);
