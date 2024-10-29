@@ -18,7 +18,7 @@ use winapi::um::winuser::{
     VK_VOLUME_DOWN, VK_VOLUME_MUTE, VK_VOLUME_UP,
 };
 
-use sysinfo::{Components, Disks, Networks, System};
+use sysinfo::{Disks, Networks, System, RefreshKind, CpuRefreshKind, Users};
 
 use dirs::*;
 use walkdir::WalkDir;
@@ -358,41 +358,80 @@ async fn turn_off_wifi() -> Result<(), String> {
 
 
 #[tauri::command]
-fn get_system_info() -> Result<String, String> {
+fn get_system_info() -> Result<serde_json::Value, String> {
     let mut sys = System::new_all();
     sys.refresh_all();
 
-    let mut info = String::new();
+    let total_memory = sys.total_memory();
+    let used_memory = sys.used_memory();
+    let total_swap = sys.total_swap();
+    let used_swap = sys.used_swap();
 
-    info.push_str("System:\n");
-    info.push_str(&format!("Total Memory: {} bytes\n", sys.total_memory()));
-    info.push_str(&format!("Used Memory: {} bytes\n", sys.used_memory()));
-    info.push_str(&format!("Total Swap: {} bytes\n", sys.total_swap()));
-    info.push_str(&format!("Used Swap: {} bytes\n", sys.used_swap()));
+    let long_os_version = System::long_os_version().unwrap_or("Unknown".to_string());
+    let kernel_version = System::kernel_version().unwrap_or("Unknown".to_string());
+    let os_version = System::os_version().unwrap_or("Unknown".to_string());
+    let host_name = System::host_name().unwrap_or("Unknown".to_string());
 
-    info.push_str(&format!("System Name: {:?}\n", System::name()));
-    info.push_str(&format!(
-        "System OS Build Version: {:?}\n",
-        System::kernel_version()
-    ));
-    info.push_str(&format!("System OS Version: {:?}\n", System::os_version()));
-    info.push_str(&format!("System Host Name: {:?}\n", System::host_name()));
+    let mut s = System::new_with_specifics(
+        RefreshKind::new().with_cpu(CpuRefreshKind::everything()),
+    );
+    let cpu_brand = s.cpus().first().map_or("Unknown".to_string(), |cpu| cpu.brand().to_string());
+    let nb_cpus = sys.cpus().len();
+    let cpu_arch = System::cpu_arch().unwrap_or("Unknown".to_string());
 
-    info.push_str(&format!("NB CPUs: {}\n", sys.cpus().len()));
+    // Wait a bit because CPU usage is based on diff.
+    std::thread::sleep(sysinfo::MINIMUM_CPU_UPDATE_INTERVAL);
+    // Refresh CPUs again to get actual value.
+    s.refresh_cpu_usage();
+    let cpu_usage = s.global_cpu_usage();
 
-    info.push_str("Disks:\n");
+    let last_booted_time = System::boot_time();
+    let system_uptime = System::uptime();
+
+    let mut disks_info = Vec::new();
     let disks = Disks::new_with_refreshed_list();
     for disk in &disks {
-        info.push_str(&format!("{:?}\n", disk));
+        let disk_letter = disk.mount_point().to_str().unwrap_or("Unknown").to_string();
+        let disk_name = disk.name().to_str().unwrap_or("Unknown").to_string();
+        let file_system = disk.file_system().to_string_lossy().to_string();
+        let used_storage = disk.available_space();
+        let total_storage = disk.total_space();
+
+        disks_info.push(json!({
+            "disk_letter": disk_letter,
+            "disk_name": if disk_name.is_empty() { "Unknown".to_string() } else { disk_name },
+            "file_system": file_system,
+            "used_storage": used_storage,
+            "total_storage": total_storage
+        }));
     }
 
-    info.push_str("Components:\n");
-    let components = Components::new_with_refreshed_list();
-    for component in &components {
-        info.push_str(&format!("{:?}\n", component));
+    let mut networks_info = Vec::new();
+    let networks = Networks::new_with_refreshed_list();
+    for (interface_name, _data) in &networks {
+        networks_info.push(json!({
+            "interface_name": interface_name
+        }));
     }
 
-    Ok(info)
+    Ok(json!({
+        "total_memory": total_memory,
+        "used_memory": used_memory,
+        "total_swap": total_swap,
+        "used_swap": used_swap,
+        "long_os_version": long_os_version,
+        "kernel_version": kernel_version,
+        "os_version": os_version,
+        "host_name": host_name,
+        "cpu_brand": cpu_brand,
+        "nb_cpus": nb_cpus,
+        "cpu_arch": cpu_arch,
+        "cpu_usage": cpu_usage,
+        "last_booted_time": last_booted_time,
+        "system_uptime": system_uptime,
+        "disks": disks_info,
+        "networks": networks_info
+    }))
 }
 
 

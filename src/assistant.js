@@ -75,22 +75,22 @@ window.onload = function () {
 		greeting = "Good Evening! 🌙";
 	}
 
-	new Notification(`${greeting}`, {
-		body: 'Ask me anything and I will try my best to help you out ;)',
-		sound: 'Default'
-	});
+	// new Notification(`${greeting}`, {
+	// 	body: 'Ask me anything and I will try my best to help you out ;)',
+	// 	sound: 'Default'
+	// });
 
 	// weather notification
-	setTimeout(() => {
-		getWeather().then(({ location, weatherComment, temperature }) => {
-			new Notification(`${temperature} in ${location}`, {
-				body: weatherComment,
-				sound: 'Default'
-			});
-		}).catch(error => {
-			console.error('Error in getting weather:', error);
-		});
-	}, 60000);
+	// setTimeout(() => {
+	// 	getWeather().then(({ location, weatherComment, temperature }) => {
+	// 		new Notification(`${temperature} in ${location}`, {
+	// 			body: weatherComment,
+	// 			sound: 'Default'
+	// 		});
+	// 	}).catch(error => {
+	// 		console.error('Error in getting weather:', error);
+	// 	});
+	// }, 60000);
 }
 
 
@@ -244,7 +244,7 @@ chatForm.addEventListener('submit', function (event) {
 		}
 	} else if (userMessage.toLowerCase().includes("pc info")) {
 		botResponse.textContent = "Fetching system information...";
-		getSystemInfo().then(systemInfo => botResponse.textContent = systemInfo).catch(error => botResponse.textContent = "Sorry, I couldn't fetch system information.");
+		getSystemInfo().then(({ deviceName, longOSName, lastBootedTime, uptime, cpuBrand, cpuArch, cpuCores, cpuUsage, usedMemory, totalMemory, usedSwap, totalSwap, disksInfo, networksInfo }) => botResponse.innerHTML = `${deviceName}<br>Operating System: ${longOSName}<br>Last Booted Time: ${lastBootedTime}<br>Uptime: ${uptime}<br><br>Processor: ${cpuBrand}<br>CPU Architecture: ${cpuArch}<br>CPU Cores: ${cpuCores}<br>CPU Usage: ${cpuUsage}%<br><br>Memory: ${usedMemory} GB (${((usedMemory / totalMemory) * 100).toFixed(0)}%) used out of ${totalMemory} GB<br>Swap: ${usedSwap} GB (${((usedSwap / totalSwap) * 100).toFixed(0)}%) out of ${totalSwap} GB<br><br>Disks:<br>${disksInfo}<br><br>Networks:<br>${networksInfo}`).catch(error => botResponse.textContent = "Sorry, I couldn't fetch system information.");
 	} else if (userMessage.toLowerCase().includes("bug code") || userMessage.toLowerCase().includes("error")) {
 		const bugCode = userMessage.match(/bug code 0x([0-9a-fA-F]+)/) || userMessage.match(/0x([0-9a-fA-F]+) error/);
 		if (bugCode) {
@@ -1398,10 +1398,39 @@ async function convertCurrency(amount, fromCurrency, toCurrency) {
 async function getSystemInfo() {
 	const botResponse = document.getElementById('botResponse');
 	try {
-		console.log('Invoking get_system_info');
 		const systemInfo = await invoke('get_system_info');
 		console.log('System info received:', systemInfo);
-		return systemInfo;
+
+		const { total_memory, used_memory, total_swap, used_swap, long_os_version, host_name, cpu_brand, nb_cpus, cpu_arch, cpu_usage, last_booted_time, system_uptime, disks, networks } = systemInfo;
+
+		const totalMemory = (total_memory / 1024 / 1024 / 1024).toFixed(1); // in GB
+		const usedMemory = (used_memory / 1024 / 1024 / 1024).toFixed(1); // in GB
+		const totalSwap = (total_swap / 1024 / 1024 / 1024).toFixed(1); // in GB
+		const usedSwap = (used_swap / 1024 / 1024 / 1024).toFixed(1); // in GB
+		const longOSName = long_os_version;
+		const deviceName = host_name;
+		const cpuBrand = cpu_brand;
+		const cpuCores = nb_cpus;
+		const cpuArch = cpu_arch;
+		const cpuUsage = (cpu_usage).toFixed(1);
+		const lastBootedTime = (new Date(last_booted_time * 1000)).toLocaleString();
+		const uptime = `${String(Math.floor(system_uptime / 86400)).padStart(2, '0')}:${String(Math.floor((system_uptime % 86400) / 3600)).padStart(2, '0')}:${String(Math.floor((system_uptime % 3600) / 60)).padStart(2, '0')}:${String(system_uptime % 60).padStart(2, '0')}`;
+		const disksInfo = disks.map(disk => 
+			`- Mount Point: ${disk.disk_letter} | Name: ${disk.disk_name} | File System: ${disk.file_system} | Storage: Used ${(disk.used_storage / 1024 / 1024 / 1024).toFixed(1)} GB out of ${(disk.total_storage / 1024 / 1024 / 1024).toFixed(1)} GB`
+		).join('<br>');
+
+		const networksInfo = networks.map(network => 
+			`- ${network.interface_name}`
+		).join('<br>');
+
+		console.log('Device Name: ' + deviceName + '\nOperating System: ' + longOSName + '\nBooted Time: ' + lastBootedTime + '\nUptime: ' + uptime);
+		console.log('Processor: ' + cpuBrand + '\nCPU Architecture: ' + cpuArch + '\nCPU Cores: ' + cpuCores + '\nCPU Usage: ' + cpuUsage + '%');
+		console.log('Memory:\n- Used ' + usedMemory + ' GB (' + ((usedMemory / totalMemory) * 100).toFixed(0) + '%) out of ' + totalMemory + ' GB');
+		console.log('Swap:\n- Used ' + usedSwap + ' GB (' + ((usedSwap / totalSwap) * 100).toFixed(0) + '%) out of ' + totalSwap + ' GB');
+		console.log('Disks:\n' + (disksInfo.replace(/<br>/g, '\n\n')).replace(/[|]/g, '\n-'));
+		console.log('Networks:\n' + networksInfo.replace(/<br>/g, '\n'));
+
+		return { deviceName, longOSName, lastBootedTime, uptime, cpuBrand, cpuArch, cpuCores, cpuUsage, usedMemory, totalMemory, usedSwap, totalSwap, disksInfo, networksInfo };
 	} catch (error) {
 		console.error('Error getting system information:', error);
 		botResponse.textContent = 'Failed to get system information. Please try again later.';
