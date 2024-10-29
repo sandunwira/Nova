@@ -425,7 +425,7 @@ fn get_windows_drives() -> Vec<String> {
 }
 
 #[tauri::command]
-fn search_file(search_terms: String) -> Result<Vec<SearchResult>, String> {
+async fn search_file(search_terms: String) -> Result<Vec<SearchResult>, String> {
     let mut results = Vec::new();
     let drives = get_windows_drives();
 
