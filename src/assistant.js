@@ -1485,6 +1485,8 @@ async function sendEmail() {
 // function to search files
 async function searchFile(searchTerms) {
 	try {
+		chatMessage.setAttribute('disabled', true);
+		chatFormSubmitBtn.disabled = true;
 		const searchDisplay = `"${searchTerms}"`;
 
 		botResponse.textContent = `Searching for files matching ${searchDisplay} across all drives... This may take a while.`;
@@ -1512,6 +1514,9 @@ async function searchFile(searchTerms) {
 			searchTime = `${searchTime} seconds`;
 		}
 
+		chatFormSubmitBtn.disabled = false;
+		chatMessage.disabled = false;
+
 		if (results.length > 0) {
 			console.log('File(s) found:', results);
 
@@ -1536,6 +1541,8 @@ async function searchFile(searchTerms) {
 			});
 		}
 	} catch (error) {
+		chatFormSubmitBtn.disabled = false;
+		chatMessage.disabled = false;
 		console.error('Error searching for files:', error);
 		botResponse.textContent = `Error: ${error}`;
 	}
