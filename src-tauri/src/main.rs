@@ -136,8 +136,7 @@ fn main() {
 static mut RECEIVED_APPLICATIONS: Option<Vec<Value>> = None;
 
 #[command]
-fn receive_applications_json(json: Vec<Value>) -> Result<(), String> {
-    println!("Received applications JSON: {:?}", json);
+async fn receive_applications_json(json: Vec<Value>) -> Result<(), String> {
     // Store the received JSON array in a static variable
     unsafe {
         RECEIVED_APPLICATIONS = Some(json);
@@ -152,7 +151,7 @@ fn open_application(app_name: String) -> Result<Value, String> {
     // Get home directory using dirs crate
     let home_dir = dirs::home_dir()
         .ok_or_else(|| "Failed to get home directory".to_string())?;
-    
+
     let json_path = home_dir
         .join("Documents")
         .join("Nova")
@@ -327,9 +326,9 @@ fn toggle_mute() -> Result<(), String> {
 
 
 #[tauri::command]
-fn turn_on_wifi() -> Result<(), String> {
-    let status = RunasCommand::new("cmd")
-        .args(&["/C", "start", "netsh", "interface", "set", "interface", "Wi-Fi", "enabled"])
+async fn turn_on_wifi() -> Result<(), String> {
+    let status = RunasCommand::new("netsh")
+        .args(&["interface", "set", "interface", "Wi-Fi", "enabled"])
         .show(false)
         .status()
         .map_err(|e| e.to_string())?;
@@ -342,9 +341,9 @@ fn turn_on_wifi() -> Result<(), String> {
 }
 
 #[tauri::command]
-fn turn_off_wifi() -> Result<(), String> {
-    let status = RunasCommand::new("cmd")
-        .args(&["/C", "start", "netsh", "interface", "set", "interface", "Wi-Fi", "disabled"])
+async fn turn_off_wifi() -> Result<(), String> {
+    let status = RunasCommand::new("netsh")
+        .args(&["interface", "set", "interface", "Wi-Fi", "disabled"])
         .show(false)
         .status()
         .map_err(|e| e.to_string())?;
@@ -495,7 +494,7 @@ fn open_folder(filePath: String) -> Result<(), String> {
 
 
 #[tauri::command]
-fn set_light_mode() -> Result<(), String> {
+async fn set_light_mode() -> Result<(), String> {
     let hkcu = RegKey::predef(HKEY_CURRENT_USER);
     let path = "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
 
@@ -514,7 +513,7 @@ fn set_light_mode() -> Result<(), String> {
 }
 
 #[tauri::command]
-fn set_dark_mode() -> Result<(), String> {
+async fn set_dark_mode() -> Result<(), String> {
     let hkcu = RegKey::predef(HKEY_CURRENT_USER);
     let path = "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
 
@@ -649,7 +648,7 @@ fn sleep_pc() -> Result<(), String> {
 
 
 #[tauri::command]
-fn get_installed_apps() -> Result<(), String> {
+async fn get_installed_apps() -> Result<(), String> {
     let paths = vec![
         PathBuf::from("C:\\ProgramData\\Microsoft\\Windows\\Start Menu"),
         PathBuf::from(
