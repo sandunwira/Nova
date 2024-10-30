@@ -954,6 +954,24 @@
 		]
 	},
 	{
+		"intent": "pity",
+		"requests": [
+			"pity",
+			"im feeling pity",
+			"im feeling sorry",
+			"im feeling sympathetic",
+			"im feeling compassionate",
+			"i feel their pain",
+			"i feel their struggles",
+			"i feel their challenges",
+			"i feel their hurt",
+			"i feel their suffering",
+			"its hard to watch them go through this",
+			"i wish i could help",
+			"i wish i could do something"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",

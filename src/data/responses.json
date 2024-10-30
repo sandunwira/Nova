@@ -720,6 +720,19 @@
 		]
 	},
 	{
+		"intent": "pity",
+		"responses": [
+			"It's tough to see someone in that situation. I'm here to support you [name].",
+			"I understand your feelings. It can be heartbreaking. I'm here to listen [name].",
+			"That's a compassionate perspective. What do you think we can do to support them [name]?",
+			"It's natural to feel that way when someone is struggling. They could really use our support.",
+			"I agree; it's really sad to see. Let's see if we can make a difference together [name].",
+			"I share your feelings [name]. Sometimes, just being there for them can mean a lot.",
+			"It's important to acknowledge that feeling. We should reach out to them. What do you think [name]?",
+			"I know, right? It's so hard to watch. Let's see if we can help them together [name]."
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",
