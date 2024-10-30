@@ -564,6 +564,19 @@
 		]
 	},
 	{
+		"intent": "anticipation",
+		"responses": [
+			"I'm excited for you [name]! What are you looking forward to?",
+			"That's wonderful to hear! What are you anticipating [name]?",
+			"I'm so happy for you [name]! What's coming up that you're excited about?",
+			"That's fantastic news! I'm thrilled for you [name].",
+			"I'm so glad to hear that you're feeling excited [name]! What's coming up that you're looking forward to?",
+			"That's wonderful to hear! I'm sure you're feeling eager and excited [name].",
+			"I'm glad you have something to look forward to [name]. What are you anticipating?",
+			"That's wonderful news [name]. I'm glad you're feeling excited and hopeful."
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",

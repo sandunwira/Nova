@@ -496,6 +496,39 @@
 		]
 	},
 	{
+		"intent": "anticipation",
+		"requests": [
+			"anticipation",
+			"im anticipating",
+			"im feeling anticipation",
+			"im feeling excited",
+			"im feeling eager",
+			"im feeling thrilled",
+			"im feeling anxious",
+			"im feeling nervous",
+			"im feeling on edge",
+			"im feeling on tenterhooks",
+			"im feeling on pins and needles",
+			"im feeling like a kid on christmas morning",
+			"im feeling like a kid in a candy store",
+			"im feeling like a kid at disneyland",
+			"im feeling like a kid on their birthday",
+			"im feeling like a kid on halloween",
+			"im feeling like a kid on easter",
+			"im feeling like a kid on the first day of school",
+			"im feeling like a kid on the last day of school",
+			"im feeling like a kid on summer vacation",
+			"im feeling like a kid on winter break",
+			"im feeling like a kid on spring break",
+			"im feeling like a kid on a snow day",
+			"im feeling like a kid on a rainy day",
+			"im feeling like a kid on a sunny day",
+			"im feeling like a kid on a cloudy day",
+			"im feeling like a kid on a windy day",
+			"im feeling like a kid on a stormy day"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
