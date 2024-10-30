@@ -271,6 +271,20 @@
 		]
 	},
 	{
+		"intent": "melancholy",
+		"requests": [
+			"melancholy",
+			"im melancholic",
+			"im feeling melancholic",
+			"im feeling melancholy",
+			"i feel a sense of longing for the past",
+			"im often overwhelmed by feelings of sadness",
+			"i feel a sense of loss",
+			"im often lost in thought, feeling wistful",
+			"i feel a quiet sadness that won't go away"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
