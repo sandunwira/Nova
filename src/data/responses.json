@@ -588,6 +588,15 @@
 		]
 	},
 	{
+		"intent": "lust",
+		"responses": [
+			"Sorry [name], Since I'm an AI assistant, I can't engage in that kind of conversation.",
+			"Sorry [name], I can't participate in that kind of discussion. Let's move on to a different topic.",
+			"Sorry [name], Let's keep the conversation appropriate. Is there something else you'd like to talk about?",
+			"Sorry [name], Let's move on to a different topic. Is there something else you'd like to discuss?"
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",

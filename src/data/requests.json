@@ -553,6 +553,26 @@
 		]
 	},
 	{
+		"intent": "lust",
+		"requests": [
+			"lust",
+			"horny",
+			"turned on",
+			"aroused",
+			"im lusting",
+			"im feeling lustful",
+			"im feeling horny",
+			"im feeling turned on",
+			"im feeling aroused",
+			"im feeling passionate",
+			"im feeling amorous",
+			"im feeling frisky",
+			"im feeling randy",
+			"im feeling hot and bothered",
+			"im feeling hot and heavy"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
