@@ -434,6 +434,29 @@
 		]
 	},
 	{
+		"intent": "surprise",
+		"requests": [
+			"surprise",
+			"im surprised",
+			"im feeling surprised",
+			"wow, i didnt see that coming",
+			"im shocked",
+			"im taken aback",
+			"im astonished",
+			"i cant believe it",
+			"im amazed",
+			"im stunned",
+			"wow",
+			"whoa",
+			"oh my god",
+			"oh my gosh",
+			"oh wow",
+			"oh my goodness",
+			"oh my word",
+			"i did not expect that"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",

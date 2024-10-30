@@ -534,6 +534,21 @@
 		]
 	},
 	{
+		"intent": "surprise",
+		"responses": [
+			"Isn't that something [name]?",
+			"I know right [name]!",
+			"It's a real surprise, isn't it [name]?",
+			"That's quite unexpected [name].",
+			"It's incredible, isn't it [name]?",
+			"I can see that you're surprised [name]!",
+			"It's pretty incredible, isn't it [name]?",
+			"It sounds like something caught you off guard [name].",
+			"It seems like something unexpected happened [name].",
+			"It looks like you're really surprised [name]!"
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",
