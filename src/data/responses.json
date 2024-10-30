@@ -314,7 +314,7 @@
 		]
 	},
 	{
-		"intent": "angry",
+		"intent": "anger",
 		"responses": [
 			"I understand that you're feeling angry [name]. It's okay to feel this way. Would you like to talk about what's making you angry?",
 			"I'm sorry to hear that you're angry [name]. It's okay to express your feelings. Would you like to talk about it?",
