@@ -255,6 +255,22 @@
 		]
 	},
 	{
+		"intent": "apathy",
+		"requests": [
+			"apathy",
+			"im apathetic",
+			"im feeling apathetic",
+			"im feeling indifferent",
+			"im feeling uninterested",
+			"i don't care",
+			"i don't give a damn",
+			"i just don't care anymore",
+			"i don't have energy to do anything",
+			"i don't have energy to do something",
+			"im just going through the motions"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",

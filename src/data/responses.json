@@ -344,6 +344,21 @@
 		]
 	},
 	{
+		"intent": "apathy",
+		"responses": [
+			"I'm sorry to hear that you're feeling apathetic [name]. It's okay to feel this way. Would you like to talk about it?",
+			"I understand that you're feeling apathetic [name]. It's okay to have these feelings. Would you like to talk about it?",
+			"I'm here for you [name], no matter what. If you need someone to listen, I'm all ears.",
+			"I'm sorry you're feeling apathetic [name]. Sometimes, it's helpful to talk about our feelings. Would you like to talk?",
+			"It's okay to feel apathetic. Everyone experiences apathy at times [name]. Would you like to talk about what's making you feel this way?",
+			"I'm here for you [name], no matter what. If you need someone to listen, I'm all ears.",
+			"I'm sorry you're feeling apathetic [name]. It's okay to express your feelings. Would you like to talk about it?",
+			"I understand that you're feeling apathetic [name]. It's okay to feel this way. Sometimes, talking about it can help. Would you like to talk?",
+			"I'm here for you [name]. If you need someone to listen, I'm all ears.",
+			"I'm sorry you're feeling apathetic [name]. It's okay to feel this way. Would you like to talk about what's making you feel apathetic?"
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",
