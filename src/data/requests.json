@@ -853,6 +853,34 @@
 		]
 	},
 	{
+		"intent": "novelty",
+		"requests": [
+			"novelty",
+			"im feeling novel",
+			"im feeling new",
+			"im feeling fresh",
+			"im feeling original",
+			"im feeling unique",
+			"im feeling different",
+			"im feeling unusual",
+			"im feeling uncommon",
+			"im feeling rare",
+			"im feeling special",
+			"im feeling extraordinary",
+			"im feeling exceptional",
+			"im feeling remarkable",
+			"im feeling outstanding",
+			"im feeling phenomenal",
+			"im feeling fantastic",
+			"im feeling wonderful",
+			"im feeling amazing",
+			"im feeling terrific",
+			"im feeling fabulous",
+			"im feeling splendid",
+			"im feeling marvelous"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
