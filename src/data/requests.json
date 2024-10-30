@@ -573,6 +573,20 @@
 		]
 	},
 	{
+		"intent": "indifference",
+		"requests": [
+			"indifference",
+			"im indifferent",
+			"im feeling indifferent",
+			"im feeling apathetic",
+			"im feeling uninterested",
+			"im feeling disinterested",
+			"im feeling detached",
+			"im feeling aloof",
+			"im feeling cold"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
