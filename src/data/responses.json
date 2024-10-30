@@ -495,6 +495,19 @@
 		]
 	},
 	{
+		"intent": "relief",
+		"responses": [
+			"That's great to hear! You must feel a sense of accomplishment.",
+			"I'm glad to hear that you're feeling relieved [name]. It's a wonderful feeling.",
+			"I'm happy for you [name]! It's always a relief when things work out.",
+			"That's fantastic news! I'm so happy for you [name].",
+			"I'm so glad to hear that you're feeling relieved [name]. You must be so happy!",
+			"That's wonderful to hear! I'm sure you're feeling much better now [name].",
+			"I'm glad you can finally relax and unwind. You deserve it [name].",
+			"That's wonderful news [name]. I'm glad you can rest easy now."
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",

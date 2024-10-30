@@ -388,6 +388,24 @@
 		]
 	},
 	{
+		"intent": "relief",
+		"requests": [
+			"relief",
+			"im relieved",
+			"im feeling relieved",
+			"im so relieved the project is finally finished",
+			"i feel a huge weight lifted off my shoulders",
+			"im relieved that everything turned out okay",
+			"im feeling a sense of relief wash over me",
+			"im relieved that the worst is over",
+			"im relieved that the storm has passed",
+			"im relieved that the hard part is behind me",
+			"im relieved that the ordeal is finally over",
+			"im relieved to know that everyone is safe",
+			"im relieved that I made the right decision"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
