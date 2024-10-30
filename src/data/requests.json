@@ -344,6 +344,20 @@
 		]
 	},
 	{
+		"intent": "jealousy",
+		"requests": [
+			"jealous",
+			"im jealous",
+			"im feeling jealous",
+			"i sometimes feel a pang of jealousy when I see others succeed",
+			"i sometimes feel envious of others' accomplishments",
+			"i can't help but feel jealous of their happiness",
+			"i can't help but feel envious of their success",
+			"i sometimes feel resentful of those who have more than me",
+			"i often compare myself to others, which leads to feelings of jealousy"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
