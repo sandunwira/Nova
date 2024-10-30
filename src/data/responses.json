@@ -329,6 +329,21 @@
 		]
 	},
 	{
+		"intent": "envy",
+		"responses": [
+			"It's normal to feel envious sometimes [name]. What's making you feel this way?",
+			"I understand that you're feeling envious [name]. It's okay to have these feelings. Would you like to talk about it?",
+			"I'm sorry you're feeling envious [name]. It's okay to express your feelings. Would you like to talk about it?",
+			"I understand that you're feeling envious. It's okay to feel this way [name]. Is there anything I can do to help?",
+			"It's okay to feel envious. Everyone experiences envy at times [name]. Would you like to talk about what's making you feel this way?",
+			"I'm here for you [name], no matter what. If you need someone to listen, I'm all ears.",
+			"I'm sorry you're feeling envious [name]. It's okay to express your feelings. Would you like to talk about it?",
+			"I understand that you're feeling envious [name]. It's okay to feel this way. Sometimes, talking about it can help. Would you like to talk?",
+			"I'm here for you [name]. If you need someone to listen, I'm all ears.",
+			"I'm sorry you're feeling envious [name]. It's okay to feel this way. Would you like to talk about what's making you feel envious?"
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",

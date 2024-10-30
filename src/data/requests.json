@@ -244,6 +244,17 @@
 		]
 	},
 	{
+		"intent": "envy",
+		"requests": [
+			"envy",
+			"im envious",
+			"im feeling envious",
+			"im feeling jealous",
+			"im feeling covetous",
+			"im feeling resentful"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
