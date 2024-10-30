@@ -529,6 +529,30 @@
 		]
 	},
 	{
+		"intent": "admiration",
+		"requests": [
+			"admiration",
+			"im admiring",
+			"i really admire your work",
+			"you are truly amazing",
+			"you are truly inspiring",
+			"you are truly remarkable",
+			"you are truly exceptional",
+			"you are truly extraordinary",
+			"you are truly phenomenal",
+			"you are so talented",
+			"you are so gifted",
+			"you are so skilled",
+			"you are an inspiration",
+			"you are a role model",
+			"you are a shining example",
+			"you are a beacon of light",
+			"you are amazing",
+			"you are inspiring",
+			"you are remarkable"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",

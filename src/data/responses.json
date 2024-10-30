@@ -577,6 +577,17 @@
 		]
 	},
 	{
+		"intent": "admiration",
+		"responses": [
+			"Thank you [name], I appreciate your admiration. Your support means a lot to me.",
+			"Your admiration is greatly appreciated [name]. Thank you for your kind words.",
+			"Thank you [name], I try my best to be helpful and supportive.",
+			"That's very kind of you to say [name]. I'm here to assist you in any way I can.",
+			"I'm grateful for your admiration [name]. Your support means a lot to me.",
+			"I'm glad you think so [name]. I'm here to help you with anything you need."
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",
