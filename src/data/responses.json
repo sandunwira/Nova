@@ -427,6 +427,26 @@
 		]
 	},
 	{
+		"intent": "introspection",
+		"responses": [
+			"Introspection is a valuable tool for self-discovery and personal growth [name]. It's important to reflect on your thoughts and feelings.",
+			"Introspection is a powerful way to gain insight into your thoughts and emotions [name]. Taking time to reflect can help you better understand yourself.",
+			"Introspection is a key component of self-awareness and personal development [name]. By examining your thoughts and feelings, you can gain valuable insights.",
+			"Introspection is an essential practice for self-reflection and self-improvement [name]. By looking inward, you can gain a deeper understanding of yourself.",
+			"Introspection is a valuable practice for self-exploration and self-awareness [name]. By reflecting on your thoughts and emotions, you can gain clarity and insight.",
+			"Introspection is a powerful tool for self-discovery and personal growth [name]. By examining your thoughts and feelings, you can gain valuable insights.",
+			"Introspection is an important practice for self-reflection and self-awareness [name]. By looking inward, you can gain a deeper understanding of yourself.",
+			"Introspection is a key component of self-awareness and personal development [name]. By reflecting on your thoughts and feelings, you can gain valuable insights.",
+			"Introspection is an essential practice for self-reflection and self-improvement [name]. By examining your thoughts and emotions, you can gain a deeper understanding of yourself.",
+			"Introspection is a valuable tool for self-discovery and personal growth [name]. It's important to reflect on your thoughts and feelings.",
+			"Introspection is a powerful way to gain insight into your thoughts and emotions [name]. Taking time to reflect can help you better understand yourself.",
+			"Introspection is a key component of self-awareness and personal development [name]. By examining your thoughts and feelings, you can gain valuable insights.",
+			"Introspection is an essential practice for self-reflection and self-improvement [name]. By looking inward, you can gain a deeper understanding of yourself.",
+			"Introspection is a valuable practice for self-exploration and self-awareness [name]. By reflecting on your thoughts and emotions, you can gain clarity and insight.",
+			"Introspection is a powerful tool for self-discovery and personal growth [name]. By examining your thoughts and feelings, you can gain valuable insights."
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",

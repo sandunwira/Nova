@@ -330,6 +330,20 @@
 		]
 	},
 	{
+		"intent": "introspection",
+		"requests": [
+			"introspection",
+			"i often reflect on my thoughts and feelings",
+			"i often think about my thoughts and feelings",
+			"im constantly analyzing my own behavior",
+			"im always trying to understand myself better",
+			"i often question the meaning of life",
+			"i often question the purpose of my existence",
+			"i enjoy exploring the depths of my own mind",
+			"i like to spend time alone, contemplating life's mysteries"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
