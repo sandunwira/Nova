@@ -694,6 +694,19 @@
 		]
 	},
 	{
+		"intent": "empathy",
+		"responses": [
+			"I'm grateful to have you [name]. Your empathy and understanding mean a lot to me.",
+			"Thank you for your empathy [name]. Your support is greatly appreciated.",
+			"Your empathy is greatly appreciated [name]. Thank you for your kindness.",
+			"Thank you for your understanding and empathy [name]. It's comforting to know you care.",
+			"I'm grateful for your empathy [name]. Your support means a lot to me.",
+			"Thank you for your kind words of empathy [name]. I appreciate your compassion.",
+			"Your empathy is greatly appreciated [name]. Thank you for your support.",
+			"I'm grateful to have you [name]. Your empathy and support mean a lot to me."
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",

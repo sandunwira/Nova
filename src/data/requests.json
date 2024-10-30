@@ -881,6 +881,26 @@
 		]
 	},
 	{
+		"intent": "empathy",
+		"requests": [
+			"empathy",
+			"im empathetic",
+			"i can relate to that",
+			"i understand how you feel",
+			"i know what you're going through",
+			"i feel your pain",
+			"i feel the challenges you're facing",
+			"i feel the struggles you're going through",
+			"i understand how difficult this must be for you",
+			"i understand how hard this must be for you",
+			"i understand how tough this must be for you",
+			"i truly sympathize with you",
+			"i truly empathize with you",
+			"i truly feel for you",
+			"i feel your hurt"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
