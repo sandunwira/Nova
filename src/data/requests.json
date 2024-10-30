@@ -304,6 +304,32 @@
 		]
 	},
 	{
+		"intent": "gratitude",
+		"requests": [
+			"grateful",
+			"im grateful",
+			"im feeling grateful",
+			"im feeling thankful",
+			"im feeling appreciative",
+			"im feeling indebted",
+			"im feeling obliged",
+			"im feeling beholden",
+			"im feeling indebted to you",
+			"im feeling thankful to you",
+			"im feeling grateful to you",
+			"im feeling appreciative of you",
+			"im feeling indebted to you",
+			"im feeling obliged to you",
+			"im feeling beholden to you",
+			"i owe you one",
+			"i owe you a debt of gratitude",
+			"i owe you a big thank you",
+			"i owe you a big thanks",
+			"i owe you a big one",
+			"i owe you a big debt of gratitude"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",

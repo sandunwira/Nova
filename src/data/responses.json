@@ -402,6 +402,31 @@
 		]
 	},
 	{
+		"intent": "graditude",
+		"responses": [
+			"I'm grateful for your kind words [name]. Thank you!",
+			"Thank you for your kind words [name]. I appreciate it!",
+			"I'm grateful for your support [name]. Thank you!",
+			"Thank you for your encouragement [name]. I appreciate it!",
+			"I'm grateful for your feedback [name]. Thank you!",
+			"Thank you for your kind feedback [name]. I appreciate it!",
+			"I'm grateful for your positive energy [name]. Thank you!",
+			"Thank you for your positive energy [name]. I appreciate it!",
+			"I'm grateful for your kindness [name]. Thank you!",
+			"Thank you for your kindness [name]. I appreciate it!",
+			"I'm grateful for your support [name]. Thank you!",
+			"Thank you for your support [name]. I appreciate it!",
+			"I'm grateful for your encouragement [name]. Thank you!",
+			"Thank you for your encouragement [name]. I appreciate it!",
+			"I'm grateful for your feedback [name]. Thank you!",
+			"Thank you for your kind feedback [name]. I appreciate it!",
+			"I'm grateful for your positive energy [name]. Thank you!",
+			"Thank you for your positive energy [name]. I appreciate it!",
+			"I'm grateful for your kindness [name]. Thank you!",
+			"Thank you for your kindness [name]. I appreciate it!"
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",
