@@ -517,9 +517,20 @@
 			"I'm grateful for your sympathy [name]. Your support means a lot to me.",
 			"Thank you for your kind words of sympathy [name]. I appreciate your compassion.",
 			"Your sympathy is greatly appreciated [name]. Thank you for your support.",
-			"Thank you for your understanding and sympathy [name]. It's comforting to know you care.",
-			"I'm grateful for your sympathy [name]. Your support means a lot to me.",
 			"I'm grateful to have you [name]. Your sympathy and support mean a lot to me."
+		]
+	},
+	{
+		"intent": "euphoria",
+		"responses": [
+			"I'm so happy for you [name]! It's wonderful to hear that you're feeling euphoric.",
+			"That's fantastic news! I'm thrilled to hear that you're feeling euphoric [name].",
+			"I'm so glad to hear that you're feeling euphoric [name]. It's a great feeling, isn't it?",
+			"That's wonderful to hear! What's making you feel so euphoric today [name]?",
+			"I'm so happy for you [name]! It's great to hear that you're feeling euphoric.",
+			"That's fantastic! Enjoy the moment [name]!",
+			"I'm so glad you're feeling so good [name]!",
+			"That's wonderful to hear [name]! I'm thrilled for you."
 		]
 	},
 	{

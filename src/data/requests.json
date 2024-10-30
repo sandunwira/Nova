@@ -419,6 +419,21 @@
 		]
 	},
 	{
+		"intent": "euphoria",
+		"requests": [
+			"euphoria",
+			"im euphoric",
+			"im feeling euphoric",
+			"im on cloud nine",
+			"im walking on air",
+			"im over the moon",
+			"im in seventh heaven",
+			"im on top of the world",
+			"im so excited i cant sleep",
+			"this is the best day"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
