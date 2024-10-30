@@ -462,6 +462,21 @@
 		]
 	},
 	{
+		"intent": "delight",
+		"responses": [
+			"That's wonderful to hear! What's making you so delighted today [name]?",
+			"I'm glad to hear that you're feeling delighted! What's bringing you joy [name]?",
+			"I'm so glad you're feeling delighted! It's a great feeling, isn't it [name]?",
+			"That's fantastic! What's putting a smile on your face [name]?",
+			"I'm so happy for you! What's making you so cheerful [name]?",
+			"That's great news! What's making you so delighted today [name]?",
+			"I'm so glad you're feeling good [name]! What's making you so cheerful?",
+			"That's fantastic! What's putting a smile on your face [name]?",
+			"I'm so happy for you [name]! What's making you so delighted today?",
+			"That's great news! What's making you feel so good [name]?"
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",

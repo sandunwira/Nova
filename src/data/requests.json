@@ -358,6 +358,19 @@
 		]
 	},
 	{
+		"intent": "delight",
+		"requests": [
+			"delight",
+			"im delighted",
+			"im feeling delighted",
+			"im filled with joy and delight",
+			"this is such a delightful surprise",
+			"im thrilled and delighted",
+			"this fills me with delight",
+			"im overjoyed and delighted"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
