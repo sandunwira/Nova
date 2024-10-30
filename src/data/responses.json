@@ -477,6 +477,24 @@
 		]
 	},
 	{
+		"intent": "kindness",
+		"responses": [
+			"That's a wonderful quality to have. Remember, small acts of kindness can make a big difference in someone's day [name].",
+			"Kindness is a beautiful trait that can brighten someone's day [name]. Keep spreading positivity and compassion wherever you go.",
+			"Kindness is a powerful force that can create positive change in the world [name]. Your acts of kindness can have a lasting impact on others.",
+			"It sounds like you're a caring person who values kindness [name]. Your compassion and empathy make the world a better place.",
+			"Kindness is a gift that you can give to others every day [name]. Your thoughtful actions can bring joy and comfort to those around you.",
+			"That's a great way to live your life [name]. Kindness is contagious, so keep spreading it!",
+			"It's inspiring to hear that you want to be kind. Remember, kindness starts with yourself. Be kind to yourself first [name].",
+			"That's a thoughtful thing to do [name]. Kindness is a powerful tool that can help to heal and connect people.",
+			"It's great to see that you value kindness [name]. By being kind to others, you're making the world a better place.",
+			"Kindness is a beautiful thing. Keep being kind to others, and you'll be rewarded with happiness and fulfillment [name].",
+			"It's clear that you have a kind heart [name]. Keep nurturing it, and you'll continue to bring joy to those around you.",
+			"Kindness is a choice. Choose kindness every day, and you'll make a positive impact on the world. Keep spreading love and compassion [name].",
+			"Thank you for being kind [name]. Your kindness is a gift to the world."
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",

@@ -371,6 +371,23 @@
 		]
 	},
 	{
+		"intent": "kindness",
+		"requests": [
+			"kind",
+			"im kind",
+			"im feeling kind",
+			"i love helping others and spreading kindness",
+			"i always try to be kind to everyone I meet",
+			"i believe in the power of kindness to change the world",
+			"i try to show kindness and compassion to all living beings",
+			"i believe that kindness is the key to a happy and fulfilling life",
+			"i try to be kind to myself and others every day",
+			"kindness is the language of the soul",
+			"i believe that kindness is the greatest gift we can give",
+			"a little kindness can go a long way"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
