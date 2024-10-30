@@ -653,6 +653,19 @@
 		]
 	},
 	{
+		"intent": "optimism",
+		"responses": [
+			"I'm glad to hear that you're feeling optimistic [name]. What's giving you hope?",
+			"That's wonderful to hear! What's making you feel positive [name]?",
+			"I'm so happy for you [name]! What's making you feel optimistic?",
+			"That's fantastic news! I'm thrilled for you [name].",
+			"I'm so glad to hear that you're feeling optimistic [name]! What's giving you confidence?",
+			"That's wonderful to hear! I'm sure you're feeling hopeful and positive [name].",
+			"I'm glad you're feeling optimistic [name]. Keep up the positive attitude!",
+			"That's wonderful news [name]. I'm glad you're feeling optimistic and hopeful."
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",
