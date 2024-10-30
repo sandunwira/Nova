@@ -508,6 +508,21 @@
 		]
 	},
 	{
+		"intent": "sympathy",
+		"responses": [
+			"I appreciate your sympathy [name]. It means a lot to me.",
+			"Thank you for your kind words of sympathy [name]. I appreciate your support.",
+			"Your sympathy is greatly appreciated [name]. Thank you for your kindness.",
+			"Thank you for your understanding and sympathy [name]. It's comforting to know you care.",
+			"I'm grateful for your sympathy [name]. Your support means a lot to me.",
+			"Thank you for your kind words of sympathy [name]. I appreciate your compassion.",
+			"Your sympathy is greatly appreciated [name]. Thank you for your support.",
+			"Thank you for your understanding and sympathy [name]. It's comforting to know you care.",
+			"I'm grateful for your sympathy [name]. Your support means a lot to me.",
+			"I'm grateful to have you [name]. Your sympathy and support mean a lot to me."
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",

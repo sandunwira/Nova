@@ -406,6 +406,19 @@
 		]
 	},
 	{
+		"intent": "sympathy",
+		"requests": [
+			"sympathy",
+			"im sympathetic",
+			"im feeling sympathetic",
+			"thats terrible news",
+			"i cant imagine how difficult it must be",
+			"im so sorry to hear that",
+			"my heart goes out to you",
+			"i wish there was something i could do to help"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
