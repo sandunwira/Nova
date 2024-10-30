@@ -285,6 +285,25 @@
 		]
 	},
 	{
+		"intent": "curiousity",
+		"requests": [
+			"curious",
+			"im curious",
+			"im feeling curious",
+			"im curious to know",
+			"im curious about something",
+			"i want to know more",
+			"i want to learn more",
+			"i want to explore more",
+			"i want to discover more",
+			"im intrigued by the possibilities",
+			"i want to know what happens next",
+			"i want to know what happens",
+			"im always eager to learn new things",
+			"i want to know more about this"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",

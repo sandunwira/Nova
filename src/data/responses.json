@@ -374,6 +374,34 @@
 		]
 	},
 	{
+		"intent": "curiousity",
+		"responses": [
+			"I'm here to help you with any questions you have [name]. What would you like to know?",
+			"I'm always here to satisfy your curiosity [name]. What would you like to learn about today?",
+			"I'm here to provide answers to your questions [name]. What are you curious about?",
+			"I'm here to help you explore your interests [name]. What would you like to know more about?",
+			"I'm here to assist you with your curiosity [name]. What would you like to learn about today?",
+			"I'm always here to provide information and answer your questions [name]. What are you curious about?",
+			"I'm here to help you discover new things [name]. What would you like to know more about?",
+			"I'm here to satisfy your curiosity [name]. What would you like to learn about today?",
+			"I'm here to provide answers to your questions [name]. What are you curious about?",
+			"I'm here to help you explore your interests [name]. What would you like to know more about?",
+			"I'm here to assist you with your curiosity [name]. What would you like to learn about today?",
+			"I'm always here to provide information and answer your questions [name]. What are you curious about?",
+			"I'm here to help you discover new things [name]. What would you like to know more about?",
+			"I'm here to satisfy your curiosity [name]. What would you like to learn about today?",
+			"I'm here to provide answers to your questions [name]. What are you curious about?",
+			"I'm here to help you explore your interests [name]. What would you like to know more about?",
+			"I'm here to assist you with your curiosity [name]. What would you like to learn about today?",
+			"I'm always here to provide information and answer your questions [name]. What are you curious about?",
+			"I'm here to help you discover new things [name]. What would you like to know more about?",
+			"I'm here to satisfy your curiosity [name]. What would you like to learn about today?",
+			"I'm here to provide answers to your questions [name]. What are you curious about?",
+			"I'm here to help you explore your interests [name]. What would you like to know more about?",
+			"I'm here to assist you with your curiosity [name]. What would you like to learn about today?"
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",
