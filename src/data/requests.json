@@ -1067,6 +1067,38 @@
 		]
 	},
 	{
+		"intent": "resilience",
+		"requests": [
+			"resilient",
+			"im resilient",
+			"im feeling resilient",
+			"im feeling strong",
+			"im feeling tough",
+			"im feeling durable",
+			"im feeling hardy",
+			"im feeling rugged",
+			"im feeling robust",
+			"im feeling sturdy",
+			"im feeling solid",
+			"im feeling firm",
+			"im feeling unyielding",
+			"im feeling unbreakable",
+			"im feeling unshakable",
+			"im feeling unflappable",
+			"im feeling unflinching",
+			"im feeling unbending",
+			"im feeling unswerving",
+			"im feeling unwavering",
+			"im feeling unshakeable",
+			"im feeling unmovable",
+			"im feeling unchangeable",
+			"im feeling unalterable",
+			"im feeling unmodifiable",
+			"im feeling unvarying",
+			"im feeling unchanging"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
