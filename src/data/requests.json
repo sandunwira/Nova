@@ -1099,6 +1099,36 @@
 		]
 	},
 	{
+		"intent": "guilt",
+		"requests": [
+			"guilty",
+			"im guilty",
+			"im feeling guilty",
+			"im feeling remorseful",
+			"im feeling regretful",
+			"im feeling contrite",
+			"im feeling penitent",
+			"im feeling apologetic",
+			"im feeling sorry",
+			"im feeling ashamed",
+			"im feeling embarrassed",
+			"im feeling humiliated",
+			"im feeling mortified",
+			"im feeling chagrined",
+			"im feeling sheepish",
+			"im feeling red-faced",
+			"im feeling guilty as charged",
+			"im feeling guilty as sin",
+			"im feeling guilty as hell",
+			"im feeling guilty as the devil",
+			"im feeling guilty as a sinner",
+			"im feeling guilty as a criminal",
+			"im feeling guilty as a felon",
+			"im feeling guilty as a convict",
+			"im feeling guilty as a prisoner"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
