@@ -1129,6 +1129,27 @@
 		]
 	},
 	{
+		"intent": "disgust",
+		"requests": [
+			"disgusted",
+			"im disgusted",
+			"im feeling disgusted",
+			"im feeling repulsed",
+			"im feeling revolted",
+			"im feeling sickened",
+			"im feeling nauseated",
+			"im feeling queasy",
+			"im feeling squeamish",
+			"im feeling bilious",
+			"im feeling disgusted by their behavior",
+			"im feeling disgusted by their actions",
+			"im feeling disgusted by their words",
+			"im feeling disgusted by their deeds",
+			"im feeling disgusted by their conduct",
+			"im feeling disgusted by their performance"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",
