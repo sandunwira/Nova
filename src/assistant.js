@@ -10,6 +10,7 @@ const chatFormSubmitBtn = document.getElementById('chatFormSubmitBtn');
 let requestsData = [];
 let responsesData = [];
 let bugcodesData = [];
+let crisisHotlinesData = [];
 
 
 // Fetch the JSON files
@@ -29,6 +30,12 @@ fetch('data/bugcodes.json')
 	.then(response => response.json())
 	.then(data => {
 		bugcodesData = data;
+	});
+
+fetch('data/crisis_hotlines.json')
+	.then(response => response.json())
+	.then(data => {
+		crisisHotlinesData = data;
 	});
 
 
@@ -302,6 +309,19 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("sleep pc") || userMessage.toLowerCase().includes("sleep computer")) {
 		botResponse.textContent = "Putting the PC to sleep...";
 		sleep_pc().then(() => botResponse.textContent = "PC is going to sleep...").catch(error => botResponse.textContent = "Sorry, I couldn't put the PC to sleep.");
+	} else if (userMessage.toLowerCase().includes("emergency") || userMessage.toLowerCase().includes("police") || userMessage.toLowerCase().includes("danger") || userMessage.toLowerCase().includes("fire") || userMessage.toLowerCase().includes("ambulance") || userMessage.toLowerCase().includes("medical") || userMessage.toLowerCase().includes("doctor") || userMessage.toLowerCase().includes("hospital") || userMessage.toLowerCase().startsWith("119") || userMessage.toLowerCase().startsWith("911") || userMessage.toLowerCase().startsWith("999") || userMessage.toLowerCase().startsWith("112") || userMessage.toLowerCase().includes("crisis")) {
+		getCrisisHotlines().then(hotlineData => {
+			if (hotlineData) {
+				let hotlinesText = `Here are some hotlines to seek help if you're in a crisis in, ${hotlineData["country"]}:<br><br>`;
+				hotlineData["hotlines"].forEach(hotline => {
+					const numbers = hotline.numbers.join(', ');
+					hotlinesText += `${hotline.name}:<br>- ${numbers}<br><br>`;
+				});
+				botResponse.innerHTML = hotlinesText;
+			} else {
+				botResponse.textContent = "Please call 911 or your local emergency number for immediate help.";
+			}
+		}).catch(error => botResponse.textContent = "Sorry, I couldn't find any hotlines for immediate help. Please call 911 or your local emergency number for immediate help.");
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.innerHTML = response;
@@ -1732,5 +1752,29 @@ async function sleep_pc() {
 			body: 'Failed to sleep system. Please try again later.',
 			icon: 'assets/images/icon.png'
 		});
+	}
+}
+
+
+
+// Function to get crisis hotlines
+async function getCrisisHotlines() {
+	try {
+		const { country } = await getIPAddress();
+		const hotlineData = crisisHotlinesData.find(hotline => hotline["alpha-2"] === country);
+		if (hotlineData) {
+			console.log(`Hotlines for ${hotlineData["country"]}:`);
+			for (const hotline of hotlineData["hotlines"]) {
+				const numbers = hotline.numbers.join(', ');
+				console.log(`${hotline.name}:\n${numbers}`);
+			}
+			return hotlineData;
+		} else {
+			console.log(`No hotlines found for ${country}`);
+			return null;
+		}
+	} catch (error) {
+		console.error('Error in getCrisisHotlines:', error);
+		throw error;
 	}
 }
