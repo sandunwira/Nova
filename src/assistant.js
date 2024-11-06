@@ -106,7 +106,10 @@ chatForm.addEventListener('submit', function (event) {
 	event.preventDefault();
 	const userMessage = chatMessage.value.trim();
 
-	if (userMessage.toLowerCase().includes("visit") || userMessage.toLowerCase().includes("go to")) {
+	if (userMessage.toLowerCase().startsWith("set a timer for")) {
+		const time = userMessage.replace("set a timer for", "").trim();
+		setTimer(time);
+	} else if (userMessage.toLowerCase().includes("visit") || userMessage.toLowerCase().includes("go to")) {
 		const url = userMessage.replace("visit", "").replace("go to", "").trim();
 		botResponse.textContent = "Opening " + url + "...";
 		openURL(url).then(() => botResponse.innerHTML = `Opened <a href="https://${url}" target="_blank">https://${url}</a> successfully. Enjoy!`).catch(error => botResponse.textContent = "Sorry, I couldn't open the URL.");
@@ -327,6 +330,77 @@ chatForm.addEventListener('submit', function (event) {
 		botResponse.innerHTML = response;
 	}
 });
+
+
+
+// function to set a timer
+async function setTimer(time) {
+	try {
+		const timer = time.split(' ');
+		const duration = parseInt(timer[0]);
+
+		if (isNaN(duration)) {
+			botResponse.textContent = "Sorry, I couldn't set the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
+			return;
+		} else if (duration <= 0) {
+			botResponse.textContent = "Please enter a valid duration for the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
+			return;
+		}
+
+		const unit = timer[1].toLowerCase();
+		const timeInMs = convertToMilliseconds(duration, unit);
+
+		if (timeInMs === 0) {
+			botResponse.textContent = "Please enter a valid unit for the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
+			return;
+		} else if (timeInMs > 86400000) {
+			botResponse.textContent = "Please enter a duration less than or equal to 24 hours.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
+			return;
+		}
+
+		console.log(`Timer: ${duration} ${unit} timer has started!`);
+		botResponse.textContent = `Timer: ${duration} ${unit} timer has started!`;
+
+		let remainingTime = timeInMs;
+		const interval = setInterval(() => {
+			remainingTime -= 1000;
+			botResponse.innerHTML = `Timer: ${Math.floor(remainingTime / 1000)} seconds remaining...`;
+			console.log(`Timer: ${Math.floor(remainingTime / 1000)} seconds remaining...`);
+			if (remainingTime <= 0) {
+				clearInterval(interval);
+			}
+		}, 1000);
+
+		await new Promise(resolve => setTimeout(resolve, timeInMs));
+
+		console.log(`Timer: ${duration} ${unit} timer has completed!`);
+		botResponse.textContent = `Timer: ${duration} ${unit} timer has completed!`;
+
+		new Notification('Timer Completed!', {
+			body: `${duration} ${unit} timer has completed!`,
+			sound: 'Default'
+		});
+	} catch (error) {
+		console.error('Failed to set timer:', error);
+		botResponse.innerHTML = "Sorry, I couldn't set the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
+	}
+}
+
+function convertToMilliseconds(duration, unit) {
+	let timeInMs = 0;
+	switch (unit) {
+		case 'second': timeInMs = duration * 1000; break;
+		case 'seconds': timeInMs = duration * 1000; break;
+		case 'minute': timeInMs = duration * 60000; break;
+		case 'minutes': timeInMs = duration * 60000; break;
+		case 'hour': timeInMs = duration * 3600000; break;
+		case 'hours': timeInMs = duration * 3600000; break;
+		case 'day': timeInMs = duration * 86400000; break;
+		case 'days': timeInMs = duration * 86400000; break;
+		default: timeInMs = 0;
+	}
+	return timeInMs;
+}
 
 
 
