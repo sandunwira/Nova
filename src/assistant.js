@@ -122,7 +122,7 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("random movie") || userMessage.toLowerCase().includes("movie recommendation") || userMessage.toLowerCase().includes("suggest me a movie") || userMessage.toLowerCase().includes("suggest a movie")) {
 		botResponse.textContent = "Searching for a movie...";
 		getRandomMovie();
-	} else if (userMessage.toLowerCase().includes("ip address") || userMessage.toLowerCase().includes("ip")) {
+	} else if (userMessage.toLowerCase().includes("ip address")) {
 		botResponse.textContent = "Fetching your IP Address...";
 		getIPAddress().then(({ ipaddress }) => botResponse.textContent = `Your IP Address is: ${ipaddress}`).catch(error => botResponse.textContent = "Sorry, I couldn't fetch your IP Address.");
 	} else if (userMessage.toLowerCase().includes("weather")) {
@@ -312,7 +312,7 @@ chatForm.addEventListener('submit', function (event) {
 	} else if (userMessage.toLowerCase().includes("sleep pc") || userMessage.toLowerCase().includes("sleep computer")) {
 		botResponse.textContent = "Putting the PC to sleep...";
 		sleep_pc().then(() => botResponse.textContent = "PC is going to sleep...").catch(error => botResponse.textContent = "Sorry, I couldn't put the PC to sleep.");
-	} else if (userMessage.toLowerCase().includes("emergency") || userMessage.toLowerCase().includes("police") || userMessage.toLowerCase().includes("danger") || userMessage.toLowerCase().includes("fire") || userMessage.toLowerCase().includes("ambulance") || userMessage.toLowerCase().includes("medical") || userMessage.toLowerCase().includes("doctor") || userMessage.toLowerCase().includes("hospital") || userMessage.toLowerCase().startsWith("119") || userMessage.toLowerCase().startsWith("911") || userMessage.toLowerCase().startsWith("999") || userMessage.toLowerCase().startsWith("112") || userMessage.toLowerCase().includes("crisis")) {
+	} else if (userMessage.toLowerCase().startsWith("emergency") || userMessage.toLowerCase().startsWith("police") || userMessage.toLowerCase().startsWith("danger") || userMessage.toLowerCase().startsWith("fire") || userMessage.toLowerCase().startsWith("ambulance") || userMessage.toLowerCase().startsWith("medical") || userMessage.toLowerCase().startsWith("doctor") || userMessage.toLowerCase().startsWith("hospital") || userMessage.toLowerCase().startsWith("119") || userMessage.toLowerCase().startsWith("911") || userMessage.toLowerCase().startsWith("999") || userMessage.toLowerCase().startsWith("112") || userMessage.toLowerCase().startsWith("crisis")) {
 		getCrisisHotlines().then(hotlineData => {
 			if (hotlineData) {
 				let hotlinesText = `Here are some hotlines to seek help if you're in a crisis in, ${hotlineData["country"]}:<br><br>`;
@@ -325,12 +325,32 @@ chatForm.addEventListener('submit', function (event) {
 				botResponse.textContent = "Please call 911 or your local emergency number for immediate help.";
 			}
 		}).catch(error => botResponse.textContent = "Sorry, I couldn't find any hotlines for immediate help. Please call 911 or your local emergency number for immediate help.");
+	} else if (userMessage.toLowerCase().startsWith("summarize:")) {
+		const inputText = userMessage.replace("summarize:", "").trim();
+		if (inputText === "") {
+			botResponse.innerHTML = "Please provide a text to summarize.<br>Hint: summarize: [text]";
+		} else {
+			botResponse.textContent = "Summarizing the text...";
+			textSummarizer(inputText).then(summary => botResponse.textContent = summary).catch(error => botResponse.textContent = "Sorry, I couldn't summarize the text.");
+		}
 	} else {
 		const response = findResponse(userMessage);
 		botResponse.innerHTML = response;
 	}
 });
 
+
+
+// function to summarize text
+async function textSummarizer(inputText) {
+    try {
+        const summary = Summarizer.summarize(inputText);
+        return summary;
+    } catch (error) {
+        console.error('Failed to summarize text:', error);
+        throw error;
+    }
+}
 
 
 // function to set a timer

@@ -34,10 +34,11 @@
         "all": false,
         "create": true,
         "close": true,
+        "hide": true,
         "center": true,
         "print": false,
-        "minimize": false,
-        "maximize": false,
+        "minimize": true,
+        "maximize": true,
         "setAlwaysOnTop": true,
         "setClosable": true,
         "setResizable": true,
@@ -46,8 +47,8 @@
         "setDecorations": true,
         "setSize": true,
         "startDragging": true,
-        "unmaximize": false,
-        "unminimize": false
+        "unmaximize": true,
+        "unminimize": true
       }
     },
     "bundle": {
