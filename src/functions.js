@@ -642,6 +642,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.innerHTML = 'Nova: ' + response;
 					chatResponses.appendChild(botResponseDiv);
 				}
+
+				const chatResponsesContainer = document.getElementById('chatResponsesContainer');
+				chatResponsesContainer.scrollTop = chatResponsesContainer.scrollHeight;
 			} catch (error) {
 				console.error('Error processing query:', error);
 

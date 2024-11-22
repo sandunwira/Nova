@@ -96,12 +96,12 @@
     "windows": [
       {
         "title": "Nova",
-        "minWidth": 700,
-        "minHeight": 500,
+        "minWidth": 800,
+        "minHeight": 600,
         "fullscreen": false,
         "focus": true,
         "resizable": true,
-        "decorations": true,
+        "decorations": false,
         "center": true
       }
     ],

@@ -24,17 +24,29 @@
 </head>
 
 <body>
-	<h1>Test Bot Responses</h1>
-	<p>Enter your message below to test the bot responses.</p>
-	<form id="chatForm">
-		<label for="chatMessage">Message:</label><br>
-		<input type="text" id="chatMessage" name="message" autocomplete="off"><br><br>
-		<input type="submit" id="chatFormSubmitBtn" value="Submit">
+	<div class="containerBlock" style="position: fixed; top: 0; left: 0; height: 100vh; width: 100%;">
+		<div class="titlebar" style="height: 35px; display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+			<p>Test Bot Responses</p>
+			<div class="titlebarButtons">
+				<button id="titlebar-minimize">_</button>
+				<button id="titlebar-maximize">□</button>
+				<button id="titlebar-close">x</button>
+			</div>
+		</div>
 
-		<div id="chatResponses" style="display: flex; flex-direction: column; width: 100%;"></div>
-	</form>
+		<div class="container" style="height: calc(100% - 35px); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+			<div id="chatResponsesContainer" style="height: 90%; width: 100%; overflow: auto;">
+				<div id="chatResponses" style="display: flex; flex-direction: column; width: 100%;"></div>
+			</div>
 
-	<p id="botResponse"></p>
+			<div class="chatFormContainer" style="height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+				<form id="chatForm" style="width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: center;">
+					<input type="text" id="chatMessage" name="message" autocomplete="off">
+					<input type="submit" id="chatFormSubmitBtn" value="Submit">
+				</form>
+			</div>
+		</div>
+	</div>
 </body>
 
 </html>
