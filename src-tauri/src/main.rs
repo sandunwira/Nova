@@ -595,22 +595,27 @@ fn take_screenshot() -> Result<(), String> {
 
 
 #[tauri::command]
-fn change_wallpaper(image_path: String) -> Result<(), String> {
-    // Returns the wallpaper of the current desktop.
-    println!("{:?}", wallpaper::get());
+async fn change_wallpaper(image_path: String) -> Result<(), String> {
+    // Use spawn_blocking to run the blocking operation in a separate thread
+    tokio::task::spawn_blocking(move || {
+        // Returns the wallpaper of the current desktop.
+        println!("{:?}", wallpaper::get());
 
-    // Sets the wallpaper for the current desktop from a URL.
-    match wallpaper::set_from_url(&image_path) {
-        Ok(_) => {
-            // Set the wallpaper mode to Crop
-            wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
+        // Sets the wallpaper for the current desktop from a URL.
+        match wallpaper::set_from_url(&image_path) {
+            Ok(_) => {
+                // Set the wallpaper mode to Crop
+                wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
 
-            // Returns the wallpaper of the current desktop.
-            println!("{:?}", wallpaper::get());
-            Ok(())
+                // Returns the wallpaper of the current desktop.
+                println!("{:?}", wallpaper::get());
+                Ok(())
+            }
+            Err(e) => Err(e.to_string()),
         }
-        Err(e) => Err(e.to_string()),
-    }
+    })
+    .await
+    .unwrap_or_else(|e| Err(format!("Failed to change wallpaper: {}", e)))
 }
 
 

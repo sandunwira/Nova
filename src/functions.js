@@ -87,7 +87,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 					openURL(url).then(() => {
 						botResponseDiv.innerHTML = `Nova: Opened <a href="https://${url}" target="_blank">https://${url}</a> successfully. Enjoy!`;
 					}).catch(error => {
-						botResponseDiv.textContent = "Nova: Sorry, I couldn't open the URL.";
+						botResponseDiv.remove();
+						const errorResponseDiv = document.createElement('div');
+						errorResponseDiv.className = 'error-response';
+						errorResponseDiv.textContent = "Nova: Sorry, I couldn't open the URL.";
+						chatResponses.appendChild(errorResponseDiv);
 					});
 				} else if (userMessage.startsWith("open") || userMessage.startsWith("launch") || userMessage.startsWith("run") || userMessage.startsWith("start") || userMessage.startsWith("execute")) {
 					const appName = userMessage.replace('open', '').trim().replace('launch', '').trim().replace('run', '').trim().replace('start', '').trim().replace('execute', '').trim();
@@ -231,11 +235,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 					getOnThisDayEvents().then(events => {
 						const { day, month } = getDate();
-						let eventsText = `Nova: Here are some interesting events that happened on ${month} ${day} in history:<br><br>`;
+						let eventsText = `Here are some interesting events that happened on ${month} ${day} in history:<br><br>`;
 						events.forEach((event, index) => {
 							eventsText += `${index + 1}. ${event}<br>`;
 						});
-						botResponseDiv.innerHTML = `${eventsText}`;
+						botResponseDiv.innerHTML = `Nova: ${eventsText}`;
 					}).catch(() => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
@@ -264,6 +268,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 					const query = userMessage.replace("books about", "").trim();
 
 					const botResponseDiv = document.createElement('div');
+					botResponseDiv.className = 'bot-response';
 					botResponseDiv.innerHTML = "Nova: Searching for books about " + query + "...";
 					chatResponses.appendChild(botResponseDiv);
 
@@ -348,47 +353,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 				} else if (userMessage.toLowerCase().includes("previous")) {
 					previousMedia();
 				} else if (userMessage.toLowerCase().includes("skip") || userMessage.toLowerCase().includes("next")) {
-0	.
-				const botResponseDiv = document.createElement('div');
-					botResponseDiv.className = 'bot-response';
-					botResponseDiv.innerHTML = 'Nova: Skipping to the next track...';
-					chatResponses.appendChild(botResponseDiv);
 					nextMedia();
 				} else if (userMessage.toLowerCase().includes("increase volume") || userMessage.toLowerCase().includes("volume up")) {
-					const botResponseDiv = document.createElement('div');
-					botResponseDiv.className = 'bot-response';
-					botResponseDiv.innerHTML = 'Nova: Increasing volume...';
-					chatResponses.appendChild(botResponseDiv);
 					increaseVolume();
 				} else if (userMessage.toLowerCase().includes("decrease volume") || userMessage.toLowerCase().includes("volume down")) {
-					const botResponseDiv = document.createElement('div');
-					botResponseDiv.className = 'bot-response';
-					botResponseDiv.innerHTML = 'Nova: Decreasing volume...';
-					chatResponses.appendChild(botResponseDiv);
 					decreaseVolume();
 				} else if (userMessage.toLowerCase().startsWith("mute")) {
-					const botResponseDiv = document.createElement('div');
-					botResponseDiv.className = 'bot-response';
-					botResponseDiv.innerHTML = "Nova: Muting the volume...";
-					chatResponses.appendChild(botResponseDiv);
 					muteVolume();
 				} else if (userMessage.toLowerCase().startsWith("unmute")) {
-					const botResponseDiv = document.createElement('div');
-					botResponseDiv.className = 'bot-response';
-					botResponseDiv.innerHTML = "Nova: Unmuting the volume...";
-					chatResponses.appendChild(botResponseDiv);
 					unmuteVolume();
 				} else if (userMessage.toLowerCase().includes("on wifi") || userMessage.toLowerCase().includes("wifi on")) {
-					const botResponseDiv = document.createElement('div');
-					botResponseDiv.className = 'bot-response';
-					botResponseDiv.innerHTML = "Nova: Turning on Wi-Fi...";
-					chatResponses.appendChild(botResponseDiv);
 					turnOnWiFi();
 				} else if (userMessage.toLowerCase().includes("off wifi") || userMessage.toLowerCase().includes("wifi off")) {
-					const botResponseDiv = document.createElement('div');
-					botResponseDiv.className = 'bot-response';
-					botResponseDiv.innerHTML = "Nova: Turning off Wi-Fi...";
-					chatResponses.appendChild(botResponseDiv);
 					turnOffWiFi();
 				} else if (userMessage.toLowerCase().startsWith("create qr for")) {
 					const text = userMessage.replace("create qr for", "").trim();
@@ -423,10 +399,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 								chatResponses.appendChild(errorResponseDiv);
 							});
 					} else {
-						const botResponseDiv = document.createElement('div');
-						botResponseDiv.className = 'bot-response';
-						botResponseDiv.textContent = "Sorry, I couldn't understand the conversion request. Please use the format: convert [amount][base_currency] to [target_currency].";
-						chatResponses.appendChild(botResponseDiv);
+						const errorResponseDiv = document.createElement('div');
+						errorResponseDiv.className = 'error-response';
+						errorResponseDiv.textContent = "Sorry, I couldn't understand the conversion request. Please use the format: convert [amount][base_currency] to [target_currency].";
+						chatResponses.appendChild(errorResponseDiv);
 					}
 				} else if (userMessage.toLowerCase().includes("pc info")) {
 					const botResponseDiv = document.createElement('div');
@@ -517,7 +493,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 				} else if (userMessage.toLowerCase().includes("screenshot") || userMessage.toLowerCase().includes("take a screenshot")) {
 					const botResponseDiv = document.createElement('div');
 					botResponseDiv.className = 'bot-response';
-					botResponseDiv.textContent = "Taking a screenshot...";
+					botResponseDiv.textContent = "Nova: Taking a screenshot...";
 					chatResponses.appendChild(botResponseDiv);
 
 					takeScreenshot().then(() => {
@@ -574,7 +550,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 				} else if (userMessage.toLowerCase().includes("restart pc") || userMessage.toLowerCase().includes("reboot pc")) {
 					const botResponseDiv = document.createElement('div');
 					botResponseDiv.className = 'bot-response';
-					botResponseDiv.textContent = "Restarting the PC...";
+					botResponseDiv.textContent = "Nova: Restarting the PC...";
 					chatResponses.appendChild(botResponseDiv);
 
 					restart_pc().then(() => {
@@ -589,7 +565,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 				} else if (userMessage.toLowerCase().includes("lock pc") || userMessage.toLowerCase().includes("lock computer")) {
 					const botResponseDiv = document.createElement('div');
 					botResponseDiv.className = 'bot-response';
-					botResponseDiv.textContent = "Locking the PC...";
+					botResponseDiv.textContent = "Nova: Locking the PC...";
 					chatResponses.appendChild(botResponseDiv);
 
 					lock_pc().then(() => {
@@ -617,6 +593,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 						chatResponses.appendChild(errorResponseDiv);
 					});
 				} else if (userMessage.toLowerCase().startsWith("emergency") || userMessage.toLowerCase().startsWith("police") || userMessage.toLowerCase().startsWith("danger") || userMessage.toLowerCase().startsWith("fire") || userMessage.toLowerCase().startsWith("ambulance") || userMessage.toLowerCase().startsWith("medical") || userMessage.toLowerCase().startsWith("doctor") || userMessage.toLowerCase().startsWith("hospital") || userMessage.toLowerCase().startsWith("119") || userMessage.toLowerCase().startsWith("911") || userMessage.toLowerCase().startsWith("999") || userMessage.toLowerCase().startsWith("112") || userMessage.toLowerCase().startsWith("crisis")) {
+					const botResponseDiv = document.createElement('div');
+					botResponseDiv.className = 'bot-response';
+					botResponseDiv.innerHTML = "Nova: Fetching crisis hotlines...";
+					chatResponses.appendChild(botResponseDiv);
+
 					getCrisisHotlines().then(hotlineData => {
 						if (hotlineData) {
 							let hotlinesText = `Here are some hotlines to seek help if you're in a crisis in, ${hotlineData["country"]}:<br><br>`;
@@ -626,11 +607,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 							});
 							const response = hotlinesText;
 
-							const botResponseDiv = document.createElement('div');
-							botResponseDiv.className = 'bot-response';
 							botResponseDiv.innerHTML = response;
-							chatResponses.appendChild(botResponseDiv);
 						} else {
+							botResponseDiv.remove();
 							const errorResponseDiv = document.createElement('div');
 							errorResponseDiv.className = 'error-response';
 							errorResponseDiv.innerHTML = "Please call 911 or your local emergency number for immediate help.";
@@ -645,10 +624,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 				} else if (userMessage.toLowerCase().startsWith("summarize:")) {
 					const inputText = userMessage.replace("summarize:", "").trim();
 					if (inputText === "") {
-						const botResponseDiv = document.createElement('div');
-						botResponseDiv.className = 'bot-response';
-						botResponseDiv.innerHTML = "Please provide a text to summarize.<br>Hint: summarize: [text]";
-						chatResponses.appendChild(botResponseDiv);
+						const errorResponseDiv = document.createElement('div');
+						errorResponseDiv.className = 'error-response';
+						errorResponseDiv.innerHTML = "Please provide a text to summarize.<br>Hint: summarize: [text]";
+						chatResponses.appendChild(errorResponseDiv);
 					} else {
 						const response = await textSummarizer(inputText).then(summary => summary).catch(error => "Sorry, I couldn't summarize the text.");
 						const botResponseDiv = document.createElement('div');
