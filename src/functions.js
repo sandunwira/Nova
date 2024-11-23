@@ -114,8 +114,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 					scrolltoBottom();
 
-					searchWeb(userMessage).then(snippetText => {
-						botResponseDiv.innerHTML = 'Nova: ' + snippetText;
+					searchWeb(userMessage).then(({snippetText, search_status}) => {
+						if (search_status === 'success') {
+							botResponseDiv.innerHTML = `
+								Nova: Here's what i've found in web:<br><br>
+								${snippetText}<br><br>
+								<p style="font-size: 10px;">Powered by <a href="https://duckduckgo.com" target="_blank">DuckDuckGo</a></p>
+							`;
+						} else if (search_status === 'no_results' || search_status === 'no_snippet') {
+							botResponseDiv.remove();
+							const errorResponseDiv = document.createElement('div');
+							errorResponseDiv.className = 'error-response';
+							errorResponseDiv.textContent = "Sorry, I couldn't find any relevant information. Please try again in a bit or try a different search query.";
+							chatResponses.appendChild(errorResponseDiv);
+						}
 
 						scrolltoBottom();
 					}).catch(error => {
@@ -140,7 +152,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 					scrolltoBottom();
 
 					getIPAddress().then(({ ipaddress }) => {
-						botResponseDiv.innerHTML = `Nova: Your IP Address is: ${ipaddress}`;
+						botResponseDiv.innerHTML = `
+							<p style="margin-bottom: 5px;">Nova: Your IP Address is:</p>
+							<h1>${ipaddress}</h1>
+						`;
 
 						scrolltoBottom();
 					}).catch(() => {
@@ -161,7 +176,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 					scrolltoBottom();
 
 					getWeather().then(({ location, weatherComment, temperature, humidity, windSpeed }) => {
-						const response = `Nova: Here are the weather information for ${location}: <br>${temperature} in ${location}<br>Humidity: ${humidity}<br>Wind Speed: ${windSpeed}<br>${weatherComment}`;
+						const response = `
+							<p style="margin-bottom: 5px;">Nova: Here are the weather information for ${location}:</p><br>
+							<h1>${temperature} in ${location}</h1><br>
+							<h3>Humidity:</h3><p>${humidity}</p><br>
+							<h3>Wind Speed:</h3><p>${windSpeed}</p><br>
+							<p style="color: var(--lightGray); font-weight: 300; font-style: oblique;">${weatherComment}</p>
+							<br><p style="font-size: 10px;">Powered by <a href="https://openweathermap.org" target="_blank">OpenWeatherMap</a></p>
+						`;
 						botResponseDiv.innerHTML = response;
 
 						scrolltoBottom();
@@ -177,13 +199,19 @@ document.addEventListener('DOMContentLoaded', async function () {
 				} else if (userMessage.toLowerCase().includes("time") || userMessage.toLowerCase().includes("clock") || userMessage.toLowerCase().includes("current time") || userMessage.toLowerCase().includes("what's the time") || userMessage.toLowerCase().includes("what time is it") || userMessage.toLowerCase().includes("tell me the time")) {
 					const timeResponse = document.createElement('div');
 					timeResponse.className = 'bot-response';
-					timeResponse.innerHTML = 'Nova: Current time is ' + getTime();
+					timeResponse.innerHTML = `
+						<p style="margin-bottom: 5px;">Nova: Current time is:</p>
+						<h1>${getTime()}</h1>
+					`;
 					chatResponses.appendChild(timeResponse);
 
 					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("date") || userMessage.toLowerCase().includes("today's date") || userMessage.toLowerCase().includes("what's the date") || userMessage.toLowerCase().includes("tell me the date") || userMessage.toLowerCase().includes("what date is it") || userMessage.toLowerCase().includes("what's today's date")) {
 					const { day, month, year } = getDate();
-					const response = `Nova: Today's date is ${month} ${day}, ${year}`;
+					const response = `
+						<p style="margin-bottom: 5px;">Nova: Today's date is:</p>
+						<h1>${month} ${day}, ${year}</h1>
+					`;
 					const botResponseDiv = document.createElement('div');
 					botResponseDiv.className = 'bot-response';
 					botResponseDiv.innerHTML = response;
@@ -195,7 +223,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 					const result = calculateNumbers(expression);
 					const botResponseDiv = document.createElement('div');
 					botResponseDiv.className = 'bot-response';
-					botResponseDiv.innerHTML = `Nova: The answer of ${expression} is: ${result}`;
+					botResponseDiv.innerHTML = `
+						<p style="margin-bottom: 5px;">Nova: The answer of ${expression} is:</p>
+						<h1>${result}</h1>
+					`;
 					chatResponses.appendChild(botResponseDiv);
 
 					scrolltoBottom();
@@ -1011,6 +1042,8 @@ function getRandomMovie() {
 			const movieRating = data.imdbRating;
 			const movieActors = data.Actors;
 			const movieDirector = data.Director;
+			const moviePoster = data.Poster;
+			let moviePosterContainer;
 			const type = data.Type;
 
 			console.log(randomMovieID);
@@ -1021,9 +1054,38 @@ function getRandomMovie() {
 				return;
 			}
 
-			movieDetails = `${movieTitle} (${movieYear})\nGenre: ${movieGenre}\nRating: ${movieRating}\nDirector: ${movieDirector}\nActors: ${movieActors}\nPlot: ${moviePlot}\nImdb: https://www.imdb.com/title/${data.imdbID}`;
+			movieDetails = `${movieTitle} (${movieYear})\nGenre: ${movieGenre}\nRating: ${movieRating}\nDirector: ${movieDirector}\nActors: ${movieActors}\nPlot: ${moviePlot}\nPoster: ${moviePoster}\nImdb: https://www.imdb.com/title/${data.imdbID}`;
 			console.log(movieDetails);
-			botResponseDiv.innerHTML = 'Nova: ' + movieDetails;
+
+			if (moviePoster === "N/A") {
+				moviePosterContainer = `
+					<span style="height: 300px; aspect-ratio: 3 / 4; border-radius: 2px; background: #808080; display: flex; justify-content: center; align-items: center;">
+						<svg  xmlns="http://www.w3.org/2000/svg"  width="75px"  height="75px"  viewBox="0 0 24 24"  fill="none"  stroke="#A9A9A9"  stroke-width="1"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-movie"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M8 4l0 16" /><path d="M16 4l0 16" /><path d="M4 8l4 0" /><path d="M4 16l4 0" /><path d="M4 12l16 0" /><path d="M16 8l4 0" /><path d="M16 16l4 0" /></svg>
+					</span>
+				`;
+			} else {
+				moviePosterContainer = `<img src="${moviePoster}" alt="${movieTitle}" style="width: auto; height: auto; object-fit: contain; object-position: center;">`;
+			}
+
+			botResponseDiv.innerHTML = `
+				Nova: Here's a movie I found for you:<br><br>
+				<span style="display: flex; flex-direction: row; justify-content: center; gap: 15px;">
+					<span style="width: 50%;">
+						<h1>${movieTitle} (${movieYear})</h1><br>
+						<h3>Genre:</h3><p>${movieGenre}</p><br>
+						<h3>Rating:</h3><p>${movieRating}</p><br>
+						<h3>Director:</h3><p>${movieDirector}</p><br>
+						<h3>Actors:</h3><p>${movieActors}</p><br>
+						<h3>Plot:</h3><p>${moviePlot}</p><br>
+						<p>Visit <a href="https://www.imdb.com/title/${data.imdbID}" target="_blank">IMDb Page</a></p>
+					</span>
+					<span style="width: 50%;">
+						${moviePosterContainer}
+					</span>
+				</span>
+			`;
+
+			scrolltoBottom();
 		});
 
 	return movieDetails;
@@ -1142,6 +1204,8 @@ async function searchWeb(query) {
 	const url = proxyUrl + targetUrl;
 
 	try {
+		let search_status;
+
 		const response = await fetch(url);
 		let data = await response.json();
 		console.log('Fetched data:', data);
@@ -1198,13 +1262,19 @@ async function searchWeb(query) {
 		// Join the sentences back together
 		snippetText = sentences.join('. ');
 
+		search_status = 'success';
+
 		if (snippetText.length === 0) {
+			search_status = 'no_results';
 			snippetText = 'Sorry, I couldn\'t find any relevant information. Please try again in a bit or try a different search query.';
+		} else if (snippetText.length < 110) {
+			search_status = 'no_snippet';
+			snippetText = 'Sorry, I couldn\'t find a detailed snippet. Please click the link below to read more.';
 		}
 
 		console.log('Sanitized snippet text: ' + snippetText);
 
-		return snippetText;
+		return { snippetText, search_status };
 	}
 	catch (error) {
 		console.error('Error fetching or parsing HTML:', error);
