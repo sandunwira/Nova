@@ -96,7 +96,7 @@
     "windows": [
       {
         "title": "Nova",
-        "minWidth": 800,
+        "minWidth": 900,
         "minHeight": 600,
         "fullscreen": false,
         "focus": true,

@@ -77,6 +77,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 				if (userMessage.toLowerCase().startsWith("set a timer for")) {
 					const time = userMessage.replace("set a timer for", "").trim();
 					setTimer(time);
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("visit") || userMessage.toLowerCase().includes("go to")) {
 					const url = userMessage.replace("visit", "").replace("go to", "").trim();
 					const botResponseDiv = document.createElement('div');
@@ -84,49 +86,71 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.innerHTML = "Nova: Opening " + url + "...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					openURL(url).then(() => {
 						botResponseDiv.innerHTML = `Nova: Opened <a href="https://${url}" target="_blank">https://${url}</a> successfully. Enjoy!`;
+
+						scrolltoBottom();
 					}).catch(error => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.textContent = "Nova: Sorry, I couldn't open the URL.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.startsWith("open") || userMessage.startsWith("launch") || userMessage.startsWith("run") || userMessage.startsWith("start") || userMessage.startsWith("execute")) {
 					const appName = userMessage.replace('open', '').trim().replace('launch', '').trim().replace('run', '').trim().replace('start', '').trim().replace('execute', '').trim();
 					openApplication(appName);
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("search")) {
 					const botResponseDiv = document.createElement('div');
 					botResponseDiv.className = 'bot-response';
 					botResponseDiv.innerHTML = "Nova: Searching the web...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					searchWeb(userMessage).then(snippetText => {
 						botResponseDiv.innerHTML = 'Nova: ' + snippetText;
+
+						scrolltoBottom();
 					}).catch(error => {
 						botResponseDiv.remove();
 						const botResponseDiv = document.createElement('div');
 						botResponseDiv.className = 'error-response';
 						botResponseDiv.innerHTML = "Nova: Sorry, I couldn't find any relevant information. Please try again in a bit or try a different search query.";
 						chatResponses.appendChild(botResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("random movie") || userMessage.toLowerCase().includes("movie recommendation") || userMessage.toLowerCase().includes("suggest me a movie") || userMessage.toLowerCase().includes("suggest a movie")) {
 					getRandomMovie();
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("ip address")) {
 					const botResponseDiv = document.createElement('div');
 					botResponseDiv.className = 'bot-response';
 					botResponseDiv.innerHTML = "Nova: Fetching your IP Address...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					getIPAddress().then(({ ipaddress }) => {
 						botResponseDiv.innerHTML = `Nova: Your IP Address is: ${ipaddress}`;
+
+						scrolltoBottom();
 					}).catch(() => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.innerHTML = "Nova: Sorry, I couldn't fetch your IP Address.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("weather")) {
 					const botResponseDiv = document.createElement('div');
@@ -134,21 +158,29 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.innerHTML = "Nova: Fetching the weather...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					getWeather().then(({ location, weatherComment, temperature, humidity, windSpeed }) => {
 						const response = `Nova: Here are the weather information for ${location}: <br>${temperature} in ${location}<br>Humidity: ${humidity}<br>Wind Speed: ${windSpeed}<br>${weatherComment}`;
 						botResponseDiv.innerHTML = response;
+
+						scrolltoBottom();
 					}).catch(error => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.innerHTML = "Nova: Sorry, I couldn't fetch the weather.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("time") || userMessage.toLowerCase().includes("clock") || userMessage.toLowerCase().includes("current time") || userMessage.toLowerCase().includes("what's the time") || userMessage.toLowerCase().includes("what time is it") || userMessage.toLowerCase().includes("tell me the time")) {
 					const timeResponse = document.createElement('div');
 					timeResponse.className = 'bot-response';
 					timeResponse.innerHTML = 'Nova: Current time is ' + getTime();
 					chatResponses.appendChild(timeResponse);
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("date") || userMessage.toLowerCase().includes("today's date") || userMessage.toLowerCase().includes("what's the date") || userMessage.toLowerCase().includes("tell me the date") || userMessage.toLowerCase().includes("what date is it") || userMessage.toLowerCase().includes("what's today's date")) {
 					const { day, month, year } = getDate();
 					const response = `Nova: Today's date is ${month} ${day}, ${year}`;
@@ -156,6 +188,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.className = 'bot-response';
 					botResponseDiv.innerHTML = response;
 					chatResponses.appendChild(botResponseDiv);
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("calc") || userMessage.toLowerCase().includes("calculate") || userMessage.toLowerCase().includes("calculator") || userMessage.toLowerCase().includes("math")) {
 					const expression = userMessage.replace("calc", "").replace("calculate", "").replace("calculator", "").replace("math", "").trim();
 					const result = calculateNumbers(expression);
@@ -163,11 +197,15 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.className = 'bot-response';
 					botResponseDiv.innerHTML = `Nova: The answer of ${expression} is: ${result}`;
 					chatResponses.appendChild(botResponseDiv);
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("news") || userMessage.toLowerCase().includes("headlines") || userMessage.toLowerCase().includes("latest news") || userMessage.toLowerCase().includes("news headlines")) {
 					const newsResponseDiv = document.createElement('div');
 					newsResponseDiv.className = 'bot-response';
 					newsResponseDiv.innerHTML = 'Nova: Fetching the latest news...';
 					chatResponses.appendChild(newsResponseDiv);
+
+					scrolltoBottom();
 
 					fetchNews().then(newsItems => {
 						let newsText = "Here are the latest news headlines:<br><br>";
@@ -181,6 +219,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.textContent = "Sorry, I couldn't fetch the latest news.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("iotd") || userMessage.toLowerCase().includes("image of the day") || userMessage.toLowerCase().includes("bing image") || userMessage.toLowerCase().includes("bing wallpaper")) {
 					const botResponseDiv = document.createElement('div');
@@ -188,14 +228,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.innerHTML = "Nova: Fetching the image of the day...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					getImageOfTheDay().then(({ imageTitle, imageUrl, imageCredits }) => {
 						botResponseDiv.innerHTML = `Nova: <strong>${imageTitle}</strong><br><img src="${imageUrl}" alt="${imageTitle}" style="max-width: 100%;"><br><small>Image Credits: ${imageCredits}</small>`;
+
+						scrolltoBottom();
 					}).catch(() => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.textContent = "Nova: Sorry, I couldn't fetch the image of the day.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("qotd") || userMessage.toLowerCase().includes("quote of the day") || userMessage.toLowerCase().includes("inspirational quote") || userMessage.toLowerCase().includes("motivational quote")) {
 					const botResponseDiv = document.createElement('div');
@@ -203,14 +249,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.innerHTML = "Nova: Fetching the quote of the day...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					getQuoteOfTheDay().then(({ quote, author }) => {
 						botResponseDiv.innerHTML = `Nova: Quote of the day is:<br><br>${quote}<br>- ${author}`;
+
+						scrolltoBottom();
 					}).catch(error => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.textContent = "Nova: Sorry, I couldn't fetch the quote of the day.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("random quote") || userMessage.toLowerCase().includes("quote")) {
 					const botResponseDiv = document.createElement('div');
@@ -218,20 +270,28 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.innerHTML = "Nova: Fetching a random quote...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					getRandomQuote().then(({ quote, author }) => {
 						botResponseDiv.innerHTML = `Nova: Here's a quote I found for you:<br><br>${quote}<br>- ${author}`;
+
+						scrolltoBottom();
 					}).catch(error => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.textContent = "Nova: Sorry, I couldn't fetch a random quote.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("on this day") || userMessage.toLowerCase().includes("on this day events") || userMessage.toLowerCase().includes("on this day in history") || userMessage.toLowerCase().includes("on this day facts")) {
 					const botResponseDiv = document.createElement('div');
 					botResponseDiv.className = 'bot-response';
 					botResponseDiv.innerHTML = "Nova: Fetching on this day events...";
 					chatResponses.appendChild(botResponseDiv);
+
+					scrolltoBottom();
 
 					getOnThisDayEvents().then(events => {
 						const { day, month } = getDate();
@@ -246,6 +306,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.textContent = "Sorry, I couldn't fetch on this day events.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("meal") || userMessage.toLowerCase().includes("recipe") || userMessage.toLowerCase().includes("food") || userMessage.toLowerCase().includes("random meal") || userMessage.toLowerCase().includes("meal recipe") || userMessage.toLowerCase().includes("meal suggestion") || userMessage.toLowerCase().includes("meal recommendation")) {
 					const botResponseDiv = document.createElement('div');
@@ -253,8 +315,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.innerHTML = "Nova: Fetching a random meal recipe...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					getRandomMeal().then(mealDetails => {
 						botResponseDiv.innerHTML = `Nova: ${mealDetails}`;
+
+						scrolltoBottom();
 					}).catch(error => {
 						console.error('Error fetching random meal recipe:', error);
 
@@ -263,6 +329,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.innerHTML = "Nova: Sorry, I couldn't fetch a random meal recipe.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("books about")) {
 					const query = userMessage.replace("books about", "").trim();
@@ -272,6 +340,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.innerHTML = "Nova: Searching for books about " + query + "...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					searchBooks(query).then(bookDetails => {
 						botResponseDiv.innerHTML = `Nova: Here are books that I found for "${query}":<br><br>${bookDetails}`;
 					}).catch(error => {
@@ -280,6 +350,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.textContent = "Sorry, I couldn't find any books about " + query + ".";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().startsWith("translate") && userMessage.toLowerCase().includes(" to ")) {
 					const textToTranslate = userMessage.match(/translate (.+) to (.+)/i);
@@ -292,20 +364,28 @@ document.addEventListener('DOMContentLoaded', async function () {
 						botResponseDiv.innerHTML = "Nova: Translating the text...";
 						chatResponses.appendChild(botResponseDiv);
 
+						scrolltoBottom();
+
 						translateText(text, targetLanguage).then(translatedText => {
 							botResponseDiv.innerHTML = `Nova: Translated text: ${translatedText}`;
+
+							scrolltoBottom();
 						}).catch(error => {
 							botResponseDiv.remove();
 							const errorResponseDiv = document.createElement('div');
 							errorResponseDiv.className = 'error-response';
 							errorResponseDiv.innerHTML = "Sorry, I couldn't translate the text.";
 							chatResponses.appendChild(errorResponseDiv);
+
+							scrolltoBottom();
 						});
 					} else {
 						const botResponseDiv = document.createElement('div');
 						botResponseDiv.className = 'bot-response';
 						botResponseDiv.textContent = "Sorry, I couldn't understand the translation request. Please use the format: translate [text] to [target_language].";
 						chatResponses.appendChild(botResponseDiv);
+
+						scrolltoBottom();
 					}
 				} else if (userMessage.toLowerCase().includes("disaster") || userMessage.toLowerCase().includes("natural disaster") || userMessage.toLowerCase().includes("disaster alert") || userMessage.toLowerCase().includes("disaster warning")) {
 					const botResponseDiv = document.createElement('div');
@@ -313,14 +393,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.innerHTML = "Nova: Fetching disaster alerts...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					getDisasterAlerts().then(alerts => {
 						botResponseDiv.innerHTML = `Nova: ${alerts}`;
+
+						scrolltoBottom();
 					}).catch(() => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.textContent = "Sorry, I couldn't fetch disaster alerts.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().startsWith("play")) {
 					const query = userMessage.replace("play", "").trim();
@@ -329,6 +415,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 						botResponseDiv.className = 'bot-response';
 						botResponseDiv.innerHTML = "Nova: Please provide a song name or artist to play. Hint: play Believer by Imagine Dragons";
 						chatResponses.appendChild(botResponseDiv);
+
+						scrolltoBottom();
 						return;
 					} else {
 						const botResponseDiv = document.createElement('div');
@@ -336,36 +424,62 @@ document.addEventListener('DOMContentLoaded', async function () {
 						botResponseDiv.innerHTML = "Nova: Opening YouTube Music...";
 						chatResponses.appendChild(botResponseDiv);
 
+						scrolltoBottom();
+
 						openYTMusic(query).then(() => {
 							botResponseDiv.innerHTML = "Nova: Opened YouTube Music";
+
+							scrolltoBottom();
 						}).catch(() => {
 							botResponseDiv.remove();
 							const errorResponseDiv = document.createElement('div');
 							errorResponseDiv.className = 'error-response';
 							errorResponseDiv.innerHTML = "Sorry, I couldn't open YouTube Music.";
 							chatResponses.appendChild(errorResponseDiv);
+
+							scrolltoBottom();
 						});
 					}
 				} else if (userMessage.toLowerCase().includes("resume")) {
 					playMedia();
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("pause")) {
 					pauseMedia();
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("previous")) {
 					previousMedia();
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("skip") || userMessage.toLowerCase().includes("next")) {
 					nextMedia();
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("increase volume") || userMessage.toLowerCase().includes("volume up")) {
 					increaseVolume();
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("decrease volume") || userMessage.toLowerCase().includes("volume down")) {
 					decreaseVolume();
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().startsWith("mute")) {
 					muteVolume();
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().startsWith("unmute")) {
 					unmuteVolume();
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("on wifi") || userMessage.toLowerCase().includes("wifi on")) {
 					turnOnWiFi();
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("off wifi") || userMessage.toLowerCase().includes("wifi off")) {
 					turnOffWiFi();
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().startsWith("create qr for")) {
 					const text = userMessage.replace("create qr for", "").trim();
 					const qrCodeElement = createQRCode(text);
@@ -374,6 +488,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.innerHTML = `Nova: Here's the QR Code for "${text}":<br><br>`;
 					botResponseDiv.appendChild(qrCodeElement);
 					chatResponses.appendChild(botResponseDiv);
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().startsWith("convert")) {
 					const match = userMessage.match(/convert (\d+)([a-zA-Z]+) to ([a-zA-Z]+)/);
 					if (match) {
@@ -387,9 +503,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 						botResponseDiv.innerHTML = `Nova: Converting ${formattedAmount} ${fromCurrency} to ${toCurrency}...`;
 						chatResponses.appendChild(botResponseDiv);
 
+						scrolltoBottom();
+
 						convertCurrency(amount, fromCurrency, toCurrency)
 							.then(convertedAmount => {
 								botResponseDiv.innerHTML = `${convertedAmount} as of ${getDate().month} ${getDate().day}, ${getDate().year} at ${getTime()}`;
+
+								scrolltoBottom();
 							})
 							.catch(error => {
 								botResponseDiv.remove();
@@ -397,12 +517,16 @@ document.addEventListener('DOMContentLoaded', async function () {
 								errorResponseDiv.className = 'error-response';
 								errorResponseDiv.textContent = "Sorry, I couldn't convert the currency.";
 								chatResponses.appendChild(errorResponseDiv);
+
+								scrolltoBottom();
 							});
 					} else {
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.textContent = "Sorry, I couldn't understand the conversion request. Please use the format: convert [amount][base_currency] to [target_currency].";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					}
 				} else if (userMessage.toLowerCase().includes("pc info")) {
 					const botResponseDiv = document.createElement('div');
@@ -410,15 +534,21 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.innerHTML = "Nova: Fetching system information...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					getSystemInfo().then(({ deviceName, longOSName, lastBootedTime, uptime, cpuBrand, cpuArch, cpuCores, cpuUsage, usedMemory, totalMemory, usedSwap, totalSwap, disksInfo, networksInfo }) => {
 						const response = `Nova: ${deviceName}<br>Operating System: ${longOSName}<br>Last Booted Time: ${lastBootedTime}<br>Uptime: ${uptime}<br><br>Processor: ${cpuBrand}<br>CPU Architecture: ${cpuArch}<br>CPU Cores: ${cpuCores}<br>CPU Usage: ${cpuUsage}%<br><br>Memory: ${usedMemory} GB (${((usedMemory / totalMemory) * 100).toFixed(0)}%) used out of ${totalMemory} GB<br>Swap: ${usedSwap} GB (${((usedSwap / totalSwap) * 100).toFixed(0)}%) out of ${totalSwap} GB<br><br>Disks:<br>${disksInfo}<br><br>Networks:<br>${networksInfo}`;
 						botResponseDiv.innerHTML = response;
+
+						scrolltoBottom();
 					}).catch(error => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.textContent = "Sorry, I couldn't fetch system information.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("bug code") || userMessage.toLowerCase().includes("error")) {
 					const bugCode = userMessage.match(/bug code 0x([0-9a-fA-F]+)/) || userMessage.match(/0x([0-9a-fA-F]+) error/);
@@ -435,17 +565,23 @@ document.addEventListener('DOMContentLoaded', async function () {
 								${bugCodeDetails.solutions.map(solution => `- ${solution}`).join('<br>')}
 							`;
 							chatResponses.appendChild(botResponseDiv);
+
+							scrolltoBottom();
 						} else {
 							const errorResponseDiv = document.createElement('div');
 							errorResponseDiv.className = 'error-response';
 							errorResponseDiv.textContent = "Sorry, I couldn't find any details for the bug code.";
 							chatResponses.appendChild(errorResponseDiv);
+
+							scrolltoBottom();
 						}
 					} else {
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.textContent = "Sorry, I couldn't find any bug code in the request.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					}
 				} else if (userMessage.toLowerCase().includes("send email")) {
 					const botResponseDiv = document.createElement('div');
@@ -453,6 +589,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.innerHTML = "Nova: Opening the email client...";
 					chatResponses.appendChild(botResponseDiv);
 					sendEmail();
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().startsWith("find")) {
 					const searchTerms = userMessage.replace("find ", "");
 					const botResponseDiv = document.createElement('div');
@@ -460,20 +598,28 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.textContent = `Nova: Searching for "${searchTerms}"...`;
 					chatResponses.appendChild(botResponseDiv);
 					searchFile(searchTerms);
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().includes("switch to light mode")) {
 					const botResponseDiv = document.createElement('div');
 					botResponseDiv.className = 'bot-response';
 					botResponseDiv.innerHTML = "Nova: Switching to Light Mode...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					switchToLight().then(() => {
 						botResponseDiv.innerHTML = "Nova: Switched to Light Mode successfully!";
+
+						scrolltoBottom();
 					}).catch(() => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'bot-response';
 						errorResponseDiv.innerHTML = "Sorry, I couldn't switch to Light Mode.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("switch to dark mode")) {
 					const botResponseDiv = document.createElement('div');
@@ -481,14 +627,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.innerHTML = "Nova: Switching to Dark Mode...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					switchToDark().then(() => {
 						botResponseDiv.innerHTML = "Nova: Switched to Dark Mode successfully!";
+
+						scrolltoBottom();
 					}).catch(() => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.innerHTML = "Sorry, I couldn't switch to Dark Mode.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("screenshot") || userMessage.toLowerCase().includes("take a screenshot")) {
 					const botResponseDiv = document.createElement('div');
@@ -496,14 +648,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.textContent = "Nova: Taking a screenshot...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					takeScreenshot().then(() => {
 						botResponseDiv.innerHTML = "Nova: Screenshot successfully saved to Desktop!";
+
+						scrolltoBottom();
 					}).catch(() => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.innerHTML = "Sorry, I couldn't take a screenshot.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("wallpaper")) {
 					const query = userMessage.match(/(?:set a |)([a-zA-Z]+) wallpaper/);
@@ -516,14 +674,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 						botResponseDiv.innerHTML = `Nova: Changing the wallpaper...`;
 						chatResponses.appendChild(botResponseDiv);
 
+						scrolltoBottom();
+
 						changeWallpaper(category).then(() => {
 							botResponseDiv.innerHTML = `Nova: ${category.charAt(0).toUpperCase() + category.slice(1)} wallpaper changed successfully!`;
+
+							scrolltoBottom();
 						}).catch(error => {
 							botResponseDiv.remove();
 							const errorResponseDiv = document.createElement('div');
 							errorResponseDiv.className = 'error-response';
 							errorResponseDiv.innerHTML = "Sorry, I couldn't change the wallpaper.";
 							chatResponses.appendChild(errorResponseDiv);
+
+							scrolltoBottom();
 						});
 					} else {
 						const response = "Nova: Sorry, I couldn't find any wallpaper to change.";
@@ -531,6 +695,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 						botResponseDiv.className = 'bot-response';
 						botResponseDiv.innerHTML = response;
 						chatResponses.appendChild(botResponseDiv);
+
+						scrolltoBottom();
 					}
 				} else if (userMessage.toLowerCase().includes("shutdown pc") || userMessage.toLowerCase().includes("turn off pc")) {
 					const botResponseDiv = document.createElement('div');
@@ -538,14 +704,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.innerHTML = "Nova: PC is shutting down...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					shutdown_pc().then(() => {
 						botResponseDiv.innerHTML = "Nova: PC is turned off...";
+
+						scrolltoBottom();
 					}).catch(error => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.innerHTML = "Sorry, I couldn't shut down the PC.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("restart pc") || userMessage.toLowerCase().includes("reboot pc")) {
 					const botResponseDiv = document.createElement('div');
@@ -553,14 +725,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.textContent = "Nova: Restarting the PC...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					restart_pc().then(() => {
 						botResponseDiv.innerHTML = "Nova: PC is restarting...";
+
+						scrolltoBottom();
 					}).catch(() => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.innerHTML = "Sorry, I couldn't restart the PC.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("lock pc") || userMessage.toLowerCase().includes("lock computer")) {
 					const botResponseDiv = document.createElement('div');
@@ -568,14 +746,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.textContent = "Nova: Locking the PC...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					lock_pc().then(() => {
 						botResponseDiv.innerHTML = "Nova: PC is locked...";
+
+						scrolltoBottom();
 					}).catch(() => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.innerHTML = "Sorry, I couldn't lock the PC.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().includes("sleep pc") || userMessage.toLowerCase().includes("sleep computer")) {
 					const botResponseDiv = document.createElement('div');
@@ -583,20 +767,28 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.textContent = "Nova: Putting the PC to sleep...";
 					chatResponses.appendChild(botResponseDiv);
 
+					scrolltoBottom();
+
 					sleep_pc().then(() => {
 						botResponseDiv.innerHTML = "Nova: PC is slept...";
+
+						scrolltoBottom();
 					}).catch(error => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.innerHTML = "Sorry, I couldn't put the PC to sleep.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().startsWith("emergency") || userMessage.toLowerCase().startsWith("police") || userMessage.toLowerCase().startsWith("danger") || userMessage.toLowerCase().startsWith("fire") || userMessage.toLowerCase().startsWith("ambulance") || userMessage.toLowerCase().startsWith("medical") || userMessage.toLowerCase().startsWith("doctor") || userMessage.toLowerCase().startsWith("hospital") || userMessage.toLowerCase().startsWith("119") || userMessage.toLowerCase().startsWith("911") || userMessage.toLowerCase().startsWith("999") || userMessage.toLowerCase().startsWith("112") || userMessage.toLowerCase().startsWith("crisis")) {
 					const botResponseDiv = document.createElement('div');
 					botResponseDiv.className = 'bot-response';
 					botResponseDiv.innerHTML = "Nova: Fetching crisis hotlines...";
 					chatResponses.appendChild(botResponseDiv);
+
+					scrolltoBottom();
 
 					getCrisisHotlines().then(hotlineData => {
 						if (hotlineData) {
@@ -607,19 +799,23 @@ document.addEventListener('DOMContentLoaded', async function () {
 							});
 							const response = hotlinesText;
 
-							botResponseDiv.innerHTML = response;
+							botResponseDiv.innerHTML = 'Nova: '+ response;
 						} else {
 							botResponseDiv.remove();
 							const errorResponseDiv = document.createElement('div');
 							errorResponseDiv.className = 'error-response';
 							errorResponseDiv.innerHTML = "Please call 911 or your local emergency number for immediate help.";
 							chatResponses.appendChild(errorResponseDiv);
+
+							scrolltoBottom();
 						}
 					}).catch(() => {
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.textContent = "Sorry, I couldn't find any hotlines for immediate help. Please call 911 or your local emergency number for immediate help.";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					});
 				} else if (userMessage.toLowerCase().startsWith("summarize:")) {
 					const inputText = userMessage.replace("summarize:", "").trim();
@@ -628,12 +824,16 @@ document.addEventListener('DOMContentLoaded', async function () {
 						errorResponseDiv.className = 'error-response';
 						errorResponseDiv.innerHTML = "Please provide a text to summarize.<br>Hint: summarize: [text]";
 						chatResponses.appendChild(errorResponseDiv);
+
+						scrolltoBottom();
 					} else {
 						const response = await textSummarizer(inputText).then(summary => summary).catch(error => "Sorry, I couldn't summarize the text.");
 						const botResponseDiv = document.createElement('div');
 						botResponseDiv.className = 'bot-response';
 						botResponseDiv.innerHTML = 'Nova: ' + response;
 						chatResponses.appendChild(botResponseDiv);
+
+						scrolltoBottom();
 					}
 				} else {
 					const response = await assistant.processQuery(userMessage);
@@ -641,10 +841,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.className = 'bot-response';
 					botResponseDiv.innerHTML = 'Nova: ' + response;
 					chatResponses.appendChild(botResponseDiv);
-				}
 
-				const chatResponsesContainer = document.getElementById('chatResponsesContainer');
-				chatResponsesContainer.scrollTop = chatResponsesContainer.scrollHeight;
+					scrolltoBottom();
+				}
 			} catch (error) {
 				console.error('Error processing query:', error);
 
@@ -652,6 +851,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 				errorResponseDiv.className = 'error-response';
 				errorResponseDiv.innerHTML = 'Sorry, an error occurred while processing your request.';
 				chatResponses.appendChild(errorResponseDiv);
+
+				scrolltoBottom();
 			}
 		});
 	} catch (error) {
@@ -661,6 +862,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = 'Sorry, the assistant failed to initialize properly.';
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 	}
 });
 
@@ -723,6 +926,8 @@ async function openApplication(appName) {
 				botResponseDiv.innerHTML = `Nova: ${response.launched_app} launched successfully. Enjoy!`;
 				chatResponses.appendChild(botResponseDiv);
 
+				scrolltoBottom();
+
 				new Notification('Application Launched', {
 					body: `${response.launched_app} launched successfully. Enjoy!`,
 					sound: 'Default'
@@ -738,6 +943,8 @@ async function openApplication(appName) {
 				errorResponseDiv.innerHTML = response.message;
 				chatResponses.appendChild(errorResponseDiv);
 
+				scrolltoBottom();
+
 				new Notification('Application Error', {
 					body: response.message,
 					sound: 'Default'
@@ -752,6 +959,8 @@ async function openApplication(appName) {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = 'Sorry, I encountered a system error. Please try again later.';
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 
 		new Notification('System Error', {
 			body: 'Failed to process the request. Please try again later.',
@@ -771,6 +980,8 @@ function getRandomMovie() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = "Nova: Searching for a movie...";
 	chatResponses.appendChild(botResponseDiv);
+
+	scrolltoBottom();
 
 	fetch(`https://www.omdbapi.com/?i=tt${randomMovieID}&apikey=1e86c5d2`)
 		.then(response => response.json())
@@ -1414,6 +1625,8 @@ async function playMedia() {
 		botResponseDiv.innerHTML = "Nova: Resuming playback...";
 		chatResponses.appendChild(botResponseDiv);
 
+		scrolltoBottom();
+
 		await window.__TAURI__.invoke('play_media');
 
 		botResponseDiv.innerHTML = "Nova: Resumed playback...";
@@ -1424,6 +1637,8 @@ async function playMedia() {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = "Failed to play media. Please try again later.";
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 	}
 }
 
@@ -1435,6 +1650,8 @@ async function pauseMedia() {
 		botResponseDiv.innerHTML = "Nova: Pausing playback...";
 		chatResponses.appendChild(botResponseDiv);
 
+		scrolltoBottom();
+
 		await window.__TAURI__.invoke('pause_media');
 
 		botResponseDiv.innerHTML = "Nova: Paused playback...";
@@ -1445,6 +1662,8 @@ async function pauseMedia() {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = "Failed to pause media. Please try again later.";
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 	}
 }
 
@@ -1456,6 +1675,8 @@ async function previousMedia() {
 		botResponseDiv.innerHTML = "Nova: Playing previous track...";
 		chatResponses.appendChild(botResponseDiv);
 
+		scrolltoBottom();
+
 		await window.__TAURI__.invoke('previous_media');
 
 		botResponseDiv.innerHTML = "Nova: Played previous track...";
@@ -1466,6 +1687,8 @@ async function previousMedia() {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = "Failed to play previous track. Please try again later.";
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 	}
 }
 
@@ -1477,6 +1700,8 @@ async function nextMedia() {
 		botResponseDiv.innerHTML = "Nova: Playing next track...";
 		chatResponses.appendChild(botResponseDiv);
 
+		scrolltoBottom();
+
 		await window.__TAURI__.invoke('next_media');
 
 		botResponseDiv.innerHTML = "Nova: Played next track...";
@@ -1487,6 +1712,8 @@ async function nextMedia() {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = "Failed to play next track. Please try again later.";
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 	}
 }
 
@@ -1498,6 +1725,8 @@ async function increaseVolume() {
 		botResponseDiv.innerHTML = "Nova: Increasing volume...";
 		chatResponses.appendChild(botResponseDiv);
 
+		scrolltoBottom();
+
 		await window.__TAURI__.invoke('increase_volume');
 
 		botResponseDiv.innerHTML = "Nova: Volume increased...";
@@ -1508,6 +1737,8 @@ async function increaseVolume() {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = "Failed to increase volume. Please try again later.";
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 	}
 }
 
@@ -1519,6 +1750,8 @@ async function decreaseVolume() {
 		botResponseDiv.innerHTML = "Nova: Decreasing volume...";
 		chatResponses.appendChild(botResponseDiv);
 
+		scrolltoBottom();
+
 		await window.__TAURI__.invoke('decrease_volume');
 
 		botResponseDiv.innerHTML = "Nova: Volume decreased...";
@@ -1529,6 +1762,8 @@ async function decreaseVolume() {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = "Failed to decrease volume. Please try again later.";
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 	}
 }
 
@@ -1540,6 +1775,8 @@ async function muteVolume() {
 		botResponseDiv.innerHTML = "Nova: Toggling mute...";
 		chatResponses.appendChild(botResponseDiv);
 
+		scrolltoBottom();
+
 		await window.__TAURI__.invoke('toggle_mute');
 
 		botResponseDiv.innerHTML = "Nova: Volume muted...";
@@ -1550,6 +1787,8 @@ async function muteVolume() {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = "Failed to mute volume. Please try again later.";
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 	}
 }
 
@@ -1561,6 +1800,8 @@ async function unmuteVolume() {
 		botResponseDiv.innerHTML = "Nova: Toggling unmute...";
 		chatResponses.appendChild(botResponseDiv);
 
+		scrolltoBottom();
+
 		await window.__TAURI__.invoke('toggle_mute');
 
 		botResponseDiv.innerHTML = "Nova: Volume unmuted...";
@@ -1571,6 +1812,8 @@ async function unmuteVolume() {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = "Failed to unmute volume. Please try again later.";
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 	}
 }
 
@@ -1584,6 +1827,8 @@ async function turnOnWiFi() {
 		botResponseDiv.innerHTML = "Nova: Turning on WiFi...";
 		chatResponses.appendChild(botResponseDiv);
 
+		scrolltoBottom();
+
 		await window.__TAURI__.invoke('turn_on_wifi');
 
 		botResponseDiv.innerHTML = "Nova: WiFi turned on...";
@@ -1594,6 +1839,8 @@ async function turnOnWiFi() {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = "Failed to turn on WiFi. Please try again later.";
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 	}
 }
 
@@ -1605,6 +1852,8 @@ async function turnOffWiFi() {
 		botResponseDiv.innerHTML = "Nova: Turning off WiFi...";
 		chatResponses.appendChild(botResponseDiv);
 
+		scrolltoBottom();
+
 		await window.__TAURI__.invoke('turn_off_wifi');
 
 		botResponseDiv.innerHTML = "Nova: WiFi turned off...";
@@ -1615,6 +1864,8 @@ async function turnOffWiFi() {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = "Failed to turn off WiFi. Please try again later.";
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 	}
 }
 
@@ -1847,10 +2098,7 @@ async function getSystemInfo() {
 	} catch (error) {
 		console.error('Error getting system information:', error);
 
-		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = 'Failed to get system information. Please try again later.';
-		chatResponses.appendChild(errorResponseDiv);
+		throw error;
 	}
 }
 
@@ -1898,6 +2146,8 @@ async function sendEmail() {
 		botResponseDiv.appendChild(emailForm);
 		chatResponses.appendChild(botResponseDiv);
 
+		scrolltoBottom();
+
 		document.getElementById('emailTo').focus();
 
 		emailForm.addEventListener('submit', async (event) => {
@@ -1917,6 +2167,8 @@ async function sendEmail() {
 				botResponseDiv.innerHTML = "Opened email client. Please click send to send the email.";
 				chatResponses.appendChild(botResponseDiv);
 
+				scrolltoBottom();
+
 				alert('Opened email client. Please click send to send the email.');
 				chatFormSubmitBtn.disabled = false;
 				chatMessage.disabled = false;
@@ -1927,6 +2179,8 @@ async function sendEmail() {
 				errorResponseDiv.className = 'bot-response';
 				errorResponseDiv.innerHTML = "Failed to send email. Please try again later.";
 				chatResponses.appendChild(errorResponseDiv);
+
+				scrolltoBottom();
 
 				alert('Failed to send email. Please try again later.');
 				chatFormSubmitBtn.disabled = false;
@@ -1940,6 +2194,8 @@ async function sendEmail() {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = "Failed to send email. Please try again later.";
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 
 		alert('Failed to send email. Please try again later.');
 		chatFormSubmitBtn.disabled = false;
@@ -1962,6 +2218,8 @@ async function searchFile(searchTerms) {
 		botResponseDiv.className = 'bot-response';
 		botResponseDiv.textContent = `Searching for files matching ${searchDisplay} across all drives... This may take a while.`;
 		chatResponses.appendChild(botResponseDiv);
+
+		scrolltoBottom();
 
 		let startTime = new Date().getTime();
 
@@ -1999,6 +2257,8 @@ async function searchFile(searchTerms) {
 
 			botResponseDiv.innerHTML = `Found ${results.length} file(s) matching ${searchDisplay}:<br><br>${formattedResults}<br><br>Search took ${searchTime}.`;
 
+			scrolltoBottom();
+
 			new Notification('File Search Finished', {
 				body: `Found ${results.length} file(s) matching ${searchDisplay}. Search took ${searchTime}.`,
 				icon: 'assets/images/icon.png'
@@ -2006,6 +2266,8 @@ async function searchFile(searchTerms) {
 		} else {
 			console.log('No matching files found');
 			botResponseDiv.innerHTML = `No files found matching ${searchDisplay}`;
+
+			scrolltoBottom();
 
 			new Notification('File Search Finished', {
 				body: `No files found matching ${searchDisplay}.`,
@@ -2021,6 +2283,8 @@ async function searchFile(searchTerms) {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = "Failed to search for files. Please try again later.";
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 	}
 }
 
@@ -2215,12 +2479,16 @@ async function setTimer(time) {
 			errorResponseDiv.className = 'error-response';
 			errorResponseDiv.innerHTML = "Sorry, I couldn't set the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
 			chatResponses.appendChild(errorResponseDiv);
+
+			scrolltoBottom();
 			return;
 		} else if (duration <= 0) {
 			const errorResponseDiv = document.createElement('div');
 			errorResponseDiv.className = 'error-response';
 			errorResponseDiv.innerHTML = "Please enter a valid duration for the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
 			chatResponses.appendChild(errorResponseDiv);
+
+			scrolltoBottom();
 			return;
 		}
 
@@ -2232,12 +2500,16 @@ async function setTimer(time) {
 			errorResponseDiv.className = 'error-response';
 			errorResponseDiv.innerHTML = "Please enter a valid unit for the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
 			chatResponses.appendChild(errorResponseDiv);
+
+			scrolltoBottom();
 			return;
 		} else if (timeInMs > 86400000) {
 			const errorResponseDiv = document.createElement('div');
 			errorResponseDiv.className = 'error-response';
 			errorResponseDiv.innerHTML = "Please enter a duration less than or equal to 24 hours.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
 			chatResponses.appendChild(errorResponseDiv);
+
+			scrolltoBottom();
 			return;
 		}
 
@@ -2247,6 +2519,8 @@ async function setTimer(time) {
 		timerResponseDiv.className = 'bot-response';
 		timerResponseDiv.textContent = `Nova: ${duration} ${unit} timer has started!`;
 		chatResponses.appendChild(timerResponseDiv);
+
+		scrolltoBottom();
 
 		let remainingTime = timeInMs;
 
@@ -2264,6 +2538,8 @@ async function setTimer(time) {
 		console.log(`Nova: ${duration} ${unit} timer has completed!`);
 		timerResponseDiv.innerHTML = `Nova: ${duration} ${unit} timer has completed!`;
 
+		scrolltoBottom();
+
 		new Notification('Timer Completed!', {
 			body: `${duration} ${unit} timer has completed!`,
 			sound: 'Default'
@@ -2275,6 +2551,8 @@ async function setTimer(time) {
 		errorResponseDiv.className = 'error-response';
 		errorResponseDiv.innerHTML = "Sorry, I couldn't set the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
 		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 	}
 }
 
@@ -2305,4 +2583,14 @@ async function textSummarizer(inputText) {
 		console.error('Failed to summarize text:', error);
 		throw error;
 	}
+}
+
+
+
+// function to scroll to bottom of chat
+function scrolltoBottom() {
+	const chatResponsesContainer = document.getElementById('chatResponsesContainer');
+	chatResponsesContainer.scrollTop = chatResponsesContainer.scrollHeight;
+
+	console.log('Scrolled to bottom of chat');
 }

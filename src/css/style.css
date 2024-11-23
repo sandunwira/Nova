@@ -1,0 +1,47 @@
+@font-face {
+	font-family: 'Funnel Display';
+	src: url('assets/fonts/FunnelDisplay.ttf') format('truetype');
+}
+
+:root {
+	--white: #F0F0F0;
+	--whiteGray: #ECECEC;
+	--lightGray: #BBBBBB;
+	--gray: #808080;
+	--darkGray: #424242;
+	--blackGray: #242424;
+	--black: #1E1E1E;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	font-family: 'Funnel Display', sans-serif;
+}
+
+html {
+	color: var(--white);
+	background: var(--black);
+	scroll-behavior: smooth;
+}
+
+input[type="text"], input[type="submit"], input[type="email"], input[type="password"], input[type="number"], input[type="tel"], input[type="search"], input[type="url"], textarea {
+	color: var(--white);
+	background: var(--blackGray);
+	font-size: 13px;
+	padding: 9px 12px;
+	border: none;
+	outline: none;
+}
+input[type="text"] {
+	width: 350px;
+}
+button {
+	color: var(--white);
+	background: var(--blackGray);
+	font-size: 13px;
+	padding: 9px 12px;
+	border: none;
+	outline: none;
+	cursor: pointer;
+}
