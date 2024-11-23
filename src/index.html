@@ -17,39 +17,6 @@
 	<!-- ASSISTANT FEATURE SCRIPTS END -->
 
 	<link rel="stylesheet" href="css/style.css">
-
-	<style>
-		.titlebarButtons {
-			display: flex;
-			flex-direction: row;
-		}
-
-		.titlebarButtons button {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			height: 25px;
-			width: 35px;
-			background: transparent;
-			border: none;
-			opacity: 0.8;
-			color: var(--white);
-			font-size: 12px;
-			cursor: pointer;
-			transition: 0.2s;
-		}
-
-		.titlebarButtons button:hover {
-			opacity: 1;
-			background: #FFFFFF1A;
-			transition: 0.2s;
-		}
-
-		.titlebarButtons button svg {
-			height: 12px;
-			width: 12px;
-		}
-	</style>
 </head>
 
 <body>
@@ -71,7 +38,7 @@
 
 		<div class="container" style="height: calc(100% - 20px); display: flex; flex-direction: column; align-items: center; justify-content: center;">
 			<div id="chatResponsesContainer" style="display: flex; align-items: start; justify-content: center; height: 85%; width: 100%; overflow: auto;">
-				<div id="chatResponses" style="display: flex; flex-direction: column; height: calc(100% - 30px); width: 90%; margin-top: 30px;"></div>
+				<div id="chatResponses" style="display: flex; flex-direction: column; gap: 15px; height: calc(100% - 30px); width: 90%; margin-top: 30px;"></div>
 			</div>
 
 			<div class="chatFormContainer" style="height: 15%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">

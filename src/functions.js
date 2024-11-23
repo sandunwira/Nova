@@ -208,10 +208,17 @@ document.addEventListener('DOMContentLoaded', async function () {
 					scrolltoBottom();
 
 					fetchNews().then(newsItems => {
-						let newsText = "Here are the latest news headlines:<br><br>";
-						newsItems.forEach((item, index) => {
-							newsText += `${index + 1}. ${item.title}<br>${item.description}<br><a href="${item.link}" target="_blank">Read more</a><br><br>`;
+						let newsText = "Here are some of the latest global news:<br>";
+						newsItems.forEach((item) => {
+							newsText += `
+								<div style="display: flex; flex-direction: column; gap: 5px; margin-top: 20px;">
+									<h1>${item.title}</h1>
+									<p>${item.description}... <a href="${item.link}" target="_blank">read more</a></p>
+								</div>
+							`;
 						});
+
+						newsText += '<br><p style="font-size: 10px;">Powered by <a href="https://abcnews.go.com" target="_blank">ABC News</a></p>';
 						newsResponseDiv.innerHTML = 'Nova: ' + newsText;
 					}).catch(() => {
 						newsResponseDiv.remove();
@@ -231,7 +238,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 					scrolltoBottom();
 
 					getImageOfTheDay().then(({ imageTitle, imageUrl, imageCredits }) => {
-						botResponseDiv.innerHTML = `Nova: <strong>${imageTitle}</strong><br><img src="${imageUrl}" alt="${imageTitle}" style="max-width: 100%;"><br><small>Image Credits: ${imageCredits}</small>`;
+						botResponseDiv.innerHTML = `
+							Nova: Here's the image of the day:<br><br>
+							<h1>${imageTitle}</h1>
+							<img src="${imageUrl}" alt="${imageTitle}" style="margin: 10px 0px 5px 0px;">
+							<br><p style="font-size: 10px;">Image Credits: ${imageCredits}</p>
+						`;
 
 						scrolltoBottom();
 					}).catch(() => {
@@ -252,7 +264,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 					scrolltoBottom();
 
 					getQuoteOfTheDay().then(({ quote, author }) => {
-						botResponseDiv.innerHTML = `Nova: Quote of the day is:<br><br>${quote}<br>- ${author}`;
+						botResponseDiv.innerHTML = `
+							Nova: Quote of the day is:<br><br>
+							<h1>${quote}</h1>
+							<p style="margin-top: 5px;">- ${author}</p>
+						`;
 
 						scrolltoBottom();
 					}).catch(error => {
@@ -273,7 +289,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 					scrolltoBottom();
 
 					getRandomQuote().then(({ quote, author }) => {
-						botResponseDiv.innerHTML = `Nova: Here's a quote I found for you:<br><br>${quote}<br>- ${author}`;
+						botResponseDiv.innerHTML = `
+							Nova: Here's a quote I found for you:<br><br>
+							<h1>${quote}</h1>
+							<p style="margin-top: 5px;">- ${author}</p>
+						`;
 
 						scrolltoBottom();
 					}).catch(error => {
@@ -295,10 +315,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 					getOnThisDayEvents().then(events => {
 						const { day, month } = getDate();
-						let eventsText = `Here are some interesting events that happened on ${month} ${day} in history:<br><br>`;
-						events.forEach((event, index) => {
-							eventsText += `${index + 1}. ${event}<br>`;
+
+						let eventsText = `Here are some interesting events that happened on ${month} ${day} in history:<br>`;
+						events.forEach((event) => {
+							eventsText += `<p style="margin-top: 20px;">${event}</p>`;
 						});
+
 						botResponseDiv.innerHTML = `Nova: ${eventsText}`;
 					}).catch(() => {
 						botResponseDiv.remove();
@@ -318,7 +340,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 					scrolltoBottom();
 
 					getRandomMeal().then(mealDetails => {
-						botResponseDiv.innerHTML = `Nova: ${mealDetails}`;
+						botResponseDiv.innerHTML = `Nova:<br><br> ${mealDetails}`;
 
 						scrolltoBottom();
 					}).catch(error => {
@@ -593,10 +615,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 					scrolltoBottom();
 				} else if (userMessage.toLowerCase().startsWith("find")) {
 					const searchTerms = userMessage.replace("find ", "");
-					const botResponseDiv = document.createElement('div');
-					botResponseDiv.className = 'bot-response';
-					botResponseDiv.textContent = `Nova: Searching for "${searchTerms}"...`;
-					chatResponses.appendChild(botResponseDiv);
 					searchFile(searchTerms);
 
 					scrolltoBottom();
@@ -1430,21 +1448,25 @@ async function getRandomMeal() {
 			const ingredient = meal['strIngredient' + i];
 			const measure = meal['strMeasure' + i];
 			if (ingredient) {
-				mealIngredients.push(`* ${ingredient}: ${measure}`);
+				mealIngredients.push(`- ${ingredient}: ${measure}`);
 			}
 		}
 		const mealImage = meal.strMealThumb;
 		const mealYoutube = meal.strYoutube;
 		const mealDetails = `
-			${mealName} (${mealCategory}, ${mealArea})<br>
-			<p>Ingredients:<br>
-				${mealIngredients.join('<br>')}
-			</p>
-			<p>Instructions:<br>
-				${mealInstructions}
-			</p>
-			<img src="${mealImage}" alt="${mealName}" style="height: 150px;">
-			<p>YouTube: <a href="${mealYoutube}" target="_blank">${mealYoutube}</a></p>
+			<h1>${mealName} (${mealCategory}, ${mealArea})</h1><br>
+			<span style="display: flex; flex-direction: row; gap: 10px; width: 100%;">
+				<span style="width: 50%;">
+					<h2>Ingredients:</h2>
+					${mealIngredients.join('<br>')}<br><br>
+				</span>
+				<span style="width: 50%;">
+					<img src="${mealImage}" style="max-height: 150px; width: 100%; object-fit: cover;" alt="${mealName}"><br>
+				</span>
+			</span>
+			<h2>Instructions:</h2>
+			<p>${mealInstructions}</p><br>
+			<p style="font-size: 10px; margin-top: 5px;"><a href="${mealYoutube}" target="_blank">YouTube</a></p>
 		`;
 		return mealDetails;
 	} catch (error) {
@@ -2216,7 +2238,12 @@ async function searchFile(searchTerms) {
 
 		const botResponseDiv = document.createElement('div');
 		botResponseDiv.className = 'bot-response';
-		botResponseDiv.textContent = `Searching for files matching ${searchDisplay} across all drives... This may take a while.`;
+		botResponseDiv.innerHTML = `
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Searching for files matching ${searchDisplay} across all drives... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span><br>
+			This may take a while. Feel free to do something else in the meantime. I'll notify you when the search is complete.
+		`;
 		chatResponses.appendChild(botResponseDiv);
 
 		scrolltoBottom();
