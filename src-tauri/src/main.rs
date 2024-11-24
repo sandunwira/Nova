@@ -246,16 +246,15 @@ fn open_application(app_name: String) -> Result<Value, String> {
 }
 
 
+use webbrowser;
 
 #[tauri::command]
 fn open_url(url: String) -> Result<(), String> {
-    // Use the `start` command to open the URL
-    Command::new("cmd")
-        .args(&["/C", "start", "", &url])
-        .spawn()
-        .map_err(|e| format!("Failed to open URL: {}", e))?;
-
-    Ok(())
+    if webbrowser::open(&url).is_ok() {
+        Ok(())
+    } else {
+        Err("Failed to open URL".into())
+    }
 }
 
 
@@ -364,8 +363,6 @@ fn get_system_info() -> Result<serde_json::Value, String> {
 
     let total_memory = sys.total_memory();
     let used_memory = sys.used_memory();
-    let total_swap = sys.total_swap();
-    let used_swap = sys.used_swap();
 
     let long_os_version = System::long_os_version().unwrap_or("Unknown".to_string());
     let kernel_version = System::kernel_version().unwrap_or("Unknown".to_string());
@@ -417,8 +414,6 @@ fn get_system_info() -> Result<serde_json::Value, String> {
     Ok(json!({
         "total_memory": total_memory,
         "used_memory": used_memory,
-        "total_swap": total_swap,
-        "used_swap": used_swap,
         "long_os_version": long_os_version,
         "kernel_version": kernel_version,
         "os_version": os_version,
@@ -513,18 +508,14 @@ async fn search_file(search_terms: String) -> Result<Vec<SearchResult>, String> 
         }
     }
 
-    if results.is_empty() {
-        Err(format!("No files found matching: {}", search_terms))
-    } else {
-        Ok(results)
-    }
+    Ok(results)
 }
 
 #[tauri::command]
 fn open_folder(filePath: String) -> Result<(), String> {
     let path = Path::new(&filePath);
 
-    let command = Command::new("explorer").arg(&path).spawn();
+    let command = Command::new("explorer").arg("/select,").arg(&path).spawn();
 
     command.map_err(|e| format!("Failed to open folder: {}", e))?;
     Ok(())

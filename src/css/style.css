@@ -83,8 +83,8 @@ input[type="text"], input[type="submit"], input[type="email"], input[type="passw
 	border: none;
 	outline: none;
 }
-input[type="text"] {
-	width: 350px;
+input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="tel"], input[type="search"], input[type="url"], textarea {
+	min-width: 350px;
 }
 input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="number"]:focus, input[type="tel"]:focus, input[type="search"]:focus, input[type="url"]:focus, textarea:focus {
 	background: var(--darkGray);
@@ -107,7 +107,24 @@ button:hover {
 	background: var(--darkGray);
 }
 
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 10px;
+}
 
+table th, table td {
+	padding: 4px 8px;
+	border: 1px solid var(--gray);
+}
+
+
+#chatFormSubmitBtn {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 #chatForm:focus-within #chatFormSubmitBtn {
 	background: var(--darkGray);
 }
