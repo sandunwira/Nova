@@ -29,6 +29,19 @@ const chatResponses = document.getElementById('chatResponses');
 document.addEventListener('DOMContentLoaded', async function () {
 	chatMessage.focus();
 
+	const assistant = new Assistant();
+	await assistant.initialize();
+
+	const history = assistant.getConversationHistory();
+	console.log(history);
+
+	chatResponses.innerHTML = assistant.getConversationHistory().map((item) => {
+		return `
+			<div class="user-response">${item.query}</div>
+			<div class="bot-response">Nova: ${item.response}</div>
+		`;
+	}).join('');
+
 	// Time-based greetings
 	const date = new Date();
 	const hours = date.getHours();
@@ -60,9 +73,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
 	try {
-		const assistant = new Assistant();
-		await assistant.initialize();
-
 		chatForm.addEventListener('submit', async function (event) {
 			event.preventDefault();
 

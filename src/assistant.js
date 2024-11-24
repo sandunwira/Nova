@@ -2,6 +2,7 @@ class Assistant {
 	constructor() {
 		this.requestsData = [];
 		this.responsesData = [];
+		this.conversationHistory = [];
 
 		// Dynamic Variables
 		this.customData = {
@@ -42,6 +43,10 @@ class Assistant {
 			}
 
 			return matrix[b.length][a.length];
+		},
+
+		getTimestamp() {
+			return new Date().toISOString();
 		}
 	};
 
@@ -49,6 +54,13 @@ class Assistant {
 		try {
 			this.requestsData = await Assistant.Utility.fetchData('data/requests.json');
 			this.responsesData = await Assistant.Utility.fetchData('data/responses.json');
+
+			if (typeof localStorage !== 'undefined') {
+				const savedHistory = localStorage.getItem('conversationHistory');
+				if (savedHistory) {
+					this.conversationHistory = JSON.parse(savedHistory);
+				}
+			}
 		} catch (error) {
 			console.error('Error initializing Assistant:', error);
 			throw error;
@@ -79,6 +91,7 @@ class Assistant {
 		}
 
 		console.log(`Matched Intent: ${intent}`);
+		this.lastMatchedIntent = intent;
 
 		if (intent) {
 			for (const response of this.responsesData) {
@@ -87,21 +100,51 @@ class Assistant {
 				}
 			}
 		}
-
 		return "Sorry, I couldn't understand the request.";
+	}
+
+	// Add methods for conversation history management
+	saveConversation(query, response) {
+		const conversation = {
+			timestamp: Assistant.Utility.getTimestamp(),
+			query,
+			response,
+			intent: this.lastMatchedIntent || 'unknown'
+		};
+
+		this.conversationHistory.push(conversation);
+
+		// Save to localStorage if available
+		if (typeof localStorage !== 'undefined') {
+			localStorage.setItem('conversationHistory', JSON.stringify(this.conversationHistory));
+		}
+	}
+
+	getConversationHistory() {
+		return this.conversationHistory;
+	}
+
+	clearConversationHistory() {
+		this.conversationHistory = [];
+		if (typeof localStorage !== 'undefined') {
+			localStorage.removeItem('conversationHistory');
+		}
 	}
 
 	async processQuery(query) {
 		try {
 			console.log("Query:", query);
-
 			let response;
 			response = this.findResponse(query);
-
 			// Replace dynamic variables in all responses
 			response = this.replaceDynamicVariables(response);
-			console.log("Response:", response);
 
+			// Save the conversation
+			this.saveConversation(query, response);
+
+			console.log(this.getConversationHistory());
+
+			console.log("Response:", response);
 			return response;
 		} catch (error) {
 			console.error('Error processing query:', error);
