@@ -32,44 +32,34 @@ document.addEventListener('DOMContentLoaded', async function () {
 	const assistant = new Assistant();
 	await assistant.initialize();
 
-	const history = assistant.getConversationHistory();
-	console.log(history);
-
-	chatResponses.innerHTML = assistant.getConversationHistory().map((item) => {
-		return `
-			<div class="user-response">${item.query}</div>
-			<div class="bot-response">Nova: ${item.response}</div>
-		`;
-	}).join('');
-
 	// Time-based greetings
-	const date = new Date();
-	const hours = date.getHours();
-	let greeting = "Hello";
-	if (hours >= 0 && hours < 12) {
-		greeting = "Good Morning! 🌤️";
-	} else if (hours >= 12 && hours < 18) {
-		greeting = "Good Afternoon! 🌞";
-	} else {
-		greeting = "Good Evening! 🌙";
-	}
+	// const date = new Date();
+	// const hours = date.getHours();
+	// let greeting = "Hello";
+	// if (hours >= 0 && hours < 12) {
+	// 	greeting = "Good Morning! 🌤️";
+	// } else if (hours >= 12 && hours < 18) {
+	// 	greeting = "Good Afternoon! 🌞";
+	// } else {
+	// 	greeting = "Good Evening! 🌙";
+	// }
 
-	new Notification(`${greeting}`, {
-		body: 'Ask me anything and I will try my best to help you out ;)',
-		sound: 'Default'
-	});
+	// new Notification(`${greeting}`, {
+	// 	body: 'Ask me anything and I will try my best to help you out ;)',
+	// 	sound: 'Default'
+	// });
 
 	// weather notification
-	setTimeout(() => {
-		getWeather().then(({ location, weatherComment, temperature }) => {
-			new Notification(`${temperature} in ${location}`, {
-				body: weatherComment,
-				sound: 'Default'
-			});
-		}).catch(error => {
-			console.error('Error in getting weather:', error);
-		});
-	}, 60000);
+	// setTimeout(() => {
+	// 	getWeather().then(({ location, weatherComment, temperature }) => {
+	// 		new Notification(`${temperature} in ${location}`, {
+	// 			body: weatherComment,
+	// 			sound: 'Default'
+	// 		});
+	// 	}).catch(error => {
+	// 		console.error('Error in getting weather:', error);
+	// 	});
+	// }, 60000);
 
 
 	try {
