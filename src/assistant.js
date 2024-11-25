@@ -3,6 +3,8 @@ class Assistant {
 		this.requestsData = [];
 		this.responsesData = [];
 		this.conversationHistory = [];
+		this.lastMatchedIntent = null;
+		this.lastMatchedResponse = null;
 
 		// Dynamic Variables
 		this.customData = {
@@ -16,6 +18,58 @@ class Assistant {
 		async fetchData(url) {
 			const response = await fetch(url);
 			return response.json();
+		},
+
+		// New method to extract keywords from a query
+		extractKeywords(query) {
+			// Remove punctuation and convert to lowercase
+			const cleanQuery = query.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').toLowerCase();
+
+			// Split into words and remove common stop words
+			const stopWords = new Set([
+				'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from',
+				'has', 'he', 'in', 'is', 'it', 'its', 'of', 'on', 'that', 'the',
+				'to', 'was', 'were', 'will', 'with'
+			]);
+
+			return cleanQuery.split(/\s+/)
+				.filter(word => word.length > 1 && !stopWords.has(word));
+		},
+
+		// Enhanced keyword matching with more sophisticated scoring
+		calculateIntentScore(query, requestExamples) {
+			// Remove punctuation and extra whitespace
+			const cleanQuery = query.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').trim();
+
+			// Exact match check
+			const exactMatches = requestExamples.filter(example =>
+				example.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').trim() === cleanQuery
+			);
+			if (exactMatches.length > 0) return 1.0;
+
+			// Partial match and word-based scoring
+			const queryWords = cleanQuery.split(/\s+/);
+			const scores = requestExamples.map(example => {
+				const cleanExample = example.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').trim();
+				const exampleWords = cleanExample.split(/\s+/);
+
+				// Calculate word overlap
+				const matchedWords = queryWords.filter(qw =>
+					exampleWords.some(ew => ew === qw || ew.includes(qw) || qw.includes(ew))
+				);
+
+				// Calculate scores based on word overlap and length
+				const wordOverlapScore = matchedWords.length / Math.max(queryWords.length, exampleWords.length);
+
+				// Levenshtein distance as a fallback
+				const distanceScore = 1 - (this.levenshtein(cleanQuery, cleanExample) / Math.max(cleanQuery.length, cleanExample.length));
+
+				// Combine scores with more weight to word overlap
+				return (wordOverlapScore * 0.7) + (distanceScore * 0.3);
+			});
+
+			// Return the highest score
+			return Math.max(...scores);
 		},
 
 		levenshtein(a, b) {
@@ -47,6 +101,13 @@ class Assistant {
 
 		getTimestamp() {
 			return new Date().toISOString();
+		},
+
+		// Check if query is a repeat request
+		isRepeatRequest(query) {
+			const repeatKeywords = ['repeat', 'again', 'another', 'once more', 'one more', 'more'];
+			const cleanQuery = query.toLowerCase().trim();
+			return repeatKeywords.some(keyword => cleanQuery.includes(keyword));
 		}
 	};
 
@@ -75,32 +136,55 @@ class Assistant {
 	}
 
 	findResponse(requestKeyword) {
-		let intent = null;
-		let minDistance = Infinity;
-		let closestRequest = null;
+		// Check for repeat request first
+		if (Assistant.Utility.isRepeatRequest(requestKeyword) && this.lastMatchedIntent) {
+			console.log(`Repeating last matched intent: ${this.lastMatchedIntent}`);
+			return this.getResponseForIntent(this.lastMatchedIntent);
+		}
 
+		let bestMatch = null;
+		let highestScore = 0;
+
+		// Iterate through all requests to find the best intent match
 		for (const request of this.requestsData) {
-			for (const req of request.requests) {
-				const distance = Assistant.Utility.levenshtein(req.toLowerCase(), requestKeyword.toLowerCase());
-				if (distance < minDistance) {
-					minDistance = distance;
-					closestRequest = req;
-					intent = request.intent;
-				}
+			// Calculate intent score for this request
+			const intentScore = Assistant.Utility.calculateIntentScore(
+				requestKeyword,
+				request.requests
+			);
+
+			// Update best match if this intent has a higher score
+			if (intentScore > highestScore) {
+				highestScore = intentScore;
+				bestMatch = request;
 			}
 		}
 
-		console.log(`Matched Intent: ${intent}`);
-		this.lastMatchedIntent = intent;
+		// Log matching details
+		console.log(`Matched Intent: ${bestMatch?.intent || 'None'}, Score: ${highestScore}`);
 
-		if (intent) {
-			for (const response of this.responsesData) {
-				if (response.intent === intent) {
-					return response.responses[Math.floor(Math.random() * response.responses.length)];
-				}
-			}
+		// Set last matched intent and response
+		this.lastMatchedIntent = bestMatch?.intent;
+
+		// Return response or default message
+		if (bestMatch && highestScore > 0.5) {
+			const response = this.getResponseForIntent(bestMatch.intent);
+			this.lastMatchedResponse = response;
+			return response;
 		}
+
 		return "Sorry, I couldn't understand the request.";
+	}
+
+	getResponseForIntent(intent) {
+		// Find and return a random response for the matched intent
+		const matchedResponses = this.responsesData.find(response => response.intent === intent);
+
+		if (matchedResponses && matchedResponses.responses && matchedResponses.responses.length > 0) {
+			return matchedResponses.responses[Math.floor(Math.random() * matchedResponses.responses.length)];
+		}
+
+		return "Sorry, I couldn't find a response for this intent.";
 	}
 
 	// Add methods for conversation history management
