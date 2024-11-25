@@ -26,7 +26,53 @@ const chatFormSubmitBtn = document.getElementById('chatFormSubmitBtn');
 const chatResponses = document.getElementById('chatResponses');
 
 
+// Add the showWelcomeMessage function
+function showWelcomeMessage() {
+    if (chatResponses.children.length === 0) {
+        const welcomeDiv = document.createElement('div');
+        welcomeDiv.id = 'welcome-message';
+		welcomeDiv.style = 'height: 100%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; user-select: none;';
+        welcomeDiv.innerHTML = `
+			<span style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+				<p>This is</p>
+				<h1 style="font-size: 55px;">NOVA</h1>
+			</span>
+
+			<span style="width: 60%; display: flex; flex-direction: column; align-items: center; gap: 35px;">
+				<p>I can help you with tasks such as:</p>
+
+				<div style="width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+					<div style="background: var(--blackGray); border: 0.5px solid var(--darkGray); padding: 12px; display: flex; flex-direction: row; align-items: center; justify-content: start; gap: 15px;">
+						<svg  xmlns="http://www.w3.org/2000/svg"  width="14"  height="14"  viewBox="0 0 24 24"  fill="#2878C1"  class="icon icon-tabler icons-tabler-filled icon-tabler-cloud"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.04 4.305c2.195 -.667 4.615 -.224 6.36 1.176c1.386 1.108 2.188 2.686 2.252 4.34l.003 .212l.091 .003c2.3 .107 4.143 1.961 4.25 4.27l.004 .211c0 2.407 -1.885 4.372 -4.255 4.482l-.21 .005h-11.878l-.222 -.008c-2.94 -.11 -5.317 -2.399 -5.43 -5.263l-.005 -.216c0 -2.747 2.08 -5.01 4.784 -5.417l.114 -.016l.07 -.181c.663 -1.62 2.056 -2.906 3.829 -3.518l.244 -.08z" /></svg>
+						<p style="font-size: 12px; font-weight: 300;">Check Weather</p>
+					</div>
+
+					<div style="background: var(--blackGray); border: 0.5px solid var(--darkGray); padding: 12px; display: flex; flex-direction: row; align-items: center; justify-content: start; gap: 15px;">
+						<svg  xmlns="http://www.w3.org/2000/svg"  width="14"  height="14"  viewBox="0 0 24 24"  fill="#2878C1"  class="icon icon-tabler icons-tabler-filled icon-tabler-hourglass"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 2a2 2 0 0 1 1.995 1.85l.005 .15v2a6.996 6.996 0 0 1 -3.393 6a6.994 6.994 0 0 1 3.388 5.728l.005 .272v2a2 2 0 0 1 -1.85 1.995l-.15 .005h-10a2 2 0 0 1 -1.995 -1.85l-.005 -.15v-2a6.996 6.996 0 0 1 3.393 -6a6.994 6.994 0 0 1 -3.388 -5.728l-.005 -.272v-2a2 2 0 0 1 1.85 -1.995l.15 -.005h10z" /></svg>
+						<p style="font-size: 12px; font-weight: 300;">Set a Timer</p>
+					</div>
+
+					<div style="background: var(--blackGray); border: 0.5px solid var(--darkGray); padding: 12px; display: flex; flex-direction: row; align-items: center; justify-content: start; gap: 15px;">
+						<svg  xmlns="http://www.w3.org/2000/svg"  width="14"  height="14"  viewBox="0 0 24 24"  fill="#2878C1"  class="icon icon-tabler icons-tabler-filled icon-tabler-zoom"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3.072a8 8 0 0 1 2.617 11.424l4.944 4.943a1.5 1.5 0 0 1 -2.008 2.225l-.114 -.103l-4.943 -4.944a8 8 0 0 1 -12.49 -6.332l-.006 -.285l.005 -.285a8 8 0 0 1 11.995 -6.643z" /></svg>
+						<p style="font-size: 12px; font-weight: 300;">Search Web / Files</p>
+					</div>
+
+					<div style="background: var(--blackGray); border: 0.5px solid var(--darkGray); padding: 12px; display: flex; flex-direction: row; align-items: center; justify-content: start; gap: 15px;">
+						<svg  xmlns="http://www.w3.org/2000/svg"  width="14"  height="14"  viewBox="0 0 24 24"  fill="#2878C1"  class="icon icon-tabler icons-tabler-filled icon-tabler-transform"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 14a4 4 0 1 1 -3.995 4.2l-.005 -.2l.005 -.2a4 4 0 0 1 3.995 -3.8z" /><path d="M16.707 2.293a1 1 0 0 1 .083 1.32l-.083 .094l-1.293 1.293h3.586a3 3 0 0 1 2.995 2.824l.005 .176v3a1 1 0 0 1 -1.993 .117l-.007 -.117v-3a1 1 0 0 0 -.883 -.993l-.117 -.007h-3.585l1.292 1.293a1 1 0 0 1 -1.32 1.497l-.094 -.083l-3 -3a.98 .98 0 0 1 -.28 -.872l.036 -.146l.04 -.104c.058 -.126 .14 -.24 .245 -.334l2.959 -2.958a1 1 0 0 1 1.414 0z" /><path d="M3 12a1 1 0 0 1 .993 .883l.007 .117v3a1 1 0 0 0 .883 .993l.117 .007h3.585l-1.292 -1.293a1 1 0 0 1 -.083 -1.32l.083 -.094a1 1 0 0 1 1.32 -.083l.094 .083l3 3a.98 .98 0 0 1 .28 .872l-.036 .146l-.04 .104a1.02 1.02 0 0 1 -.245 .334l-2.959 2.958a1 1 0 0 1 -1.497 -1.32l.083 -.094l1.291 -1.293h-3.584a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-3a1 1 0 0 1 1 -1z" /><path d="M6 2a4 4 0 1 1 -3.995 4.2l-.005 -.2l.005 -.2a4 4 0 0 1 3.995 -3.8z" /></svg>
+						<p style="font-size: 12px; font-weight: 300;">Translate Text</p>
+					</div>
+				</div>
+
+				<p>and many more</p>
+			</span>
+        `;
+        chatResponses.appendChild(welcomeDiv);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async function () {
+	showWelcomeMessage();
+
 	chatMessage.focus();
 
 	const assistant = new Assistant();
@@ -64,6 +110,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 	try {
 		chatForm.addEventListener('submit', async function (event) {
+
+			const welcomeMessage = document.getElementById('welcome-message');
+			if (welcomeMessage) {
+				welcomeMessage.remove();
+			}
+
 			event.preventDefault();
 
 			const userResponse = document.createElement('div');
