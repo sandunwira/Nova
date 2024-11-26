@@ -224,9 +224,9 @@ class Assistant {
 			response = this.replaceDynamicVariables(response);
 
 			// Save the conversation
-			this.saveConversation(query, response);
+			// this.saveConversation(query, response);
 
-			console.log(this.getConversationHistory());
+			// console.log(this.getConversationHistory());
 
 			console.log("Response:", response);
 			return response;
