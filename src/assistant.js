@@ -215,6 +215,65 @@ class Assistant {
 		}
 	}
 
+	async getIntent(query) {
+		if (!query || typeof query !== 'string') {
+			return {
+				intent: null,
+				confidence: 0,
+				error: 'Invalid query'
+			};
+		}
+
+		try {
+			// Check for repeat request first
+			if (Assistant.Utility.isRepeatRequest(query) && this.lastMatchedIntent) {
+				return {
+					intent: this.lastMatchedIntent,
+					confidence: 1.0,
+					isRepeat: true
+				};
+			}
+
+			let bestMatch = null;
+			let highestScore = 0;
+
+			// Iterate through all requests to find the best intent match
+			for (const request of this.requestsData) {
+				const intentScore = Assistant.Utility.calculateIntentScore(
+					query,
+					request.requests
+				);
+
+				// Update best match if this intent has a higher score
+				if (intentScore > highestScore) {
+					highestScore = intentScore;
+					bestMatch = request;
+				}
+			}
+
+			// Only return intent if confidence is high enough
+			if (bestMatch && highestScore > 0.5) {
+				this.lastMatchedIntent = bestMatch.intent;
+				return {
+					intent: bestMatch.intent,
+					confidence: highestScore
+				};
+			}
+
+			return {
+				intent: null,
+				confidence: highestScore
+			};
+		} catch (error) {
+			console.error('Error getting intent:', error);
+			return {
+				intent: null,
+				confidence: 0,
+				error: error.message
+			};
+		}
+	}
+
 	async processQuery(query) {
 		try {
 			console.log("Query:", query);

@@ -1370,9 +1370,415 @@
 		]
 	},
 	{
-		"intent": "application",
+		"intent": "random_movie",
 		"requests": [
-			"open"
+			"random movie",
+			"recommend me a movie",
+			"recommend me a random movie",
+			"recommend me a movie to watch",
+			"recommend me a random movie to watch"
+		]
+	},
+	{
+		"intent": "get_ip",
+		"requests": [
+			"ip address",
+			"what is my ip address",
+			"what is my public ip address",
+			"what is my private ip address",
+			"what is my local ip address",
+			"what is my public ip"
+		]
+	},
+	{
+		"intent": "get_weather",
+		"requests": [
+			"weather",
+			"current weather",
+			"what is the weather like",
+			"what is the temperature",
+			"what is the current weather",
+			"what is the weather outside",
+			"what is the weather forecast",
+			"what is the weather today"
+		]
+	},
+	{
+		"intent": "get_time",
+		"requests": [
+			"time",
+			"current time",
+			"what is the time",
+			"what is the current time",
+			"what is the time right now",
+			"what is the current time right now"
+		]
+	},
+	{
+		"intent": "get_date",
+		"requests": [
+			"date",
+			"current date",
+			"what is the date",
+			"what is the current date",
+			"what is the date today",
+			"what is the current date today"
+		]
+	},
+	{
+		"intent": "get_news",
+		"requests": [
+			"news",
+			"current news",
+			"what is the news",
+			"what is the current news",
+			"what is the news today",
+			"what is the current news today",
+			"what are the headlines",
+			"headlines"
+		]
+	},
+	{
+		"intent": "get_iotd",
+		"requests": [
+			"iotd",
+			"image of the day",
+			"what is the image of the day",
+			"what is the image of the day today",
+			"what is the image of the day right now"
+		]
+	},
+	{
+		"intent": "get_qotd",
+		"requests": [
+			"qotd",
+			"quote of the day",
+			"what is the quote of the day",
+			"what is the quote of the day today",
+			"what is the quote of the day right now"
+		]
+	},
+	{
+		"intent": "get_quote",
+		"requests": [
+			"quote",
+			"random quote",
+			"give me a quote",
+			"give me a random quote"
+		]
+	},
+	{
+		"intent": "get_otd",
+		"requests": [
+			"otd",
+			"on this day",
+			"what happened on today",
+			"what happened today in history",
+			"what happened today"
+		]
+	},
+	{
+		"intent": "get_meal",
+		"requests": [
+			"meal",
+			"random meal",
+			"give me a meal",
+			"give me a random meal",
+			"give me a random recipe",
+			"give me a recipe",
+			"tell me a recipe to cook",
+			"recipe"
+		]
+	},
+	{
+		"intent": "resume_playback",
+		"requests": [
+			"resume",
+			"resume playback",
+			"resume media",
+			"continue",
+			"continue playback",
+			"continue media",
+			"resume media playback",
+			"continue media playback"
+		]
+	},
+	{
+		"intent": "pause_playback",
+		"requests": [
+			"pause",
+			"pause playback",
+			"pause media",
+			"pause media playback",
+			"stop playback",
+			"stop media",
+			"stop media playback"
+		]
+	},
+	{
+		"intent": "next_track",
+		"requests": [
+			"next",
+			"skip",
+			"next track",
+			"skip track",
+			"next song",
+			"skip song",
+			"next song",
+			"skip song",
+			"next media",
+			"skip media"
+		]
+	},
+	{
+		"intent": "previous_track",
+		"requests": [
+			"previous",
+			"rewind",
+			"previous track",
+			"rewind track",
+			"previous song",
+			"rewind song",
+			"previous media",
+			"rewind media"
+		]
+	},
+	{
+		"intent": "volume_up",
+		"requests": [
+			"volume up",
+			"raise volume",
+			"increase volume",
+			"raise the volume",
+			"increase the volume"
+		]
+	},
+	{
+		"intent": "volume_down",
+		"requests": [
+			"volume down",
+			"lower volume",
+			"decrease volume",
+			"lower the volume",
+			"decrease the volume"
+		]
+	},
+	{
+		"intent": "mute_volume",
+		"requests": [
+			"mute",
+			"mute volume",
+			"mute the volume"
+		]
+	},
+	{
+		"intent": "unmute_volume",
+		"requests": [
+			"unmute",
+			"unmute volume",
+			"unmute the volume"
+		]
+	},
+	{
+		"intent": "turn_on_wifi",
+		"requests": [
+			"turn on wifi",
+			"turn on the wifi",
+			"connect to wifi",
+			"connect to the wifi",
+			"enable wifi",
+			"enable the wifi",
+			"switch on wifi",
+			"switch on the wifi",
+			"connect to wifi",
+			"connect to the wifi"
+		]
+	},
+	{
+		"intent": "turn_off_wifi",
+		"requests": [
+			"turn off wifi",
+			"turn off the wifi",
+			"disconnect from wifi",
+			"disconnect from the wifi",
+			"disable wifi",
+			"disable the wifi",
+			"switch off wifi",
+			"switch off the wifi",
+			"disconnect from wifi",
+			"disconnect from the wifi"
+		]
+	},
+	{
+		"intent": "shutdown_pc",
+		"requests": [
+			"shutdown",
+			"shutdown pc",
+			"shutdown the pc",
+			"shutdown device",
+			"turn off the pc",
+			"turn off the device",
+			"turn off",
+			"turn off the computer",
+			"turn off the device",
+			"power off",
+			"power off the pc",
+			"power off the device",
+			"power off the computer",
+			"switch off",
+			"switch off the pc",
+			"switch off the device",
+			"switch off the computer"
+		]
+	},
+	{
+		"intent": "restart_pc",
+		"requests": [
+			"restart",
+			"restart pc",
+			"restart the pc",
+			"restart device",
+			"restart the computer",
+			"restart the device"
+		]
+	},
+	{
+		"intent": "lock_pc",
+		"requests": [
+			"lock",
+			"lock pc",
+			"lock the pc",
+			"lock device",
+			"lock the computer",
+			"lock the device"
+		]
+	},
+	{
+		"intent": "sleep_pc",
+		"requests": [
+			"sleep",
+			"sleep pc",
+			"sleep the pc",
+			"sleep device",
+			"sleep the computer",
+			"sleep the device"
+		]
+	},
+	{
+		"intent": "get_system_info",
+		"requests": [
+			"system info",
+			"system information",
+			"about my pc",
+			"about my computer",
+			"about my pc specs",
+			"about my computer specs",
+			"what is the system",
+			"what is the system specs",
+			"what is the system info",
+			"what is the system information",
+			"what are my pc specs",
+			"what are my pc info",
+			"what are my pc information",
+			"what are my computer specs",
+			"what is my pc specs",
+			"what is my computer specs",
+			"tell me about my pc",
+			"tell me about my computer",
+			"tell me about my pc specs",
+			"tell me about my computer specs",
+			"give me info about my pc",
+			"give me information about my computer",
+			"give me info about my pc specs",
+			"give me information about my computer specs",
+			"what is my pc",
+			"my pc info",
+			"my computer info",
+			"my pc information",
+			"my computer information"
+		]
+	},
+	{
+		"intent": "set_light_mode",
+		"requests": [
+			"light mode",
+			"set light mode",
+			"set the light mode",
+			"set the light mode",
+			"set light mode",
+			"set the light mode",
+			"change to light mode",
+			"change to the light mode",
+			"turn on light mode",
+			"turn on the light mode",
+			"switch to light mode",
+			"switch to the light mode",
+			"switch on light mode",
+			"switch on the light mode"
+		]
+	},
+	{
+		"intent": "set_dark_mode",
+		"requests": [
+			"dark mode",
+			"set dark mode",
+			"set the dark mode",
+			"set the dark mode",
+			"set dark mode",
+			"set the dark mode",
+			"change to dark mode",
+			"change to the dark mode",
+			"turn on dark mode",
+			"turn on the dark mode",
+			"switch to dark mode",
+			"switch to the dark mode",
+			"switch on dark mode",
+			"switch on the dark mode"
+		]
+	},
+	{
+		"intent": "take_screenshot",
+		"requests": [
+			"screenshot",
+			"take screenshot",
+			"take a screenshot",
+			"capture screenshot",
+			"capture a screenshot",
+			"save screenshot",
+			"save a screenshot"
+		]
+	},
+	{
+		"intent": "emergency_hotlines",
+		"requests": [
+			"im in danger",
+			"im in a crisis",
+			"i want immediate help",
+			"i want emergency help",
+			"there is an emergency",
+			"emergency help",
+			"emergency hotlines",
+			"crisis hotlines",
+			"crisis helplines",
+			"emergency numbers",
+			"crisis numbers",
+			"hotlines for emergencies",
+			"hotlines for crises",
+			"hotlines for emergencies",
+			"hotlines for crises"
+		]
+	},
+	{
+		"intent": "send_email",
+		"requests": [
+			"send mail",
+			"send a mail",
+			"send email",
+			"send an email",
+			"i want to send mail",
+			"i want to send a mail",
+			"i want to send email",
+			"i want to send an email"
 		]
 	}
 ]
