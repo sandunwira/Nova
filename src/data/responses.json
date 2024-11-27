@@ -1320,13 +1320,5 @@
 			"It is impossible for most people to lick their own elbow.",
 			"The 'sixth sick sheik's sixth sheep's sick' is believed to be the toughest tongue twister in the English language."
 		]
-	},
-	{
-		"intent": "application",
-		"responses": [
-			"Opening",
-			"Starting",
-			"Launching"
-		]
 	}
 ]
