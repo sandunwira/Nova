@@ -5,6 +5,8 @@ use tauri::command;
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu};
 use tauri::{Manager, WindowEvent};
 
+use window_shadows::set_shadow;
+
 use std::env;
 use std::fs;
 use std::path::Path;
@@ -88,6 +90,9 @@ fn main() {
         .setup(|app| {
             let main_window = app.get_window("main").unwrap();
             let main_window_clone = main_window.clone();
+
+            set_shadow(&main_window, true).unwrap();
+
             // Listen for the close event on the main window
             main_window.on_window_event(move |event| {
                 if let WindowEvent::CloseRequested { api, .. } = event {
