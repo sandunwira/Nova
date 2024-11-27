@@ -892,6 +892,15 @@
 		]
 	},
 	{
+		"intent": "suicide",
+		"responses": [
+			"I'm sorry to hear that you're feeling suicidal [name]. It's important to seek professional help. Would you like to talk about this further?",
+			"I understand that you're feeling suicidal [name]. It's important to seek professional help. Would you like to talk about this further?",
+			"I know you're feeling suicidal [name]. It's important to seek professional help. Would you like to talk about this further?",
+			"I'm sorry you're feeling suicidal [name]. It's important to seek professional help. Would you like to talk about this further?"
+		]
+	},
+	{
 		"intent": "joke",
 		"responses": [
 			"What do you call a person who is outside a door and has no arms nor legs? Matt",
