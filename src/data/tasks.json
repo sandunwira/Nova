@@ -29,7 +29,7 @@
     },
     {
         "icon": "<svg  xmlns=\"http://www.w3.org/2000/svg\"  width=\"14\"  height=\"14\"  viewBox=\"0 0 24 24\"  fill=\"none\"  stroke=\"var(--accent2)\"  stroke-width=\"2\"  stroke-linecap=\"round\"  stroke-linejoin=\"round\"  class=\"icon icon-tabler icons-tabler-outline icon-tabler-link\"><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M9 15l6 -6\" /><path d=\"M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464\" /><path d=\"M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463\" /></svg>",
-        "text": "Visit Webistes"
+        "text": "Visit Websites"
     },
     {
         "icon": "<svg  xmlns=\"http://www.w3.org/2000/svg\"  width=\"14\"  height=\"14\"  viewBox=\"0 0 24 24\"  fill=\"var(--accent2)\"  class=\"icon icon-tabler icons-tabler-filled icon-tabler-device-tv\"><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M8.707 2.293l3.293 3.292l3.293 -3.292a1 1 0 0 1 1.32 -.083l.094 .083a1 1 0 0 1 0 1.414l-2.293 2.293h4.586a3 3 0 0 1 3 3v9a3 3 0 0 1 -3 3h-14a3 3 0 0 1 -3 -3v-9a3 3 0 0 1 3 -3h4.585l-2.292 -2.293a1 1 0 0 1 1.414 -1.414\" /></svg>",
