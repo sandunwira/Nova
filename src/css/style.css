@@ -11,6 +11,8 @@
 	--darkGray: #424242;
 	--blackGray: #242424;
 	--black: #1E1E1E;
+	--accent: #00AAFF;
+	--accent2: #2878C1;
 }
 
 * {
@@ -134,6 +136,21 @@ table th, table td {
 	background: var(--darkGray);
 }
 #chatFormSubmitBtn:hover {
+	background: #333333;
+}
+
+#chatFormVoiceBtn {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-right: 0.5px solid var(--darkGray);
+}
+#chatForm:focus-within #chatFormVoiceBtn {
+	background: var(--darkGray);
+	border-right: 0.5px solid #333333;
+}
+#chatFormVoiceBtn:hover {
 	background: #333333;
 }
 
