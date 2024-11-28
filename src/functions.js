@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 							botResponseDiv.innerHTML = `
 									<p>Nova: Here's the currency conversion:</p><br>
 									<h1>${convertedAmount}</h1>
-									<p>(as of ${getDate().month} ${getDate().day}, ${getDate().year} at ${getTime()})</p>
+									<p>(as of ${getDateForFunctions().month} ${getDateForFunctions().day}, ${getDateForFunctions().year} at ${getTimeForFunctions()})</p>
 								`;
 
 							scrolltoBottom();
@@ -1128,6 +1128,40 @@ function getTime() {
 	}
 }
 
+// function to get the time for functions
+function getTimeForFunctions() {
+	try {
+		let date = new Date();
+		let hours = date.getHours();
+		switch (hours) {
+			case 0: hours = 12; break;
+			case 13: hours = 1; break;
+			case 14: hours = 2; break;
+			case 15: hours = 3; break;
+			case 16: hours = 4; break;
+			case 17: hours = 5; break;
+			case 18: hours = 6; break;
+			case 19: hours = 7; break;
+			case 20: hours = 8; break;
+			case 21: hours = 9; break;
+			case 22: hours = 10; break;
+			case 23: hours = 11; break;
+		}
+		if (hours < 10) {
+			hours = '0' + hours;
+		}
+		let minutes = date.getMinutes();
+		if (minutes < 10) {
+			minutes = '0' + minutes;
+		}
+		let ampm = date.getHours() >= 12 ? 'pm' : 'am';
+
+		return `${hours}:${minutes}${ampm}`;
+	} catch (error) {
+		console.error('Error in getTime:', error);
+		throw error;
+	}
+}
 
 
 // function to get the date
