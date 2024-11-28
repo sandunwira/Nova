@@ -1390,6 +1390,35 @@
 		]
 	},
 	{
+		"intent": "ask_rps",
+		"requests": [
+			"can you play rock paper scissors",
+			"can you play rock paper scissors with me",
+			"play rock paper scissors",
+			"play rock paper scissors with me",
+			"rock paper scissors",
+			"rock paper scissors with me",
+			"rock paper scissors please",
+			"rock paper scissors with me please",
+			"can you play rps",
+			"can you play rps with me",
+			"play rps",
+			"play rps with me",
+			"rps",
+			"rps with me",
+			"rps please",
+			"rps with me please"
+		]
+	},
+	{
+		"intent": "rps",
+		"requests": [
+			"rock",
+			"paper",
+			"scissors"
+		]
+	},
+	{
 		"intent": "joke",
 		"requests": [
 			"can you tell me a joke",

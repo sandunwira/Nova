@@ -511,6 +511,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 								await sendEmail();
 								break;
 
+							case 'rps':
+								await playRockPaperScissors(userMessage);
+								break;
+
 							default:
 								// For intents that only need responses (like greetings)
 								const response = await assistant.processQuery(userMessage);
@@ -528,6 +532,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 						chatResponses.appendChild(botResponseDiv);
 					}
 				}
+
+				scrolltoBottom();
 			} catch (error) {
 				console.error('Error processing query:', error);
 
@@ -3204,6 +3210,79 @@ async function textSummarizer(inputText) {
 		return summary;
 	} catch (error) {
 		console.error('Failed to summarize text:', error);
+		throw error;
+	}
+}
+
+
+
+// function to play rock paper scissors
+async function playRockPaperScissors(userMessage) {
+	let resultComment = '';
+	choices = ['Rock', 'Paper', 'Scissors'];
+
+	const botResponseDiv = document.createElement('div');
+	botResponseDiv.className = 'bot-response';
+	botResponseDiv.innerHTML = `Nova: Let's play rock, paper, scissors!`;
+	chatResponses.appendChild(botResponseDiv);
+
+	scrolltoBottom();
+
+	try {
+		let player_choice = userMessage.toLowerCase().trim();
+
+		if (player_choice.includes('rock')) {
+			player_choice = 'Rock';
+		} else if (player_choice.includes('paper')) {
+			player_choice = 'Paper';
+		} else if (player_choice.includes('scissors')) {
+			player_choice = 'Scissors';
+		} else {
+			player_choice = choices[Math.floor(Math.random() * choices.length)];
+		}
+
+		let computer_choice = choices[Math.floor(Math.random() * choices.length)];
+
+		let result = '';
+		if (player_choice === computer_choice) {
+			result = 'it\'s a tie';
+			resultComment = `We both chose ${player_choice}`;
+		} else if (player_choice === 'Rock' && computer_choice === 'Paper') {
+			result = 'you lose';
+			resultComment = `Paper covers Rock`;
+		} else if (player_choice === 'Rock' && computer_choice === 'Scissors') {
+			result = 'you win';
+			resultComment = `Rock crushes Scissors`;
+		} else if (player_choice === 'Paper' && computer_choice === 'Rock') {
+			result = 'you win';
+			resultComment = `Paper covers Rock`;
+		} else if (player_choice === 'Paper' && computer_choice === 'Scissors') {
+			result = 'you lose';
+			resultComment = `Scissors cut Paper`;
+		} else if (player_choice === 'Scissors' && computer_choice === 'Rock') {
+			result = 'you lose';
+			resultComment = `Rock crushes Scissors`;
+		} else if (player_choice === 'Scissors' && computer_choice === 'Paper') {
+			result = 'you win';
+			resultComment = `Scissors cut Paper`;
+		}
+
+		botResponseDiv.innerHTML = `
+			Nova: I chose ${computer_choice}!<br><br>${resultComment}, so <span style="font-weight: bold;">${result}</span>!
+		`;
+
+		scrolltoBottom();
+	} catch (error) {
+		console.error('Failed to play rock paper scissors:', error);
+
+		botResponseDiv.remove();
+		const errorResponseDiv = document.createElement('div');
+		errorResponseDiv.className = 'error-response';
+		errorResponseDiv.innerHTML = "Sorry, I couldn't play rock paper scissors. Please try again.";
+		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
+
 		throw error;
 	}
 }

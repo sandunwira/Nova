@@ -901,6 +901,16 @@
 		]
 	},
 	{
+		"intent": "ask_rps",
+		"responses": [
+			"Yes, absolutely, [name]. I can play rock, paper, or scissors with you. What do you choose [name]?",
+			"Of course, [name]. I can play rock, paper, or scissors with you. What do you choose [name]?",
+			"Sure, [name]. I can play rock, paper, or scissors with you. What do you choose [name]?",
+			"Absolutely, [name]. I can play rock, paper, or scissors with you. What do you choose [name]?",
+			"Sure, [name]. I can play rock, paper, or scissors with you. What do you choose [name]?"
+		]
+	},
+	{
 		"intent": "joke",
 		"responses": [
 			"What do you call a person who is outside a door and has no arms nor legs? Matt",
