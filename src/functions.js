@@ -356,6 +356,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 						scrolltoBottom();
 					}
+				} else if (userMessage.toLowerCase().startsWith("wake me up at")) {
+					let wakeUpTime = userMessage.replace("wake me up at", "").trim();
+					wakeUpAlarm(wakeUpTime);
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().startsWith("summarize:")) {
 					const inputText = userMessage.replace("summarize:", "").trim();
 					if (inputText === "") {
@@ -3329,6 +3334,137 @@ async function playRockPaperScissors(userMessage) {
 		throw error;
 	}
 }
+
+
+
+async function wakeUpAlarm(wakeUpTime) {
+    if (wakeUpTime === "") {
+        const errorResponseDiv = document.createElement('div');
+        errorResponseDiv.className = 'error-response';
+        errorResponseDiv.innerHTML = "Please provide a time to wake up.<br>Hint: wake me up at 9:00 AM";
+        chatResponses.appendChild(errorResponseDiv);
+        return;
+    }
+
+    // Check if time includes AM/PM
+    const isAM = wakeUpTime.toLowerCase().includes('am');
+    const isPM = wakeUpTime.toLowerCase().includes('pm');
+
+    // Remove AM/PM and trim
+    wakeUpTime = wakeUpTime.replace(/(am|pm)/i, '').trim();
+    const wakeUpTimeArray = wakeUpTime.split(':');
+
+    if (wakeUpTimeArray.length !== 2) {
+        const errorResponseDiv = document.createElement('div');
+        errorResponseDiv.className = 'error-response';
+        errorResponseDiv.innerHTML = "Please provide time in HH:MM format.<br>Hint: wake me up at 9:00 AM";
+        chatResponses.appendChild(errorResponseDiv);
+        return;
+    }
+
+    let wakeUpHour = parseInt(wakeUpTimeArray[0]);
+    let wakeUpMinute = parseInt(wakeUpTimeArray[1]);
+
+    // Convert 12-hour format to 24-hour format
+    if (isPM && wakeUpHour < 12) wakeUpHour += 12;
+    if (isAM && wakeUpHour === 12) wakeUpHour = 0;
+
+    // Validate hours and minutes
+    if (wakeUpHour < 0 || wakeUpHour > 23 || wakeUpMinute < 0 || wakeUpMinute > 59 || isNaN(wakeUpHour) || isNaN(wakeUpMinute)) {
+        const errorResponseDiv = document.createElement('div');
+        errorResponseDiv.className = 'error-response';
+        errorResponseDiv.innerHTML = "Please provide a valid time to wake up.<br>Hint: wake me up at 9:00 AM";
+        chatResponses.appendChild(errorResponseDiv);
+        return; // Exit function if invalid time
+    }
+
+    try {
+        const now = new Date();
+        const alarmTime = new Date();
+
+        alarmTime.setHours(wakeUpHour);
+        alarmTime.setMinutes(wakeUpMinute);
+        alarmTime.setSeconds(0);
+
+        // If alarm time has already passed today, set it for tomorrow
+        if (alarmTime < now) {
+            alarmTime.setDate(alarmTime.getDate() + 1);
+        }
+
+        // Format display time
+        const displayHour = wakeUpHour % 12 || 12;
+        const ampm = wakeUpHour >= 12 ? 'PM' : 'AM';
+        const displayTime = `${displayHour}:${wakeUpMinute.toString().padStart(2, '0')} ${ampm}`;
+
+        const botResponseDiv = document.createElement('div');
+        botResponseDiv.className = 'bot-response';
+        botResponseDiv.innerHTML = `
+            Nova: Wake up alarm successfully set! I'll wake you up at <span style="font-weight: bold;">${displayTime}</span>!
+        `;
+        chatResponses.appendChild(botResponseDiv);
+
+		new Notification('Wake Up Alarm Set!', {
+			body: `Wake up alarm successfully set at ${displayTime}!`,
+			silent: 'Default',
+		});
+
+        const timeUntilAlarm = alarmTime - now;
+
+        setTimeout(() => {
+            // Create and play alarm sound
+            const audio = new Audio('assets/sounds/alarms/alarm6.mp3');
+            audio.loop = true;
+            audio.play();
+
+            // Create notification
+            new Notification('Wake Up!', {
+                body: `Time to wake up! It's ${displayTime} now!`,
+				silent: true,
+            });
+
+            // Create stop alarm indicator
+            botResponseDiv.innerHTML = `
+                Nova: Time to wake up! It's <span style="font-weight: bold;">${displayTime}</span> now!<br><br>
+                <button id="stopAlarm">Stop Alarm</button>
+            `;
+            scrolltoBottom();
+
+            // Add click event to stop button
+            document.getElementById('stopAlarm').addEventListener('click', () => {
+                audio.pause();
+                audio.currentTime = 0;
+				botResponseDiv.innerHTML = `
+					Nova: Wake up alarm stopped!
+				`;
+            });
+
+            // Auto stop after 1 minute if not stopped manually
+            setTimeout(() => {
+                if (document.getElementById('stopAlarm')) {
+                    audio.pause();
+                    audio.currentTime = 0;
+					botResponseDiv.innerHTML = `
+						Nova: Wake up alarm stopped!
+					`;
+                }
+            }, 60000);
+        }, timeUntilAlarm);
+
+        scrolltoBottom();
+    } catch (error) {
+        console.error('Failed to set wake up alarm:', error);
+
+        const errorResponseDiv = document.createElement('div');
+        errorResponseDiv.className = 'error-response';
+        errorResponseDiv.innerHTML = "Sorry, I couldn't set the wake up alarm. Please try again.";
+        chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
+
+        throw error;
+    }
+}
+
 
 
 
