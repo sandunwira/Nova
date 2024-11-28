@@ -533,6 +533,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 					}
 				}
 
+				chatMessage.value = '';
+
 				scrolltoBottom();
 			} catch (error) {
 				console.error('Error processing query:', error);
@@ -543,6 +545,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 				chatResponses.appendChild(errorResponseDiv);
 
 				scrolltoBottom();
+			}
+		});
+
+		chatMessage.addEventListener('keydown', function(e) {
+			if (e.key === 'Enter' && !e.shiftKey) {
+				e.preventDefault();
+				chatForm.dispatchEvent(new Event('submit'));
 			}
 		});
 	} catch (error) {
