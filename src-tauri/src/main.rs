@@ -50,7 +50,7 @@ fn main() {
     let tray_menu = SystemTrayMenu::new().add_item(quit);
 
     // Create the system tray
-    let system_tray = SystemTray::new().with_menu(tray_menu);
+    let system_tray = SystemTray::new().with_menu(tray_menu).with_tooltip("Nova");
 
     tauri::Builder::default()
         .system_tray(system_tray)
