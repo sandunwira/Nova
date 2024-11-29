@@ -179,10 +179,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 					const botResponseDiv = document.createElement('div');
 					botResponseDiv.className = 'bot-response';
 					botResponseDiv.innerHTML = `
-							<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-								Nova: Fetching disaster alerts... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-							</span>
-						`;
+						<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+							Nova: Fetching disaster alerts... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+						</span>
+					`;
 					chatResponses.appendChild(botResponseDiv);
 
 					scrolltoBottom();
@@ -206,13 +206,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 						const botResponseDiv = document.createElement('div');
 						botResponseDiv.className = 'bot-response';
 						botResponseDiv.innerHTML = `
-								<p style="margin-bottom: 5px;">
-									Nova: Please provide a song name or artist to play.<br>
-									Hint: play Believer by Imagine Dragons
-								</p><br>
-								<p style="font-size: 10px;">Powered by <a href="https://music.youtube.com" target="_blank">YouTube Music</a></p><br>
-								<p style="color: var(--lightGray); font-weight: 300; font-style: oblique;">If you want to resume playing currently paused media, say "resume".</p>
-							`;
+							<p style="margin-bottom: 5px;">
+								Nova: Please provide a song name or artist to play.<br>
+								Hint: play Believer by Imagine Dragons
+							</p><br>
+							<p style="font-size: 10px;">Powered by <a href="https://music.youtube.com" target="_blank">YouTube Music</a></p><br>
+							<p style="color: var(--lightGray); font-weight: 300; font-style: oblique;">If you want to resume playing currently paused media, say "resume".</p>
+						`;
 						chatResponses.appendChild(botResponseDiv);
 
 						scrolltoBottom();
@@ -238,20 +238,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 						const botResponseDiv = document.createElement('div');
 						botResponseDiv.className = 'bot-response';
 						botResponseDiv.innerHTML = `
-								<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-									Nova: Converting ${formattedAmount} ${fromCurrency} to ${toCurrency}... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-								</span>
-							`;
+							<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+								Nova: Converting ${formattedAmount} ${fromCurrency} to ${toCurrency}... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+							</span>
+						`;
 						chatResponses.appendChild(botResponseDiv);
 
 						scrolltoBottom();
 
 						convertCurrency(amount, fromCurrency, toCurrency).then(convertedAmount => {
 							botResponseDiv.innerHTML = `
-									<p>Nova: Here's the currency conversion:</p><br>
-									<h1>${convertedAmount}</h1>
-									<p>(as of ${getDateForFunctions().month} ${getDateForFunctions().day}, ${getDateForFunctions().year} at ${getTimeForFunctions()})</p>
-								`;
+								<p>Nova: Here's the currency conversion:</p><br>
+								<h1>${convertedAmount}</h1>
+								<p>(as of ${getDateForFunctions().month} ${getDateForFunctions().day}, ${getDateForFunctions().year} at ${getTimeForFunctions()})</p>
+							`;
 
 							scrolltoBottom();
 						}).catch(error => {
@@ -279,20 +279,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 							const botResponseDiv = document.createElement('div');
 							botResponseDiv.className = 'bot-response';
 							botResponseDiv.innerHTML = `
-									<p style="margin-bottom: 5px;">Nova: Here are the details for the bug code:</p><br>
-	
-									<h3>Bug Code:</h3>
-									<p>${bugCodeDetails.code}</p><br>
-	
-									<h3>Code Name:</h3>
-									<p>${bugCodeDetails.code_name}</p><br>
-	
-									<h3>Description:</h3>
-									<p>${bugCodeDetails.description}</p><br>
-	
-									<h3>Solutions:</h3>
-									<p>${bugCodeDetails.solutions.map(solution => `- ${solution}`).join('<br>')}</p>
-								`;
+								<p style="margin-bottom: 5px;">Nova: Here are the details for the bug code:</p><br>
+
+								<h3>Bug Code:</h3>
+								<p>${bugCodeDetails.code}</p><br>
+
+								<h3>Code Name:</h3>
+								<p>${bugCodeDetails.code_name}</p><br>
+
+								<h3>Description:</h3>
+								<p>${bugCodeDetails.description}</p><br>
+
+								<h3>Solutions:</h3>
+								<p>${bugCodeDetails.solutions.map(solution => `- ${solution}`).join('<br>')}</p>
+							`;
 							chatResponses.appendChild(botResponseDiv);
 
 							scrolltoBottom();
@@ -326,16 +326,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 						const botResponseDiv = document.createElement('div');
 						botResponseDiv.className = 'bot-response';
 						botResponseDiv.innerHTML = `
-								<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-									Nova: Changing the wallpaper... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-								</span>
-							`;
+							<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+								Nova: Changing the wallpaper... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+							</span>
+						`;
 						chatResponses.appendChild(botResponseDiv);
 
 						scrolltoBottom();
 
 						changeWallpaper(category).then(() => {
-							botResponseDiv.innerHTML = `Nova: ${category.charAt(0).toUpperCase() + category.slice(1)} wallpaper changed successfully!`;
+							botResponseDiv.innerHTML = `
+								Nova: ${category.charAt(0).toUpperCase() + category.slice(1)} wallpaper changed successfully!
+							`;
 
 							scrolltoBottom();
 						}).catch(error => {
@@ -374,10 +376,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 						const botResponseDiv = document.createElement('div');
 						botResponseDiv.className = 'bot-response';
 						botResponseDiv.innerHTML = `
-								<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-									Nova: Summarizing the text... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-								</span>
-							`;
+							<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+								Nova: Summarizing the text... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+							</span>
+						`;
 						chatResponses.appendChild(botResponseDiv);
 
 						const response = await textSummarizer(inputText).then(summary => summary).catch(error => "Sorry, I couldn't summarize the text.");
@@ -615,7 +617,10 @@ async function openURL(url) {
 			url: url
 		});
 
-		botResponseDiv.innerHTML = `Nova: Opened <a href="${url}" target="_blank">${url}</a> successfully. Enjoy!`;
+		botResponseDiv.innerHTML = `
+			Nova: Opened <a href="${url}" target="_blank">${url}</a> successfully. Enjoy!
+		`;
+
 		scrolltoBottom();
 	} catch (error) {
 		console.error('Failed to open URL:', error);
@@ -646,7 +651,9 @@ async function openApplication(appName) {
 
 				const botResponseDiv = document.createElement('div');
 				botResponseDiv.className = 'bot-response';
-				botResponseDiv.innerHTML = `Nova: ${response.launched_app} launched successfully. Enjoy!`;
+				botResponseDiv.innerHTML = `
+					Nova: ${response.launched_app} launched successfully. Enjoy!
+				`;
 				chatResponses.appendChild(botResponseDiv);
 
 				scrolltoBottom();
@@ -732,7 +739,16 @@ function getRandomMovie() {
 				return;
 			}
 
-			movieDetails = `${movieTitle} (${movieYear})\nGenre: ${movieGenre}\nRating: ${movieRating}\nDirector: ${movieDirector}\nActors: ${movieActors}\nPlot: ${moviePlot}\nPoster: ${moviePoster}\nImdb: https://www.imdb.com/title/${data.imdbID}`;
+			movieDetails = `
+				${movieTitle} (${movieYear})\n
+				Genre: ${movieGenre}\n
+				Rating: ${movieRating}\n
+				Director: ${movieDirector}\n
+				Actors: ${movieActors}\n
+				Plot: ${moviePlot}\n
+				Poster: ${moviePoster}\n
+				Imdb: https://www.imdb.com/title/${data.imdbID}
+			`;
 			console.log(movieDetails);
 
 			if (moviePoster === "N/A") {
@@ -742,7 +758,9 @@ function getRandomMovie() {
 					</span>
 				`;
 			} else {
-				moviePosterContainer = `<img src="${moviePoster}" alt="${movieTitle}" style="width: auto; height: auto; object-fit: contain; object-position: center;">`;
+				moviePosterContainer = `
+					<img src="${moviePoster}" alt="${movieTitle}" style="width: auto; height: auto; object-fit: contain; object-position: center;">
+				`;
 			}
 
 			botResponseDiv.innerHTML = `
@@ -851,6 +869,7 @@ async function getWeather() {
 		const weatherData = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=2e65cf86daa6dc72fef7c3f47c32788e`)
 			.then(response => response.json());
 		console.log(weatherData);
+
 		const description = weatherData.weather[0].description.charAt(0).toUpperCase() + weatherData.weather[0].description.slice(1);
 		const temperature = `${Math.round(weatherData.main.temp - 273.15)}°C`;
 		const humidity = `${weatherData.main.humidity}%`;
@@ -1054,8 +1073,7 @@ async function searchWeb(query) {
 		scrolltoBottom();
 
 		return { snippetText, search_status };
-	}
-	catch (error) {
+	} catch (error) {
 		console.error('Error fetching or parsing HTML:', error);
 
 		botResponseDiv.remove();
@@ -1086,6 +1104,7 @@ function getTime() {
 
 	try {
 		let date = new Date();
+
 		let hours = date.getHours();
 		switch (hours) {
 			case 0: hours = 12; break;
@@ -1104,10 +1123,12 @@ function getTime() {
 		if (hours < 10) {
 			hours = '0' + hours;
 		}
+
 		let minutes = date.getMinutes();
 		if (minutes < 10) {
 			minutes = '0' + minutes;
 		}
+
 		let ampm = date.getHours() >= 12 ? 'pm' : 'am';
 
 		botResponseDiv.innerHTML = `
@@ -1137,6 +1158,7 @@ function getTime() {
 function getTimeForFunctions() {
 	try {
 		let date = new Date();
+
 		let hours = date.getHours();
 		switch (hours) {
 			case 0: hours = 12; break;
@@ -1155,10 +1177,12 @@ function getTimeForFunctions() {
 		if (hours < 10) {
 			hours = '0' + hours;
 		}
+
 		let minutes = date.getMinutes();
 		if (minutes < 10) {
 			minutes = '0' + minutes;
 		}
+
 		let ampm = date.getHours() >= 12 ? 'pm' : 'am';
 
 		return `${hours}:${minutes}${ampm}`;
@@ -1178,17 +1202,18 @@ function getDate() {
 			Nova: Fetching the date... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
-
 	chatResponses.appendChild(botResponseDiv);
 
 	scrolltoBottom();
 
 	try {
 		let date = new Date();
+
 		let day = date.getDate();
 		if (day < 10) {
 			day = '0' + day;
 		}
+
 		let month = date.getMonth();
 		switch (month) {
 			case 0: month = "January"; break;
@@ -1204,11 +1229,12 @@ function getDate() {
 			case 10: month = "November"; break;
 			case 11: month = "December"; break;
 		}
+
 		let year = date.getFullYear();
 
 		botResponseDiv.innerHTML = `
 			<p style="margin-bottom: 5px;">Nova: Today's date is:</p>
-			<h1>${day} ${month} ${year}</h1>
+			<h1>${day} ${month}, ${year}</h1>
 		`;
 
 		scrolltoBottom();
@@ -1233,10 +1259,12 @@ function getDate() {
 function getDateForFunctions() {
 	try {
 		let date = new Date();
+
 		let day = date.getDate();
 		if (day < 10) {
 			day = '0' + day;
 		}
+
 		let month = date.getMonth();
 		switch (month) {
 			case 0: month = "January"; break;
@@ -1252,6 +1280,7 @@ function getDateForFunctions() {
 			case 10: month = "November"; break;
 			case 11: month = "December"; break;
 		}
+
 		let year = date.getFullYear();
 
 		return { day, month, year };
@@ -1272,7 +1301,6 @@ function calculateNumbers(expression) {
 			Nova: Calculating... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
-
 	chatResponses.appendChild(botResponseDiv);
 
 	scrolltoBottom();
@@ -1313,8 +1341,9 @@ async function fetchNews() {
 			Nova: Fetching the latest news... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
-
 	chatResponses.appendChild(botResponseDiv);
+
+	scrolltoBottom();
 
 	try {
 		const response = await fetch(`https://api.allorigins.win/get?url=https://abcnews.go.com/abcnews/internationalheadlines?${Date.now()}`);
@@ -1372,8 +1401,9 @@ async function getImageOfTheDay() {
 			Nova: Fetching the image of the day... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
-
 	chatResponses.appendChild(botResponseDiv);
+
+	scrolltoBottom();
 
 	try {
 		const proxyUrl = 'https://api.allorigins.win/get?url=';
@@ -1430,7 +1460,6 @@ async function getQuoteOfTheDay() {
 			Nova: Fetching the quote of the day... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
-
 	chatResponses.appendChild(botResponseDiv);
 
 	scrolltoBottom();
@@ -1489,7 +1518,6 @@ async function getRandomQuote() {
 			Nova: Fetching a random quote... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
-
 	chatResponses.appendChild(botResponseDiv);
 
 	scrolltoBottom();
@@ -3339,131 +3367,132 @@ async function playRockPaperScissors(userMessage) {
 
 
 async function wakeUpAlarm(wakeUpTime) {
-    if (wakeUpTime === "") {
-        const errorResponseDiv = document.createElement('div');
-        errorResponseDiv.className = 'error-response';
-        errorResponseDiv.innerHTML = "Please provide a time to wake up.<br>Hint: wake me up at 9:00 AM";
-        chatResponses.appendChild(errorResponseDiv);
-        return;
-    }
+	if (wakeUpTime === "") {
+		const errorResponseDiv = document.createElement('div');
+		errorResponseDiv.className = 'error-response';
+		errorResponseDiv.innerHTML = "Please provide a time to wake up.<br>Hint: wake me up at 9:00 AM";
+		chatResponses.appendChild(errorResponseDiv);
+		return;
+	}
 
-    // Check if time includes AM/PM
-    const isAM = wakeUpTime.toLowerCase().includes('am');
-    const isPM = wakeUpTime.toLowerCase().includes('pm');
+	// Check if time includes AM/PM
+	const isAM = wakeUpTime.toLowerCase().includes('am');
+	const isPM = wakeUpTime.toLowerCase().includes('pm');
 
-    // Remove AM/PM and trim
-    wakeUpTime = wakeUpTime.replace(/(am|pm)/i, '').trim();
-    const wakeUpTimeArray = wakeUpTime.split(':');
+	// Remove AM/PM and trim
+	wakeUpTime = wakeUpTime.replace(/(am|pm)/i, '').trim();
+	const wakeUpTimeArray = wakeUpTime.split(':');
 
-    if (wakeUpTimeArray.length !== 2) {
-        const errorResponseDiv = document.createElement('div');
-        errorResponseDiv.className = 'error-response';
-        errorResponseDiv.innerHTML = "Please provide time in HH:MM format.<br>Hint: wake me up at 9:00 AM";
-        chatResponses.appendChild(errorResponseDiv);
-        return;
-    }
+	if (wakeUpTimeArray.length !== 2) {
+		const errorResponseDiv = document.createElement('div');
+		errorResponseDiv.className = 'error-response';
+		errorResponseDiv.innerHTML = "Please provide time in HH:MM format.<br>Hint: wake me up at 9:00 AM";
+		chatResponses.appendChild(errorResponseDiv);
+		return;
+	}
 
-    let wakeUpHour = parseInt(wakeUpTimeArray[0]);
-    let wakeUpMinute = parseInt(wakeUpTimeArray[1]);
+	let wakeUpHour = parseInt(wakeUpTimeArray[0]);
+	let wakeUpMinute = parseInt(wakeUpTimeArray[1]);
 
-    // Convert 12-hour format to 24-hour format
-    if (isPM && wakeUpHour < 12) wakeUpHour += 12;
-    if (isAM && wakeUpHour === 12) wakeUpHour = 0;
+	// Convert 12-hour format to 24-hour format
+	if (isPM && wakeUpHour < 12) wakeUpHour += 12;
+	if (isAM && wakeUpHour === 12) wakeUpHour = 0;
 
-    // Validate hours and minutes
-    if (wakeUpHour < 0 || wakeUpHour > 23 || wakeUpMinute < 0 || wakeUpMinute > 59 || isNaN(wakeUpHour) || isNaN(wakeUpMinute)) {
-        const errorResponseDiv = document.createElement('div');
-        errorResponseDiv.className = 'error-response';
-        errorResponseDiv.innerHTML = "Please provide a valid time to wake up.<br>Hint: wake me up at 9:00 AM";
-        chatResponses.appendChild(errorResponseDiv);
-        return; // Exit function if invalid time
-    }
+	// Validate hours and minutes
+	if (wakeUpHour < 0 || wakeUpHour > 23 || wakeUpMinute < 0 || wakeUpMinute > 59 || isNaN(wakeUpHour) || isNaN(wakeUpMinute)) {
+		const errorResponseDiv = document.createElement('div');
+		errorResponseDiv.className = 'error-response';
+		errorResponseDiv.innerHTML = "Please provide a valid time to wake up.<br>Hint: wake me up at 9:00 AM";
+		chatResponses.appendChild(errorResponseDiv);
+		return; // Exit function if invalid time
+	}
 
-    try {
-        const now = new Date();
-        const alarmTime = new Date();
+	try {
+		const now = new Date();
+		const alarmTime = new Date();
 
-        alarmTime.setHours(wakeUpHour);
-        alarmTime.setMinutes(wakeUpMinute);
-        alarmTime.setSeconds(0);
+		alarmTime.setHours(wakeUpHour);
+		alarmTime.setMinutes(wakeUpMinute);
+		alarmTime.setSeconds(0);
 
-        // If alarm time has already passed today, set it for tomorrow
-        if (alarmTime < now) {
-            alarmTime.setDate(alarmTime.getDate() + 1);
-        }
+		// If alarm time has already passed today, set it for tomorrow
+		if (alarmTime < now) {
+			alarmTime.setDate(alarmTime.getDate() + 1);
+		}
 
-        // Format display time
-        const displayHour = wakeUpHour % 12 || 12;
-        const ampm = wakeUpHour >= 12 ? 'PM' : 'AM';
-        const displayTime = `${displayHour}:${wakeUpMinute.toString().padStart(2, '0')} ${ampm}`;
+		// Format display time
+		const displayHour = wakeUpHour % 12 || 12;
+		const ampm = wakeUpHour >= 12 ? 'PM' : 'AM';
+		const displayTime = `${displayHour}:${wakeUpMinute.toString().padStart(2, '0')} ${ampm}`;
 
-        const botResponseDiv = document.createElement('div');
-        botResponseDiv.className = 'bot-response';
-        botResponseDiv.innerHTML = `
-            Nova: Wake up alarm successfully set! I'll wake you up at <span style="font-weight: bold;">${displayTime}</span>!
-        `;
-        chatResponses.appendChild(botResponseDiv);
+		const botResponseDiv = document.createElement('div');
+		botResponseDiv.className = 'bot-response';
+		botResponseDiv.innerHTML = `
+			Nova: Wake up alarm successfully set! I'll wake you up at <span style="font-weight: bold;">${displayTime}</span>!
+		`;
+		chatResponses.appendChild(botResponseDiv);
 
 		new Notification('Wake Up Alarm Set!', {
 			body: `Wake up alarm successfully set at ${displayTime}!`,
 			silent: 'Default',
 		});
 
-        const timeUntilAlarm = alarmTime - now;
+		const timeUntilAlarm = alarmTime - now;
 
-        setTimeout(() => {
-            // Create and play alarm sound
-            const audio = new Audio('assets/sounds/alarms/alarm6.mp3');
-            audio.loop = true;
-            audio.play();
+		setTimeout(() => {
+			// Create and play alarm sound
+			const audio = new Audio('assets/sounds/alarms/alarm6.mp3');
+			audio.loop = true;
+			audio.play();
 
-            // Create notification
-            new Notification('Wake Up!', {
-                body: `Time to wake up! It's ${displayTime} now!`,
+			// Create notification
+			new Notification('Wake Up!', {
+				body: `Time to wake up! It's ${displayTime} now!`,
 				silent: true,
-            });
+			});
 
-            // Create stop alarm indicator
-            botResponseDiv.innerHTML = `
-                Nova: Time to wake up! It's <span style="font-weight: bold;">${displayTime}</span> now!<br><br>
-                <button id="stopAlarm">Stop Alarm</button>
-            `;
-            scrolltoBottom();
+			// Create stop alarm indicator
+			botResponseDiv.innerHTML = `
+				Nova: Time to wake up! It's <span style="font-weight: bold;">${displayTime}</span> now!<br><br>
+				<button id="stopAlarm">Stop Alarm</button>
+			`;
 
-            // Add click event to stop button
-            document.getElementById('stopAlarm').addEventListener('click', () => {
-                audio.pause();
-                audio.currentTime = 0;
+			scrolltoBottom();
+
+			// Add click event to stop button
+			document.getElementById('stopAlarm').addEventListener('click', () => {
+				audio.pause();
+				audio.currentTime = 0;
 				botResponseDiv.innerHTML = `
 					Nova: Wake up alarm stopped!
 				`;
-            });
+			});
 
-            // Auto stop after 1 minute if not stopped manually
-            setTimeout(() => {
-                if (document.getElementById('stopAlarm')) {
-                    audio.pause();
-                    audio.currentTime = 0;
+			// Auto stop after 1 minute if not stopped manually
+			setTimeout(() => {
+				if (document.getElementById('stopAlarm')) {
+					audio.pause();
+					audio.currentTime = 0;
 					botResponseDiv.innerHTML = `
 						Nova: Wake up alarm stopped!
 					`;
-                }
-            }, 60000);
-        }, timeUntilAlarm);
+				}
+			}, 60000);
+		}, timeUntilAlarm);
 
-        scrolltoBottom();
-    } catch (error) {
-        console.error('Failed to set wake up alarm:', error);
+		scrolltoBottom();
+	} catch (error) {
+		console.error('Failed to set wake up alarm:', error);
 
-        const errorResponseDiv = document.createElement('div');
-        errorResponseDiv.className = 'error-response';
-        errorResponseDiv.innerHTML = "Sorry, I couldn't set the wake up alarm. Please try again.";
-        chatResponses.appendChild(errorResponseDiv);
+		const errorResponseDiv = document.createElement('div');
+		errorResponseDiv.className = 'error-response';
+		errorResponseDiv.innerHTML = "Sorry, I couldn't set the wake up alarm. Please try again.";
+		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
 
-        throw error;
-    }
+		throw error;
+	}
 }
 
 
