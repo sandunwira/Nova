@@ -149,8 +149,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 					searchWeb(userMessage);
 
 					scrolltoBottom();
-				} else if (userMessage.toLowerCase().startsWith("calc") || userMessage.toLowerCase().startsWith("calculate") || userMessage.toLowerCase().startsWith("calculator") || userMessage.toLowerCase().startsWith("math")) {
-					const expression = userMessage.replace("calc", "").replace("calculate", "").replace("calculator", "").replace("math", "").trim();
+				} else if (userMessage.toLowerCase().startsWith("calc")) {
+					const expression = userMessage.replace("calc", "").trim();
 					calculateNumbers(expression);
 
 					scrolltoBottom();
