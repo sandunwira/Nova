@@ -1469,7 +1469,10 @@
 			"what is my public ip address",
 			"what is my private ip address",
 			"what is my local ip address",
-			"what is my public ip"
+			"what is my public ip",
+			"fetch my ip address",
+			"fetch my public ip address",
+			"fetch my private ip address"
 		]
 	},
 	{
