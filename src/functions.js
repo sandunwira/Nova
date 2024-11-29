@@ -361,8 +361,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 					wakeUpAlarm(wakeUpTime);
 
 					scrolltoBottom();
-				} else if (userMessage.toLowerCase().startsWith("summarize:")) {
-					const inputText = userMessage.replace("summarize:", "").trim();
+				} else if (userMessage.toLowerCase().startsWith("summarize:") || userMessage.toLowerCase().startsWith("summarise:")) {
+					const inputText = userMessage.replace("summarize:", "").trim().replace("summarise:", "").trim();
 					if (inputText === "") {
 						const errorResponseDiv = document.createElement('div');
 						errorResponseDiv.className = 'error-response';
@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 						chatResponses.appendChild(botResponseDiv);
 
 						const response = await textSummarizer(inputText).then(summary => summary).catch(error => "Sorry, I couldn't summarize the text.");
-						botResponseDiv.innerHTML = 'Nova: This is the summarized text:<br><br>' + response;
+						botResponseDiv.innerHTML = 'Nova: Here is the summarized text:<br><br>' + response;
 
 						scrolltoBottom();
 					}
