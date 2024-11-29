@@ -1604,13 +1604,23 @@
 		"intent": "get_meal",
 		"requests": [
 			"meal",
+			"recipe",
 			"random meal",
 			"give me a meal",
 			"give me a random meal",
 			"give me a random recipe",
 			"give me a recipe",
+			"give me a recipe to cook",
+			"tell me a recipe",
+			"tell me a meal to cook",
+			"tell me a recipe for breakfast",
+			"tell me a recipe for lunch",
+			"tell me a recipe for dinner",
 			"tell me a recipe to cook",
-			"recipe"
+			"suggest me a recipe for breakfast",
+			"suggest me a recipe for lunch",
+			"suggest me a recipe for dinner",
+			"suggest me a recipe to cook"
 		]
 	},
 	{
