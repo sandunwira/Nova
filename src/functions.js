@@ -57,7 +57,7 @@ function showWelcomeMessage() {
 
 						<div style="width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
 							${randomTaskItems.map(item => `
-								<div style="background: var(--blackGray); border: 0.5px solid var(--darkGray); padding: 12px; display: flex; flex-direction: row; align-items: center; justify-content: start; gap: 15px;">
+								<div onclick='chatMessage.value = "${item.examples[Math.floor(Math.random() * item.examples.length)]}"; chatMessage.focus();' style="background: var(--blackGray); border: 0.5px solid var(--darkGray); padding: 12px; display: flex; flex-direction: row; align-items: center; justify-content: start; gap: 15px; cursor: pointer;">
 									${item.icon}
 									<p style="font-size: 12px; font-weight: 300;">${item.text}</p>
 								</div>
@@ -3017,12 +3017,13 @@ async function lock_pc() {
 		await invoke('lock_pc');
 		console.log('System lock initiated');
 
+		botResponseDiv.innerHTML = "Nova: PC is locked...";
+
 		new Notification('System Lock Initiated', {
 			body: 'Your system is locked!',
 			icon: 'assets/images/icon.png'
 		});
-	}
-	catch (error) {
+	} catch (error) {
 		console.error('Failed to lock system:', error);
 
 		botResponseDiv.remove();
