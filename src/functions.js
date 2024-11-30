@@ -145,6 +145,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 					openApplication(appName);
 
 					scrolltoBottom();
+				} else if (userMessage.startsWith("close")) {
+					const appName = userMessage.replace('close', '').trim();
+					closeApplication(appName);
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().startsWith("search")) {
 					searchWeb(userMessage);
 
@@ -696,6 +701,100 @@ async function openApplication(appName) {
 			body: 'Failed to process the request. Please try again later.',
 			sound: 'Default'
 		});
+	}
+}
+
+// Function to close applications
+async function closeApplication(appName) {
+	const botResponseDiv = document.createElement('div');
+	botResponseDiv.className = 'bot-response';
+	botResponseDiv.innerHTML = `
+		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+			Nova: Attempting to close ${appName} and its processes... <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+		</span>
+	`;
+	chatResponses.appendChild(botResponseDiv);
+
+	try {
+		const response = await window.__TAURI__.invoke('close_application', { appName });
+		chatResponses.removeChild(botResponseDiv);
+
+		const responseDiv = document.createElement('div');
+
+		switch(response.status) {
+			case 'success':
+				responseDiv.className = 'bot-response';
+				responseDiv.innerHTML = `
+					Nova: ${response.message}
+				`;
+				new Notification('Application Closed', {
+					body: response.message,
+					silent: true
+				});
+				break;
+
+			case 'error':
+				responseDiv.className = 'error-response';
+				if (response.protected) {
+					// Handle protected process error
+					responseDiv.innerHTML = `
+						Nova: ${response.message}<br>
+						<span style="color: var(--lightGray); font-size: 12px;">
+							This is a system process that cannot be terminated for security reasons.
+						</span>
+					`;
+				} else if (response.not_found) {
+					// Handle process not found error
+					responseDiv.innerHTML = `
+						Nova: ${response.message}<br>
+						<span style="color: var(--lightGray); font-size: 12px;">
+							The application might not be running or might have a different process name.
+						</span>
+					`;
+				} else {
+					// Handle other errors
+					responseDiv.innerHTML = `
+						Nova: ${response.message}
+					`;
+				}
+				new Notification('Error', {
+					body: response.message,
+					sound: 'Default'
+				});
+				break;
+
+			default:
+				responseDiv.className = 'error-response';
+				responseDiv.innerHTML = 'Nova: An unexpected error occurred.';
+				new Notification('Error', {
+					body: 'An unexpected error occurred.',
+					sound: 'Default'
+				});
+		}
+
+		chatResponses.appendChild(responseDiv);
+		scrolltoBottom();
+
+	} catch (error) {
+		console.error('Failed to close application:', error);
+		chatResponses.removeChild(botResponseDiv);
+
+		const errorDiv = document.createElement('div');
+		errorDiv.className = 'error-response';
+		errorDiv.innerHTML = `
+			Nova: Failed to close application.<br>
+			<span style="color: var(--lightGray); font-size: 12px;">
+				Error: ${error.message}
+			</span>
+		`;
+		chatResponses.appendChild(errorDiv);
+
+		new Notification('Error', {
+			body: 'Failed to close application: ' + error.message,
+			sound: 'Default'
+		});
+
+		scrolltoBottom();
 	}
 }
 

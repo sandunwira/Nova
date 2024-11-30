@@ -11,6 +11,8 @@ use std::env;
 use std::fs;
 use std::path::Path;
 use std::path::PathBuf;
+use std::thread;
+use std::time::Duration;
 
 use runas::Command as RunasCommand;
 use std::process::Command;
@@ -20,7 +22,7 @@ use winapi::um::winuser::{
     VK_VOLUME_DOWN, VK_VOLUME_MUTE, VK_VOLUME_UP,
 };
 
-use sysinfo::{Disks, Networks, System, RefreshKind, CpuRefreshKind, Users};
+use sysinfo::{Disks, Networks, System, RefreshKind, CpuRefreshKind};
 
 use dirs::*;
 use walkdir::WalkDir;
@@ -108,6 +110,7 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             open_application,
+            close_application,
             open_url,
             play_media,
             pause_media,
@@ -249,6 +252,146 @@ fn open_application(app_name: String) -> Result<Value, String> {
         }
     }
 }
+
+#[tauri::command]
+fn close_application(app_name: String) -> Result<Value, String> {
+    let mut sys = System::new();
+    sys.refresh_all();
+
+    let app_name_lower = app_name.to_lowercase();
+    let mut found = false;
+    let mut retry_count = 0;
+    const MAX_RETRIES: u8 = 3;
+
+    // Define protected processes by categories
+    let system_processes = vec![
+        // Core Windows processes
+        "explorer.exe", "winlogon.exe", "services.exe", "lsass.exe", "csrss.exe",
+        "smss.exe", "wininit.exe", "svchost.exe", "taskhostw.exe", "sihost.exe",
+
+        // Security processes
+        "msmpeng.exe", "mssense.exe", "securityhealthservice.exe", 
+        "smartscreen.exe", "nissrv.exe", "mrt.exe",
+
+        // Device and driver processes
+        "spoolsv.exe", "dashost.exe", "audiodg.exe", "dwm.exe",
+        "fontdrvhost.exe", "usysdiag.exe",
+
+        // App compatibility and update
+        "compattelrunner.exe", "wuauclt.exe", "trustedinstaller.exe",
+
+        // WebView and runtime
+        "msedgewebview2.exe", "webview2proxy.exe", "webviewhost.exe",
+
+        // System monitoring and management
+        "taskmgr.exe", "perfmon.exe", "wmiprvse.exe", "backgroundtaskhost.exe",
+    ];
+
+    let service_keywords = vec![
+        "svc", "service", "agent", "host", "sys", "system", "windows", "microsoft",
+        "defender", "security", "update", "device", "driver"
+    ];
+
+    // Check if trying to close a system process
+    if system_processes.iter().any(|&p| app_name_lower.contains(p.trim_end_matches(".exe"))) {
+        // Log attempt for security
+        println!("Warning: Attempted to close system process: {}", app_name);
+
+        return Ok(json!({
+            "status": "error",
+            "message": format!("Cannot close '{}' as it is a protected system process", app_name),
+            "protected": true
+        }));
+    }
+
+    // Check for service-related keywords
+    if service_keywords.iter().any(|keyword| app_name_lower.contains(keyword)) {
+        // Log attempt for security
+        println!("Warning: Attempted to close potential system process: {}", app_name);
+
+        return Ok(json!({
+            "status": "error",
+            "message": "Cannot close system services or protected processes",
+            "protected": true
+        }));
+    }
+
+    // Get process information
+    let mut matching_processes = Vec::new();
+    for (_, process) in sys.processes() {
+        let process_name = process.name().to_string_lossy().to_string().to_lowercase();
+
+        // Skip if it's a protected process
+        if system_processes.iter().any(|p| process_name.contains(p.trim_end_matches(".exe"))) {
+            continue;
+        }
+
+        // Skip if it contains service keywords
+        if service_keywords.iter().any(|keyword| process_name.contains(keyword)) {
+            continue;
+        }
+
+        if process_name.contains(&app_name_lower) {
+            matching_processes.push(process_name);
+        }
+    }
+
+    if matching_processes.is_empty() {
+        return Ok(json!({
+            "status": "error",
+            "message": format!("No running application found matching '{}'", app_name)
+        }));
+    }
+
+    // Try to terminate each matching process
+    for process_name in &matching_processes {
+        while retry_count < MAX_RETRIES {
+            let output = Command::new("taskkill")
+                .args(&["/IM", process_name, "/F", "/T"])
+                .output();
+
+            match output {
+                Ok(output) if output.status.success() => {
+                    found = true;
+                    break;
+                }
+                _ => {
+                    retry_count += 1;
+                    thread::sleep(Duration::from_millis(500));
+                }
+            }
+        }
+    }
+
+    // Final verification
+    thread::sleep(Duration::from_millis(1000));
+    sys.refresh_all();
+
+    let still_running: Vec<String> = matching_processes
+        .iter()
+        .filter(|&name| {
+            sys.processes().iter().any(|(_, process)| 
+                process.name().to_string_lossy().to_string().to_lowercase() == *name
+            )
+        })
+        .cloned()
+        .collect();
+
+    if still_running.is_empty() {
+        Ok(json!({
+            "status": "success",
+            "message": format!("Successfully closed '{}' and its processes", app_name),
+            "closed_app": app_name
+        }))
+    } else {
+        Ok(json!({
+            "status": "error",
+            "message": format!("Failed to close some '{}' processes", app_name),
+            "failed_processes": still_running
+        }))
+    }
+}
+
 
 
 use webbrowser;
