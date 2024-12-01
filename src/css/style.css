@@ -141,6 +141,10 @@ table th, table td {
 #chatFormSubmitBtn:hover {
 	background: #333333;
 }
+#chatFormSubmitBtn[disabled] {
+	background: var(--blackGray);
+	cursor: not-allowed;
+}
 
 #chatFormVoiceBtn {
 	height: 100%;
@@ -155,6 +159,10 @@ table th, table td {
 }
 #chatFormVoiceBtn:hover {
 	background: #333333;
+}
+#chatFormVoiceBtn[disabled] {
+	background: var(--blackGray);
+	cursor: not-allowed;
 }
 
 
@@ -191,25 +199,28 @@ table th, table td {
 
 
 .user-response {
+	width: calc(100% - 80px);
 	color: var(--white);
-	background: #00AAFF14;
-	padding: 15px;
+	padding: 30px 15px;
 	font-size: 14px;
 	word-break: break-word;
+	border-top: 0.5px solid #303030;
 }
 
 .bot-response {
+	width: calc(100% - 80px);
 	color: var(--white);
-	background: #42424238;
-	padding: 15px;
+	padding: 30px 15px;
 	font-size: 14px;
 	word-break: break-word;
+	border-top: 0.5px solid #303030;
 }
 
 .error-response {
+	width: calc(100% - 80px);
 	color: #FF5050;
 	background: #FF000014;
-	padding: 15px;
+	padding: 30px 15px;
 	font-size: 14px;
 	word-break: break-word;
 }

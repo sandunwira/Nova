@@ -22,8 +22,21 @@ fetch('data/crisis_hotlines.json')
 const chatForm = document.getElementById('chatForm');
 const chatMessage = document.getElementById('chatMessage');
 const botResponse = document.getElementById('botResponse');
+const chatFormVoiceBtn = document.getElementById('chatFormVoiceBtn');
 const chatFormSubmitBtn = document.getElementById('chatFormSubmitBtn');
 const chatResponses = document.getElementById('chatResponses');
+
+
+let userChatAvatarHTML = `
+	<div style="height: calc(100% - 30px); padding-top: 30px; width: 45px; display: flex; align-items: start; justify-content: center; user-select: none;">
+		<img src="assets/images/useravatars/thumbs13.svg" alt="User Avatar" style="height: 20px; width: 20px; object-fit: cover; border-radius: 50px;">
+	</div>
+`;
+let botChatAvatarHTML = `
+	<div style="height: calc(100% - 30px); padding-top: 30px; width: 45px; display: flex; align-items: start; justify-content: center; user-select: none;">
+		<img src="assets/images/logo.svg" alt="Nova Avatar" style="height: 20px; width: 20px; object-fit: contain;">
+	</div>
+`;
 
 
 // Add the showWelcomeMessage function
@@ -123,8 +136,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 			event.preventDefault();
 
 			const userResponse = document.createElement('div');
-			userResponse.className = 'user-response';
-			userResponse.innerHTML = chatMessage.value.trim();
+			userResponse.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+			userResponse.innerHTML = `
+				${userChatAvatarHTML}
+				<div class="user-response">
+					${chatMessage.value.trim()}
+				</div>
+			`;
 			chatResponses.appendChild(userResponse);
 
 			const userMessage = chatMessage.value.trim();
@@ -176,33 +194,51 @@ document.addEventListener('DOMContentLoaded', async function () {
 						scrolltoBottom();
 					} else {
 						const botResponseDiv = document.createElement('div');
-						botResponseDiv.className = 'bot-response';
-						botResponseDiv.textContent = "Sorry, I couldn't understand the translation request. Please use the format: translate [text] to [target_language].";
+						botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+						botResponseDiv.innerHTML = `
+							${botChatAvatarHTML}
+							<div class="bot-response">
+								Sorry, I couldn't understand the translation request. Please use the format: translate [text] to [target_language].
+							</div>
+						`;
 						chatResponses.appendChild(botResponseDiv);
 
 						scrolltoBottom();
 					}
 				} else if (userMessage.toLowerCase().startsWith("disaster") || userMessage.toLowerCase().startsWith("natural disaster") || userMessage.toLowerCase().startsWith("disaster alert") || userMessage.toLowerCase().startsWith("disaster warning")) {
 					const botResponseDiv = document.createElement('div');
-					botResponseDiv.className = 'bot-response';
+					botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 					botResponseDiv.innerHTML = `
-						<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-							Fetching disaster alerts... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-						</span>
+						${botChatAvatarHTML}
+						<div class="bot-response">
+							<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+								Fetching disaster alerts... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+							</span>
+						</div>
 					`;
 					chatResponses.appendChild(botResponseDiv);
 
 					scrolltoBottom();
 
 					getDisasterAlerts().then(alerts => {
-						botResponseDiv.innerHTML = `${alerts}`;
+						botResponseDiv.innerHTML = `
+							${botChatAvatarHTML}
+							<div class="bot-response">
+								${alerts}
+							</div>
+						`;
 
 						scrolltoBottom();
 					}).catch(() => {
 						botResponseDiv.remove();
 						const errorResponseDiv = document.createElement('div');
-						errorResponseDiv.className = 'error-response';
-						errorResponseDiv.textContent = "Sorry, I couldn't fetch disaster alerts.";
+						errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+						errorResponseDiv.innerHTML = `
+							${botChatAvatarHTML}
+							<div class="error-response">
+								Sorry, I couldn't fetch disaster alerts.
+							</div>
+						`;
 						chatResponses.appendChild(errorResponseDiv);
 
 						scrolltoBottom();
@@ -211,14 +247,17 @@ document.addEventListener('DOMContentLoaded', async function () {
 					const queryforytmusic = userMessage.replace("play", "").trim();
 					if (queryforytmusic === "") {
 						const botResponseDiv = document.createElement('div');
-						botResponseDiv.className = 'bot-response';
+						botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 						botResponseDiv.innerHTML = `
-							<p style="margin-bottom: 5px;">
-								Please provide a song name or artist to play.<br>
-								Hint: play Believer by Imagine Dragons
-							</p><br>
-							<p style="font-size: 10px;">Powered by <a href="https://music.youtube.com" target="_blank">YouTube Music</a></p><br>
-							<p style="color: var(--lightGray); font-weight: 300; font-style: oblique;">If you want to resume playing currently paused media, say "resume".</p>
+							${botChatAvatarHTML}
+							<div class="bot-response">
+								<p style="margin-bottom: 5px;">
+									Please provide a song name or artist to play.<br>
+									Hint: play Believer by Imagine Dragons
+								</p><br>
+								<p style="font-size: 10px;">Powered by <a href="https://music.youtube.com" target="_blank">YouTube Music</a></p><br>
+								<p style="color: var(--lightGray); font-weight: 300; font-style: oblique;">If you want to resume playing currently paused media, say "resume".</p>
+							</div>
 						`;
 						chatResponses.appendChild(botResponseDiv);
 
@@ -243,11 +282,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 						let formattedAmount = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 						const botResponseDiv = document.createElement('div');
-						botResponseDiv.className = 'bot-response';
+						botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 						botResponseDiv.innerHTML = `
-							<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-								Converting ${formattedAmount} ${fromCurrency} to ${toCurrency}... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-							</span>
+							${botChatAvatarHTML}
+							<div class="bot-response">
+								<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+									Converting ${formattedAmount} ${fromCurrency} to ${toCurrency}... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+								</span>
+							</div>
 						`;
 						chatResponses.appendChild(botResponseDiv);
 
@@ -255,25 +297,38 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 						convertCurrency(amount, fromCurrency, toCurrency).then(convertedAmount => {
 							botResponseDiv.innerHTML = `
-								<p>Here's the currency conversion:</p><br>
-								<h1>${convertedAmount}</h1>
-								<p>(as of ${getDateForFunctions().month} ${getDateForFunctions().day}, ${getDateForFunctions().year} at ${getTimeForFunctions()})</p>
+								${botChatAvatarHTML}
+								<div class="bot-response">
+									<p>Here's the currency conversion:</p><br>
+									<h1>${convertedAmount}</h1>
+									<p>(as of ${getDateForFunctions().month} ${getDateForFunctions().day}, ${getDateForFunctions().year} at ${getTimeForFunctions()})</p>
+								</div>
 							`;
 
 							scrolltoBottom();
 						}).catch(error => {
 							botResponseDiv.remove();
 							const errorResponseDiv = document.createElement('div');
-							errorResponseDiv.className = 'error-response';
-							errorResponseDiv.textContent = "Sorry, I couldn't convert the currency.";
+							errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+							errorResponseDiv.innerHTML = `
+								${botChatAvatarHTML}
+								<div class="error-response">
+									Sorry, I couldn't convert the currency.
+								</div>
+							`;
 							chatResponses.appendChild(errorResponseDiv);
 
 							scrolltoBottom();
 						});
 					} else {
 						const errorResponseDiv = document.createElement('div');
-						errorResponseDiv.className = 'error-response';
-						errorResponseDiv.textContent = "Sorry, I couldn't understand the conversion request. Please use the format: convert [amount][base_currency] to [target_currency].";
+						errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+						errorResponseDiv.innerHTML = `
+							${botChatAvatarHTML}
+							<div class="error-response">
+								Sorry, I couldn't understand the conversion request. Please use the format: convert [amount][base_currency] to [target_currency].
+							</div>
+						`;
 						chatResponses.appendChild(errorResponseDiv);
 
 						scrolltoBottom();
@@ -284,37 +339,50 @@ document.addEventListener('DOMContentLoaded', async function () {
 						const bugCodeDetails = findBugCodeDetails(bugCode[1].toUpperCase());
 						if (bugCodeDetails) {
 							const botResponseDiv = document.createElement('div');
-							botResponseDiv.className = 'bot-response';
+							botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 							botResponseDiv.innerHTML = `
-								<p style="margin-bottom: 5px;">Here are the details for the bug code:</p><br>
+								${botChatAvatarHTML}
+								<div class="bot-response">
+									<p style="margin-bottom: 5px;">Here are the details for the bug code:</p><br>
 
-								<h3>Bug Code:</h3>
-								<p>${bugCodeDetails.code}</p><br>
+									<h3>Bug Code:</h3>
+									<p>${bugCodeDetails.code}</p><br>
 
-								<h3>Code Name:</h3>
-								<p>${bugCodeDetails.code_name}</p><br>
+									<h3>Code Name:</h3>
+									<p>${bugCodeDetails.code_name}</p><br>
 
-								<h3>Description:</h3>
-								<p>${bugCodeDetails.description}</p><br>
+									<h3>Description:</h3>
+									<p>${bugCodeDetails.description}</p><br>
 
-								<h3>Solutions:</h3>
-								<p>${bugCodeDetails.solutions.map(solution => `- ${solution}`).join('<br>')}</p>
+									<h3>Solutions:</h3>
+									<p>${bugCodeDetails.solutions.map(solution => `- ${solution}`).join('<br>')}</p>
+								</div>
 							`;
 							chatResponses.appendChild(botResponseDiv);
 
 							scrolltoBottom();
 						} else {
 							const errorResponseDiv = document.createElement('div');
-							errorResponseDiv.className = 'error-response';
-							errorResponseDiv.textContent = "Sorry, I couldn't find any details for the bug code.";
+							errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+							errorResponseDiv.innerHTML = `
+								${botChatAvatarHTML}
+								<div class="error-response">
+									Sorry, I couldn't find any details for the bug code.
+								</div>
+							`;
 							chatResponses.appendChild(errorResponseDiv);
 
 							scrolltoBottom();
 						}
 					} else {
 						const errorResponseDiv = document.createElement('div');
-						errorResponseDiv.className = 'error-response';
-						errorResponseDiv.textContent = "Sorry, I couldn't find any bug code in the request.";
+						errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+						errorResponseDiv.innerHTML = `
+							${botChatAvatarHTML}
+							<div class="error-response">
+								Sorry, I couldn't find any bug code in the request.
+							</div>
+						`;
 						chatResponses.appendChild(errorResponseDiv);
 
 						scrolltoBottom();
@@ -331,11 +399,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 						const category = query[1];
 
 						const botResponseDiv = document.createElement('div');
-						botResponseDiv.className = 'bot-response';
+						botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 						botResponseDiv.innerHTML = `
-							<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-								Changing the wallpaper... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-							</span>
+							${botChatAvatarHTML}
+							<div class="bot-response">
+								<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+									Changing the wallpaper... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+								</span>
+							</div>
 						`;
 						chatResponses.appendChild(botResponseDiv);
 
@@ -343,15 +414,23 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 						changeWallpaper(category).then(() => {
 							botResponseDiv.innerHTML = `
-								${category.charAt(0).toUpperCase() + category.slice(1)} wallpaper changed successfully!
+								${botChatAvatarHTML}
+								<div class="bot-response">
+									${category.charAt(0).toUpperCase() + category.slice(1)} wallpaper changed successfully!
+								</div>
 							`;
 
 							scrolltoBottom();
 						}).catch(error => {
 							botResponseDiv.remove();
 							const errorResponseDiv = document.createElement('div');
-							errorResponseDiv.className = 'error-response';
-							errorResponseDiv.innerHTML = "Sorry, I couldn't change the wallpaper.";
+							errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+							errorResponseDiv.innerHTML = `
+								${botChatAvatarHTML}
+								<div class="error-response">
+									Sorry, I couldn't change the wallpaper.
+								</div>
+							`;
 							chatResponses.appendChild(errorResponseDiv);
 
 							scrolltoBottom();
@@ -359,8 +438,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 					} else {
 						const response = "Sorry, I couldn't find any wallpaper to change.";
 						const botResponseDiv = document.createElement('div');
-						botResponseDiv.className = 'bot-response';
-						botResponseDiv.innerHTML = response;
+						botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+						botResponseDiv.innerHTML = `
+							${botChatAvatarHTML}
+							<div class="bot-response">
+								${response}
+							</div>
+						`;
 						chatResponses.appendChild(botResponseDiv);
 
 						scrolltoBottom();
@@ -374,23 +458,36 @@ document.addEventListener('DOMContentLoaded', async function () {
 					const inputText = userMessage.replace("summarize:", "").trim().replace("summarise:", "").trim();
 					if (inputText === "") {
 						const errorResponseDiv = document.createElement('div');
-						errorResponseDiv.className = 'error-response';
-						errorResponseDiv.innerHTML = "Please provide a text to summarize.<br>Hint: summarize: [text]";
+						errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+						errorResponseDiv.innerHTML = `
+							${botChatAvatarHTML}
+							<div class="error-response">
+								Please provide a text to summarize.<br>Hint: summarize: [text]
+							</div>
+						`;
 						chatResponses.appendChild(errorResponseDiv);
 
 						scrolltoBottom();
 					} else {
 						const botResponseDiv = document.createElement('div');
-						botResponseDiv.className = 'bot-response';
+						botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 						botResponseDiv.innerHTML = `
-							<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-								Summarizing the text... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-							</span>
+							${botChatAvatarHTML}
+							<div class="bot-response">
+								<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+									Summarizing the text... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+								</span>
+							</div>
 						`;
 						chatResponses.appendChild(botResponseDiv);
 
 						const response = await textSummarizer(inputText).then(summary => summary).catch(error => "Sorry, I couldn't summarize the text.");
-						botResponseDiv.innerHTML = 'Here is the summarized text:<br><br>' + response;
+						botResponseDiv.innerHTML = `
+							${botChatAvatarHTML}
+							<div class="bot-response">
+								Here is the summarized text:<br><br>${response}
+							</div>
+						`;
 
 						scrolltoBottom();
 					}
@@ -533,16 +630,26 @@ document.addEventListener('DOMContentLoaded', async function () {
 								// For intents that only need responses (like greetings)
 								const response = await assistant.processQuery(userMessage);
 								const botResponseDiv = document.createElement('div');
-								botResponseDiv.className = 'bot-response';
-								botResponseDiv.innerHTML = response;
+								botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+								botResponseDiv.innerHTML = `
+									${botChatAvatarHTML}
+									<div class="bot-response">
+										${response}
+									</div>
+								`;
 								chatResponses.appendChild(botResponseDiv);
 						}
 					} else {
 						// No intent matched, use default response
 						const response = await assistant.processQuery(userMessage);
 						const botResponseDiv = document.createElement('div');
-						botResponseDiv.className = 'bot-response';
-						botResponseDiv.innerHTML = response;
+						botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+						botResponseDiv.innerHTML = `
+							${botChatAvatarHTML}
+							<div class="bot-response">
+								${response}
+							</div>
+						`;
 						chatResponses.appendChild(botResponseDiv);
 					}
 				}
@@ -552,8 +659,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 				console.error('Error processing query:', error);
 
 				const errorResponseDiv = document.createElement('div');
-				errorResponseDiv.className = 'error-response';
-				errorResponseDiv.innerHTML = 'Sorry, an error occurred while processing your request.';
+				errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+				errorResponseDiv.innerHTML = `
+					${botChatAvatarHTML}
+					<div class="error-response">
+						Sorry, an error occurred while processing your request.
+					</div>
+				`;
 				chatResponses.appendChild(errorResponseDiv);
 
 				scrolltoBottom();
@@ -570,8 +682,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 		console.error('Failed to initialize assistant:', error);
 
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = 'Sorry, the assistant failed to initialize properly.';
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, the assistant failed to initialize properly.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -611,8 +728,13 @@ async function openURL(url) {
 	url = `https://${url}`;
 
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
-	botResponseDiv.innerHTML = "Opening " + url + "...";
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+	botResponseDiv.innerHTML = `
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			Opening ${url}...
+		</div>
+	`;
 	chatResponses.appendChild(botResponseDiv);
 
 	scrolltoBottom();
@@ -623,7 +745,10 @@ async function openURL(url) {
 		});
 
 		botResponseDiv.innerHTML = `
-			Opened <a href="${url}" target="_blank">${url}</a> successfully. Enjoy!
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Opened <a href="${url}" target="_blank">${url}</a> successfully. Enjoy!
+			</div>
 		`;
 
 		scrolltoBottom();
@@ -632,8 +757,13 @@ async function openURL(url) {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.textContent = "Sorry, I couldn't open the URL.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't open the URL.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -655,9 +785,12 @@ async function openApplication(appName) {
 				console.log(`${response.launched_app} launched successfully. Enjoy!`);
 
 				const botResponseDiv = document.createElement('div');
-				botResponseDiv.className = 'bot-response';
+				botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 				botResponseDiv.innerHTML = `
-					${response.launched_app} launched successfully. Enjoy!
+					${botChatAvatarHTML}
+					<div class="bot-response">
+						${response.launched_app} launched successfully. Enjoy!
+					</div>
 				`;
 				chatResponses.appendChild(botResponseDiv);
 
@@ -674,8 +807,13 @@ async function openApplication(appName) {
 				console.error('Application error:', response.message);
 
 				const errorResponseDiv = document.createElement('div');
-				errorResponseDiv.className = 'error-response';
-				errorResponseDiv.innerHTML = response.message;
+				errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+				errorResponseDiv.innerHTML = `
+					${botChatAvatarHTML}
+					<div class="error-response">
+						${response.message}
+					</div>
+				`;
 				chatResponses.appendChild(errorResponseDiv);
 
 				scrolltoBottom();
@@ -691,8 +829,13 @@ async function openApplication(appName) {
 		console.error('Failed to execute command:', error);
 
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = 'Sorry, I encountered a system error. Please try again later.';
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I encountered a system error. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -707,11 +850,14 @@ async function openApplication(appName) {
 // Function to close applications
 async function closeApplication(appName) {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Attempting to close ${appName} and its processes... <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Attempting to close ${appName} and its processes... <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -723,9 +869,12 @@ async function closeApplication(appName) {
 
 		switch(response.status) {
 			case 'success':
-				responseDiv.className = 'bot-response';
+				responseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 				responseDiv.innerHTML = `
-					${response.message}
+					${botChatAvatarHTML}
+					<div class="bot-response">
+						${response.message}
+					</div>
 				`;
 				new Notification('Application Closed', {
 					body: response.message,
@@ -734,27 +883,36 @@ async function closeApplication(appName) {
 				break;
 
 			case 'error':
-				responseDiv.className = 'error-response';
+				responseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 				if (response.protected) {
 					// Handle protected process error
 					responseDiv.innerHTML = `
-						${response.message}<br>
-						<span style="color: var(--lightGray); font-size: 12px;">
-							This is a system process that cannot be terminated for security reasons.
-						</span>
+						${botChatAvatarHTML}
+						<div class="error-response">
+							${response.message}<br>
+							<span style="color: var(--lightGray); font-size: 12px;">
+								This is a system process that cannot be terminated for security reasons.
+							</span>
+						</div>
 					`;
 				} else if (response.not_found) {
 					// Handle process not found error
 					responseDiv.innerHTML = `
-						${response.message}<br>
-						<span style="color: var(--lightGray); font-size: 12px;">
-							The application might not be running or might have a different process name.
-						</span>
+						${botChatAvatarHTML}
+						<div class="error-response">
+							${response.message}<br>
+							<span style="color: var(--lightGray); font-size: 12px;">
+								The application might not be running or might have a different process name.
+							</span>
+						</div>
 					`;
 				} else {
 					// Handle other errors
 					responseDiv.innerHTML = `
-						${response.message}
+						${botChatAvatarHTML}
+						<div class="error-response">
+							${response.message}
+						</div>
 					`;
 				}
 				new Notification('Error', {
@@ -764,8 +922,13 @@ async function closeApplication(appName) {
 				break;
 
 			default:
-				responseDiv.className = 'error-response';
-				responseDiv.innerHTML = 'An unexpected error occurred.';
+				responseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+				responseDiv.innerHTML = `
+					${botChatAvatarHTML}
+					<div class="error-response">
+						An unexpected error occurred.
+					</div>
+				`;
 				new Notification('Error', {
 					body: 'An unexpected error occurred.',
 					sound: 'Default'
@@ -780,12 +943,15 @@ async function closeApplication(appName) {
 		chatResponses.removeChild(botResponseDiv);
 
 		const errorDiv = document.createElement('div');
-		errorDiv.className = 'error-response';
+		errorDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 		errorDiv.innerHTML = `
-			Failed to close application.<br>
-			<span style="color: var(--lightGray); font-size: 12px;">
-				Error: ${error.message}
-			</span>
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Failed to close application.<br>
+				<span style="color: var(--lightGray); font-size: 12px;">
+					Error: ${error.message}
+				</span>
+			</div>
 		`;
 		chatResponses.appendChild(errorDiv);
 
@@ -806,11 +972,14 @@ function getRandomMovie() {
 	let randomMovieID = Math.floor(Math.random() * 10000000);
 
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Searching for a movie... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Searching for a movie... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -863,21 +1032,24 @@ function getRandomMovie() {
 			}
 
 			botResponseDiv.innerHTML = `
-				Here's a movie I found for you:<br><br>
-				<span style="display: flex; flex-direction: row; justify-content: center; gap: 15px;">
-					<span style="width: 50%;">
-						<h1>${movieTitle} (${movieYear})</h1><br>
-						<h3>Genre:</h3><p>${movieGenre}</p><br>
-						<h3>Rating:</h3><p>${movieRating}</p><br>
-						<h3>Director:</h3><p>${movieDirector}</p><br>
-						<h3>Actors:</h3><p>${movieActors}</p><br>
-						<h3>Plot:</h3><p>${moviePlot}</p><br>
-						<p>Visit <a href="https://www.imdb.com/title/${data.imdbID}" target="_blank">IMDb Page</a></p>
+				${botChatAvatarHTML}
+				<div class="bot-response">
+					Here's a movie I found for you:<br><br>
+					<span style="display: flex; flex-direction: row; justify-content: center; gap: 15px;">
+						<span style="width: 50%;">
+							<h1>${movieTitle} (${movieYear})</h1><br>
+							<h3>Genre:</h3><p>${movieGenre}</p><br>
+							<h3>Rating:</h3><p>${movieRating}</p><br>
+							<h3>Director:</h3><p>${movieDirector}</p><br>
+							<h3>Actors:</h3><p>${movieActors}</p><br>
+							<h3>Plot:</h3><p>${moviePlot}</p><br>
+							<p>Visit <a href="https://www.imdb.com/title/${data.imdbID}" target="_blank">IMDb Page</a></p>
+						</span>
+						<span style="width: 50%;">
+							${moviePosterContainer}
+						</span>
 					</span>
-					<span style="width: 50%;">
-						${moviePosterContainer}
-					</span>
-				</span>
+				</div>
 			`;
 
 			scrolltoBottom();
@@ -891,11 +1063,14 @@ function getRandomMovie() {
 // function to get the ip address
 async function getIPAddress() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Fetching your IP Address... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Fetching your IP Address... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -908,8 +1083,11 @@ async function getIPAddress() {
 		const country = data.country;
 
 		botResponseDiv.innerHTML = `
-			<p style="margin-bottom: 5px;">Your IP Address is:</p>
-			<h1>${ipaddress}</h1>
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				<p style="margin-bottom: 5px;">Your IP Address is:</p>
+				<h1>${ipaddress}</h1>
+			</div>
 		`;
 
 		scrolltoBottom();
@@ -920,8 +1098,13 @@ async function getIPAddress() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't fetch your IP Address.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't fetch your IP Address.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -950,11 +1133,14 @@ async function getIPAddressForFunctions() {
 // function to get the weather
 async function getWeather() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Fetching the weather... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Fetching the weather... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -1044,7 +1230,12 @@ async function getWeather() {
 			<p style="color: var(--lightGray); font-weight: 300; font-style: oblique;">${weatherComment}</p>
 			<br><p style="font-size: 10px;">Powered by <a href="https://openweathermap.org" target="_blank">OpenWeatherMap</a></p>
 		`;
-		botResponseDiv.innerHTML = response;
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				${response}
+			</div>
+		`;
 
 		scrolltoBottom();
 
@@ -1054,8 +1245,13 @@ async function getWeather() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't fetch the weather.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't fetch the weather.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1074,11 +1270,14 @@ async function searchWeb(query) {
 	const url = proxyUrl + targetUrl;
 
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Searching the web... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Searching the web... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -1157,15 +1356,23 @@ async function searchWeb(query) {
 
 		if (search_status === 'success') {
 			botResponseDiv.innerHTML = `
-				Here's what i've found in web:<br><br>
-				${snippetText}<br><br>
-				<p style="font-size: 10px;">Powered by <a href="https://duckduckgo.com" target="_blank">DuckDuckGo</a></p>
+				${botChatAvatarHTML}
+				<div class="bot-response">
+					Here's what i've found in web:<br><br>
+					${snippetText}<br><br>
+					<p style="font-size: 10px;">Powered by <a href="https://duckduckgo.com" target="_blank">DuckDuckGo</a></p>
+				</div>
 			`;
 		} else if (search_status === 'no_results' || search_status === 'no_snippet') {
 			botResponseDiv.remove();
 			const errorResponseDiv = document.createElement('div');
-			errorResponseDiv.className = 'error-response';
-			errorResponseDiv.textContent = "Sorry, I couldn't find any relevant information. Please try again in a bit or try a different search query.";
+			errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+			errorResponseDiv.innerHTML = `
+				${botChatAvatarHTML}
+				<div class="error-response">
+					Sorry, I couldn't find any relevant information. Please try again in a bit or try a different search query.
+				</div>
+			`;
 			chatResponses.appendChild(errorResponseDiv);
 		}
 
@@ -1176,10 +1383,15 @@ async function searchWeb(query) {
 		console.error('Error fetching or parsing HTML:', error);
 
 		botResponseDiv.remove();
-		const botResponseDiv = document.createElement('div');
-		botResponseDiv.className = 'error-response';
-		botResponseDiv.innerHTML = "Sorry, I couldn't find any relevant information. Please try again in a bit or try a different search query.";
-		chatResponses.appendChild(botResponseDiv);
+		const errorResponseDiv = document.createElement('div');
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't find any relevant information. Please try again in a bit or try a different search query.
+			</div>
+		`;
+		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
 		throw error;
@@ -1191,11 +1403,14 @@ async function searchWeb(query) {
 // function to get the time
 function getTime() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Fetching the time... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Fetching the time... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -1231,8 +1446,11 @@ function getTime() {
 		let ampm = date.getHours() >= 12 ? 'pm' : 'am';
 
 		botResponseDiv.innerHTML = `
-			<p style="margin-bottom: 5px;">Current time is:</p>
-			<h1>${hours}:${minutes}${ampm}</h1>
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				<p style="margin-bottom: 5px;">Current time is:</p>
+				<h1>${hours}:${minutes}${ampm}</h1>
+			</div>
 		`;
 
 		scrolltoBottom();
@@ -1243,8 +1461,13 @@ function getTime() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't fetch the time.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't fetch the time.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1295,11 +1518,14 @@ function getTimeForFunctions() {
 // function to get the date
 function getDate() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Fetching the date... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Fetching the date... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -1332,8 +1558,11 @@ function getDate() {
 		let year = date.getFullYear();
 
 		botResponseDiv.innerHTML = `
-			<p style="margin-bottom: 5px;">Today's date is:</p>
-			<h1>${day} ${month}, ${year}</h1>
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				<p style="margin-bottom: 5px;">Today's date is:</p>
+				<h1>${day} ${month}, ${year}</h1>
+			</div>
 		`;
 
 		scrolltoBottom();
@@ -1344,8 +1573,13 @@ function getDate() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't fetch the date.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't fetch the date.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1394,11 +1628,14 @@ function getDateForFunctions() {
 // function to calculate numbers
 function calculateNumbers(expression) {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Calculating... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Calculating... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -1408,8 +1645,11 @@ function calculateNumbers(expression) {
 		const result = new Function('return ' + expression)();
 
 		botResponseDiv.innerHTML = `
-			<p style="margin-bottom: 5px;">The answer of ${expression} is:</p>
-			<h1>${result}</h1>
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				<p style="margin-bottom: 5px;">The answer of ${expression} is:</p>
+				<h1>${result}</h1>
+			</div>
 		`;
 
 		scrolltoBottom();
@@ -1418,9 +1658,15 @@ function calculateNumbers(expression) {
 	} catch (error) {
 		console.error('Error in calculateNumbers:', error);
 
+		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't calculate the numbers.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't calculate the numbers.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1434,11 +1680,14 @@ function calculateNumbers(expression) {
 // function to fetch news from rss feed
 async function fetchNews() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Fetching the latest news... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Fetching the latest news... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -1471,7 +1720,12 @@ async function fetchNews() {
 		});
 
 		newsText += '<br><p style="font-size: 10px;">Powered by <a href="https://abcnews.go.com" target="_blank">ABC News</a></p>';
-		botResponseDiv.innerHTML = newsText;
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				${newsText}
+			</div>
+		`;
 
 		return newsItems;
 	} catch (error) {
@@ -1479,8 +1733,13 @@ async function fetchNews() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.textContent = "Sorry, I couldn't fetch the latest news.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't fetch the latest news.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1494,11 +1753,14 @@ async function fetchNews() {
 // function to get image of the day
 async function getImageOfTheDay() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Fetching the image of the day... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Fetching the image of the day... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -1524,10 +1786,13 @@ async function getImageOfTheDay() {
 		const imageCredits = jsonData.images[0].copyright;
 
 		botResponseDiv.innerHTML = `
-			Here's the image of the day:<br><br>
-			<h1>${imageTitle}</h1>
-			<img src="${imageUrl}" alt="${imageTitle}" style="margin: 10px 0px 5px 0px;">
-			<br><p style="font-size: 10px;">Powered by <a href="https://www.bing.com" target="_blank">Bing</a> | Image Credits: ${imageCredits}</p>
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Here's the image of the day:<br><br>
+				<h1>${imageTitle}</h1>
+				<img src="${imageUrl}" alt="${imageTitle}" style="margin: 10px 0px 5px 0px;">
+				<br><p style="font-size: 10px;">Powered by <a href="https://www.bing.com" target="_blank">Bing</a> | Image Credits: ${imageCredits}</p>
+			</div>
 		`;
 
 		scrolltoBottom();
@@ -1538,8 +1803,13 @@ async function getImageOfTheDay() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.textContent = "Sorry, I couldn't fetch the image of the day.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't fetch the image of the day.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1553,11 +1823,14 @@ async function getImageOfTheDay() {
 // function to get quote of the day
 async function getQuoteOfTheDay() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Fetching the quote of the day... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Fetching the quote of the day... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -1583,9 +1856,12 @@ async function getQuoteOfTheDay() {
 		const fullQuote = quote + ' - ' + author;
 
 		botResponseDiv.innerHTML = `
-			Quote of the day is:<br><br>
-			<h1>${quote}</h1>
-			<p style="margin-top: 5px;">- ${author}</p>
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Quote of the day is:<br><br>
+				<h1>${quote}</h1>
+				<p style="margin-top: 5px;">- ${author}</p>
+			</div>
 		`;
 
 		scrolltoBottom();
@@ -1596,8 +1872,13 @@ async function getQuoteOfTheDay() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.textContent = "Sorry, I couldn't fetch the quote of the day.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't fetch the quote of the day.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1611,11 +1892,14 @@ async function getQuoteOfTheDay() {
 // function to get random quote
 async function getRandomQuote() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Fetching a random quote... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Fetching a random quote... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -1641,9 +1925,12 @@ async function getRandomQuote() {
 		const fullQuote = quote + ' - ' + author;
 
 		botResponseDiv.innerHTML = `
-			Here's a quote I found for you:<br><br>
-			<h1>${quote}</h1>
-			<p style="margin-top: 5px;">- ${author}</p>
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Here's a quote I found for you:<br><br>
+				<h1>${quote}</h1>
+				<p style="margin-top: 5px;">- ${author}</p>
+			</div>
 		`;
 
 		scrolltoBottom();
@@ -1654,8 +1941,13 @@ async function getRandomQuote() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.textContent = "Sorry, I couldn't fetch a random quote.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't fetch a random quote.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1669,11 +1961,14 @@ async function getRandomQuote() {
 // function to get on this day events
 async function getOnThisDayEvents() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Fetching on this day events... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Fetching on this day events... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -1705,7 +2000,12 @@ async function getOnThisDayEvents() {
 			eventsText += `<p style="margin-top: 20px;">${event}</p>`;
 		});
 
-		botResponseDiv.innerHTML = `${eventsText}`;
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				${eventsText}
+			</div>
+		`;
 
 		return events;
 	} catch (error) {
@@ -1713,8 +2013,13 @@ async function getOnThisDayEvents() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.textContent = "Sorry, I couldn't fetch on this day events.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't fetch on this day events.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1728,11 +2033,14 @@ async function getOnThisDayEvents() {
 // function to get random meal recipes
 async function getRandomMeal() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Fetching a random meal recipe... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Fetching a random meal recipe... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -1772,7 +2080,12 @@ async function getRandomMeal() {
 			<p style="font-size: 10px; margin-top: 5px;"><a href="${mealYoutube}" target="_blank">YouTube</a></p>
 		`;
 
-		botResponseDiv.innerHTML = `${mealDetails}`;
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				${mealDetails}
+			</div>
+		`;
 
 		scrolltoBottom();
 
@@ -1782,8 +2095,13 @@ async function getRandomMeal() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't fetch a random meal recipe.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't fetch a random meal recipe.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		throw error;
@@ -1795,11 +2113,14 @@ async function getRandomMeal() {
 // function to search books
 async function searchBooks(query) {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Searching for books about ${query}... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Searching for books about ${query}... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -1843,15 +2164,23 @@ async function searchBooks(query) {
 			}).join('<br>');
 
 			botResponseDiv.innerHTML = `
-				Here are books that I found for "${query}":<br><br>
-				${bookDetails}
+				${botChatAvatarHTML}
+				<div class="bot-response">
+					Here are books that I found for "${query}":<br><br>
+					${bookDetails}
+				</div>
 			`;
 
 			return bookDetails;
 		} else {
 			console.log('No books found');
 
-			botResponseDiv.innerHTML = "Sorry, I couldn't find any books about " + query + ".";
+			botResponseDiv.innerHTML = `
+				${botChatAvatarHTML}
+				<div class="bot-response">
+					Sorry, I couldn't find any books about "${query}"
+				</div>
+			`;
 
 			scrolltoBottom();
 
@@ -1862,8 +2191,13 @@ async function searchBooks(query) {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, an error occurred while fetching books.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, an error occurred while fetching books.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1877,11 +2211,14 @@ async function searchBooks(query) {
 // function to translate text
 async function translateText(text, targetLanguage) {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Translating the text... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Translating the text... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -1944,8 +2281,11 @@ async function translateText(text, targetLanguage) {
 		const translatedText = data.translations[0].text;
 
 		botResponseDiv.innerHTML = `
-			<p style="margin-bottom: 5px;">Here's the translated text for "${text}":</p>
-			<h1>${translatedText}</h1>
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				<p style="margin-bottom: 5px;">Here's the translated text for "${text}":</p>
+				<h1>${translatedText}</h1>
+			</div>
 		`;
 
 		scrolltoBottom();
@@ -1956,8 +2296,13 @@ async function translateText(text, targetLanguage) {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, an error occurred while translating the text.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, an error occurred while translating the text.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1969,11 +2314,14 @@ async function translateText(text, targetLanguage) {
 // function to create qr codes
 function createQRCode(textforqr) {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Creating QR Code for ${textforqr}... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Creating QR Code for ${textforqr}... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -1994,11 +2342,12 @@ function createQRCode(textforqr) {
 		qrCodeElement.style.height = '128px';
 
 		botResponseDiv.innerHTML = `
-			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+			${botChatAvatarHTML}
+			<div class="bot-response">
 				Here's the QR Code for "${textforqr}":<br><br>
-			</span>
+				${qrCodeElement.outerHTML}
+			</div>
 		`;
-		botResponseDiv.appendChild(qrCodeElement);
 
 		scrolltoBottom();
 
@@ -2008,8 +2357,13 @@ function createQRCode(textforqr) {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, an error occurred while creating the QR Code.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, an error occurred while creating the QR Code.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2023,11 +2377,14 @@ function createQRCode(textforqr) {
 // function to open_ytmusic
 async function openYTMusic(queryforytmusic) {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Opening YouTube Music... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Opening YouTube Music... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2054,7 +2411,10 @@ async function openYTMusic(queryforytmusic) {
 			console.log("Opened YouTube Music");
 
 			botResponseDiv.innerHTML = `
-				<p style="margin-bottom: 5px;">Opened YouTube Music</p>
+				${botChatAvatarHTML}
+				<div class="bot-response">
+					<p style="margin-bottom: 5px;">Opened YouTube Music</p>
+				</div>
 			`;
 
 			scrolltoBottom();
@@ -2066,8 +2426,13 @@ async function openYTMusic(queryforytmusic) {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't open YouTube Music.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't open YouTube Music.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2081,11 +2446,14 @@ async function openYTMusic(queryforytmusic) {
 // function to play media
 async function playMedia() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Resuming playback... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Resuming playback... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2094,14 +2462,24 @@ async function playMedia() {
 	try {
 		await window.__TAURI__.invoke('play_media');
 
-		botResponseDiv.innerHTML = "Resumed playback...";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Resumed playback...
+			</div>
+		`;
 	} catch (error) {
 		console.error('Failed to play media:', error);
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Failed to play media. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Failed to play media. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2111,11 +2489,14 @@ async function playMedia() {
 // function to pause media
 async function pauseMedia() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Pausing playback... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Pausing playback... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2124,14 +2505,24 @@ async function pauseMedia() {
 	try {
 		await window.__TAURI__.invoke('pause_media');
 
-		botResponseDiv.innerHTML = "Paused playback...";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Paused playback...
+			</div>
+		`;
 	} catch (error) {
 		console.error('Failed to pause media:', error);
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Failed to pause media. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Failed to pause media. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2141,11 +2532,14 @@ async function pauseMedia() {
 // function to play previous media
 async function previousMedia() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Playing previous track... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Playing previous track... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2154,14 +2548,24 @@ async function previousMedia() {
 	try {
 		await window.__TAURI__.invoke('previous_media');
 
-		botResponseDiv.innerHTML = "Played previous track...";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Played previous track...
+			</div>
+		`;
 	} catch (error) {
 		console.error('Failed to play previous media:', error);
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Failed to play previous track. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Failed to play previous track. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2171,11 +2575,14 @@ async function previousMedia() {
 // function to play next media
 async function nextMedia() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Playing next track... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Playing next track... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2184,14 +2591,24 @@ async function nextMedia() {
 	try {
 		await window.__TAURI__.invoke('next_media');
 
-		botResponseDiv.innerHTML = "Played next track...";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Played next track...
+			</div>
+		`;
 	} catch (error) {
 		console.error('Failed to play next media:', error);
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Failed to play next track. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Failed to play next track. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2201,11 +2618,14 @@ async function nextMedia() {
 // function to increase volume
 async function increaseVolume() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Increasing volume... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Increasing volume... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2214,14 +2634,24 @@ async function increaseVolume() {
 	try {
 		await window.__TAURI__.invoke('increase_volume');
 
-		botResponseDiv.innerHTML = "Volume increased...";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Volume increased...
+			</div>
+		`;
 	} catch (error) {
 		console.error('Failed to increase volume:', error);
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Failed to increase volume. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Failed to increase volume. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2231,11 +2661,14 @@ async function increaseVolume() {
 // function to decrease volume
 async function decreaseVolume() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Decreasing volume... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Decreasing volume... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2244,14 +2677,24 @@ async function decreaseVolume() {
 	try {
 		await window.__TAURI__.invoke('decrease_volume');
 
-		botResponseDiv.innerHTML = "Volume decreased...";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Volume decreased...
+			</div>
+		`;
 	} catch (error) {
 		console.error('Failed to decrease volume:', error);
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Failed to decrease volume. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Failed to decrease volume. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2261,11 +2704,14 @@ async function decreaseVolume() {
 // function to toggle mute
 async function muteVolume() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Toggling mute... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Toggling mute... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2274,14 +2720,24 @@ async function muteVolume() {
 	try {
 		await window.__TAURI__.invoke('toggle_mute');
 
-		botResponseDiv.innerHTML = "Volume muted...";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Volume muted...
+			</div>
+		`;
 	} catch (error) {
 		console.error('Failed to mute volume:', error);
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Failed to mute volume. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Failed to mute volume. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2291,11 +2747,14 @@ async function muteVolume() {
 // function to toggle unmute
 async function unmuteVolume() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Toggling unmute... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Toggling unmute... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2304,13 +2763,23 @@ async function unmuteVolume() {
 	try {
 		await window.__TAURI__.invoke('toggle_mute');
 
-		botResponseDiv.innerHTML = "Volume unmuted...";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Volume unmuted...
+			</div>
+		`;
 	} catch (error) {
 		console.error('Failed to unmute volume:', error);
 
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Failed to unmute volume. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Failed to unmute volume. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2322,11 +2791,14 @@ async function unmuteVolume() {
 // function to turn on wifi
 async function turnOnWiFi() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Turning on WiFi... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Turning on WiFi... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2335,13 +2807,23 @@ async function turnOnWiFi() {
 	try {
 		await window.__TAURI__.invoke('turn_on_wifi');
 
-		botResponseDiv.innerHTML = "WiFi turned on...";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				WiFi turned on...
+			</div>
+		`;
 	} catch (error) {
 		console.error('Failed to turn on WiFi:', error);
 
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Failed to turn on WiFi. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Failed to turn on WiFi. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2351,11 +2833,14 @@ async function turnOnWiFi() {
 // function to turn off wifi
 async function turnOffWiFi() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Turning off WiFi... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Turning off WiFi... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2364,13 +2849,23 @@ async function turnOffWiFi() {
 	try {
 		await window.__TAURI__.invoke('turn_off_wifi');
 
-		botResponseDiv.innerHTML = "WiFi turned off...";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				WiFi turned off...
+			</div>
+		`;
 	} catch (error) {
 		console.error('Failed to turn off WiFi:', error);
 
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Failed to turn off WiFi. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Failed to turn off WiFi. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2382,7 +2877,7 @@ async function turnOffWiFi() {
 // function to get natural disaster alerts
 async function getDisasterAlerts() {
 	try {
-		const { country } = await getIPAddress();
+		const { country } = await getIPAddressForFunctions();
 		let countryCode = country;
 		switch (country) {
 			case 'AF': countryCode = 'AFG'; break; case 'AX': countryCode = 'ALA'; break; case 'AL': countryCode = 'ALB'; break;
@@ -2570,11 +3065,14 @@ async function convertCurrency(amount, fromCurrency, toCurrency) {
 // Function to get and display system information
 async function getSystemInfo() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Fetching system information... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Fetching system information... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2664,7 +3162,12 @@ async function getSystemInfo() {
 			<h3>Networks:</h3>
 			<p>${networksInfo}</p>
 		`;
-		botResponseDiv.innerHTML = response;
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				${response}
+			</div>
+		`;
 
 		scrolltoBottom();
 
@@ -2674,8 +3177,13 @@ async function getSystemInfo() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.textContent = "Sorry, I couldn't fetch system information.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't fetch system information.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2706,34 +3214,41 @@ function findBugCodeDetails(bugCode) {
 async function sendEmail() {
 	try {
 		chatMessage.setAttribute('disabled', true);
+		chatFormVoiceBtn.disabled = true;
 		chatFormSubmitBtn.disabled = true;
 
 		const botResponseDiv = document.createElement('div');
-		botResponseDiv.className = 'bot-response';
-		botResponseDiv.innerHTML = "Enter the email details here:<br><br>";
+		botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Enter the email details here:<br><br>
+				<form id="emailForm">
+					<label style="display: block; margin-bottom: 5px;" for="emailTo">To:</label>
+					<input type="email" id="emailTo" name="emailTo" required><br><br>
 
-		const emailForm = document.createElement('form');
-		emailForm.id = 'emailForm';
-		emailForm.innerHTML = `
-			<label style="display: block; margin-bottom: 5px;" for="emailTo">To:</label>
-			<input type="email" id="emailTo" name="emailTo" required><br><br>
+					<label style="display: block; margin-bottom: 5px;" for="emailSubject">Subject:</label>
+					<input type="text" id="emailSubject" name="emailSubject" required><br><br>
 
-			<label style="display: block; margin-bottom: 5px;" for="emailSubject">Subject:</label>
-			<input type="text" id="emailSubject" name="emailSubject" required><br><br>
+					<label style="display: block; margin-bottom: 5px;" for="emailBody">Body:</label>
+					<input type="text" id="emailBody" name="emailBody" required><br><br>
 
-			<label style="display: block; margin-bottom: 5px;" for="emailBody">Body:</label>
-			<input type="text" id="emailBody" name="emailBody" required><br><br>
-
-			<button type="submit">Send Email</button>
-			<button type="button" id="emailCloseBtn">Close Form</button><br><br>
+					<button type="submit">Send Email</button>
+					<button type="button" id="emailCloseBtn">Close Form</button><br><br>
+				</form>
+			</div>
 		`;
-
-		botResponseDiv.appendChild(emailForm);
 		chatResponses.appendChild(botResponseDiv);
 
 		document.getElementById('emailCloseBtn').addEventListener('click', () => {
 			document.getElementById('emailForm').remove();
-			botResponseDiv.textContent = 'Email Form Closed';
+			botResponseDiv.innerHTML = `
+				${botChatAvatarHTML}
+				<div class="bot-response">
+					Email Form Closed
+				</div>
+			`;
+			chatFormVoiceBtn.disabled = false;
 			chatFormSubmitBtn.disabled = false;
 			chatMessage.removeAttribute('disabled', false);
 			chatMessage.focus();
@@ -2755,11 +3270,17 @@ async function sendEmail() {
 			try {
 				await window.__TAURI__.invoke('open_url', { url: mailtolink });
 
-				botResponseDiv.innerHTML = "Opened email client. Please click send to send the email.";
+				botResponseDiv.innerHTML = `
+					${botChatAvatarHTML}
+					<div class="bot-response">
+						Opened email client. Please click send to send the email.
+					</div>
+				`;
 
 				scrolltoBottom();
 
 				alert('Opened email client. Please click send to send the email.');
+				chatFormVoiceBtn.disabled = false;
 				chatFormSubmitBtn.disabled = false;
 				chatMessage.disabled = false;
 			} catch (error) {
@@ -2767,13 +3288,19 @@ async function sendEmail() {
 
 				botResponseDiv.remove();
 				const errorResponseDiv = document.createElement('div');
-				errorResponseDiv.className = 'bot-response';
-				errorResponseDiv.innerHTML = "Failed to send email. Please try again later.";
+				errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+				errorResponseDiv.innerHTML = `
+					${botChatAvatarHTML}
+					<div class="error-response">
+						Failed to send email. Please try again later.
+					</div>
+				`;
 				chatResponses.appendChild(errorResponseDiv);
 
 				scrolltoBottom();
 
 				alert('Failed to send email. Please try again later.');
+				chatFormVoiceBtn.disabled = false;
 				chatFormSubmitBtn.disabled = false;
 				chatMessage.disabled = false;
 			}
@@ -2782,13 +3309,19 @@ async function sendEmail() {
 		console.error('Error in sendEmail:', error);
 
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Failed to send email. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Failed to send email. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
 
 		alert('Failed to send email. Please try again later.');
+		chatFormVoiceBtn.disabled = false;
 		chatFormSubmitBtn.disabled = false;
 		userMessage.disabled = false;
 
@@ -2804,16 +3337,20 @@ async function searchFile(searchTerms) {
 
 	try {
 		chatMessage.setAttribute('disabled', true);
+		chatFormVoiceBtn.disabled = true;
 		chatFormSubmitBtn.disabled = true;
 		const searchDisplay = `"${searchTerms}"`;
 
 		const botResponseDiv = document.createElement('div');
-		botResponseDiv.className = 'bot-response';
+		botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 		botResponseDiv.innerHTML = `
-			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-				Searching for files matching ${searchDisplay} across all drives... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-			</span><br>
-			This may take a while. Feel free to do something else in the meantime. I'll notify you when the search is complete.
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+					Searching for files matching ${searchDisplay} across all drives... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+				</span><br>
+				This may take a while. Feel free to do something else in the meantime. I'll notify you when the search is complete.
+			</div>
 		`;
 		chatResponses.appendChild(botResponseDiv);
 
@@ -2842,6 +3379,7 @@ async function searchFile(searchTerms) {
 			searchTime = `${searchTime} seconds`;
 		}
 
+		chatFormVoiceBtn.disabled = false;
 		chatFormSubmitBtn.disabled = false;
 		chatMessage.disabled = false;
 
@@ -2861,11 +3399,14 @@ async function searchFile(searchTerms) {
 			}).join('');
 
 			botResponseDiv.innerHTML = `
-				Found ${results.length} file(s) matching ${searchDisplay}:<br><br>
-				<span style="display: grid; grid-template-columns: 95% auto; row-gap: 5px;">
-					${formattedResults}
-				</span><br>
-				<p style="font-size: 10px;">Search took ${searchTime}</p>
+				${botChatAvatarHTML}
+				<div class="bot-response">
+					Found ${results.length} file(s) matching ${searchDisplay}:<br><br>
+					<span style="display: grid; grid-template-columns: 95% auto; row-gap: 5px;">
+						${formattedResults}
+					</span><br>
+					<p style="font-size: 10px;">Search took ${searchTime}</p>
+				</div>
 			`;
 
 			scrolltoBottom();
@@ -2876,8 +3417,11 @@ async function searchFile(searchTerms) {
 			});
 		} else {
 			botResponseDiv.innerHTML = `
-				No matching files found for ${searchDisplay}<br><br>
-				<p style="font-size: 10px;">Search took ${searchTime}</p>
+				${botChatAvatarHTML}
+				<div class="bot-response">
+					No matching files found for ${searchDisplay}<br><br>
+					<p style="font-size: 10px;">Search took ${searchTime}</p>
+				</div>
 			`;
 
 			scrolltoBottom();
@@ -2888,6 +3432,7 @@ async function searchFile(searchTerms) {
 			});
 		}
 	} catch (error) {
+		chatFormVoiceBtn.disabled = false;
 		chatFormSubmitBtn.disabled = false;
 		chatMessage.disabled = false;
 		console.error('Error searching for files:', error);
@@ -2897,8 +3442,13 @@ async function searchFile(searchTerms) {
 		}
 
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = `An error occurred while searching: ${error}`;
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				An error occurred while searching: ${error}
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2915,11 +3465,14 @@ async function searchFile(searchTerms) {
 // function to switch to light mode
 async function switchToLight() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Switching to Light Mode... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Switching to Light Mode... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2929,7 +3482,12 @@ async function switchToLight() {
 		await invoke('set_light_mode');
 		console.log('Switched to light mode');
 
-		botResponseDiv.innerHTML = "Switched to Light Mode successfully!";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Switched to Light Mode successfully!
+			</div>
+		`;
 
 		scrolltoBottom();
 	} catch (error) {
@@ -2937,8 +3495,13 @@ async function switchToLight() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Failed to switch to light mode. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Failed to switch to light mode. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2948,11 +3511,14 @@ async function switchToLight() {
 // function to switch to dark mode
 async function switchToDark() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Switching to Dark Mode... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Switching to Dark Mode... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2962,7 +3528,12 @@ async function switchToDark() {
 		await invoke('set_dark_mode');
 		console.log('Switched to dark mode');
 
-		botResponseDiv.innerHTML = "Switched to Dark Mode successfully!";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Switched to Dark Mode successfully!
+			</div>
+		`;
 
 		scrolltoBottom();
 	} catch (error) {
@@ -2970,8 +3541,13 @@ async function switchToDark() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Failed to switch to dark mode. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Failed to switch to dark mode. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -2983,11 +3559,14 @@ async function switchToDark() {
 // function to take a screenshot
 async function takeScreenshot() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Taking a screenshot... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Taking a screenshot... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -2997,7 +3576,12 @@ async function takeScreenshot() {
 		const screenshot = await invoke('take_screenshot');
 		console.log('Screenshot taken:', screenshot);
 
-		botResponseDiv.innerHTML = "Screenshot successfully saved to Desktop!";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Screenshot successfully saved to Desktop!
+			</div>
+		`;
 
 		scrolltoBottom();
 
@@ -3007,8 +3591,13 @@ async function takeScreenshot() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't take a screenshot. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't take a screenshot. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -3052,11 +3641,14 @@ async function changeWallpaper(category) {
 // function to shutdown the system
 async function shutdown_pc() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			PC is shutting down... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				PC is shutting down... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -3066,7 +3658,12 @@ async function shutdown_pc() {
 		await invoke('shutdown_pc');
 		console.log('System shutdown initiated');
 
-		botResponseDiv.innerHTML = "PC is turned off...";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				PC is turned off...
+			</div>
+		`;
 
 		new Notification('System Shutdown Initiated', {
 			body: 'Your system will be shutting down in 10 seconds...',
@@ -3077,8 +3674,13 @@ async function shutdown_pc() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't shutdown the system. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't shutdown the system. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		new Notification('Failed to Shutdown System', {
@@ -3091,11 +3693,14 @@ async function shutdown_pc() {
 // function to restart the system
 async function restart_pc() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			PC is restarting... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				PC is restarting... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -3105,7 +3710,12 @@ async function restart_pc() {
 		await invoke('restart_pc');
 		console.log('System restart initiated');
 
-		botResponseDiv.innerHTML = "PC is restarting...";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				PC is restarting...
+			</div>
+		`;
 
 		new Notification('System Restart Initiated', {
 			body: 'Your system will be restarting in 10 seconds...',
@@ -3116,8 +3726,13 @@ async function restart_pc() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't restart the system. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't restart the system. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		new Notification('Failed to Restart System', {
@@ -3130,11 +3745,14 @@ async function restart_pc() {
 // function to log off the system
 async function lock_pc() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Locking the PC... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Locking the PC... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -3144,7 +3762,12 @@ async function lock_pc() {
 		await invoke('lock_pc');
 		console.log('System lock initiated');
 
-		botResponseDiv.innerHTML = "PC is locked...";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				PC is locked...
+			</div>
+		`;
 
 		new Notification('System Lock Initiated', {
 			body: 'Your system is locked!',
@@ -3155,8 +3778,13 @@ async function lock_pc() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't lock the system. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't lock the system. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		new Notification('Failed to Lock System', {
@@ -3169,11 +3797,14 @@ async function lock_pc() {
 // function to sleep the system
 async function sleep_pc() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Putting the PC to sleep... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Putting the PC to sleep... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -3183,7 +3814,12 @@ async function sleep_pc() {
 		await invoke('sleep_pc');
 		console.log('System sleep initiated');
 
-		botResponseDiv.innerHTML = "PC is slept...";
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				PC is slept...
+			</div>
+		`;
 
 		new Notification('System Sleep Initiated', {
 			body: 'Your system will be going to sleep in moments...',
@@ -3194,8 +3830,13 @@ async function sleep_pc() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't sleep the system. Please try again later.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't sleep the system. Please try again later.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		new Notification('Failed to Sleep System', {
@@ -3210,11 +3851,15 @@ async function sleep_pc() {
 // Function to get crisis hotlines
 async function getCrisisHotlines() {
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+
 	botResponseDiv.innerHTML = `
-		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Fetching crisis hotlines... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
-		</span>
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Fetching crisis hotlines... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
 	`;
 	chatResponses.appendChild(botResponseDiv);
 
@@ -3238,7 +3883,12 @@ async function getCrisisHotlines() {
 
 			console.log(hotlinesText);
 
-			botResponseDiv.innerHTML = response;
+			botResponseDiv.innerHTML = `
+				${botChatAvatarHTML}
+				<div class="bot-response">
+					${response}
+				</div>
+			`;
 
 			scrolltoBottom();
 
@@ -3248,8 +3898,13 @@ async function getCrisisHotlines() {
 
 			botResponseDiv.remove();
 			const errorResponseDiv = document.createElement('div');
-			errorResponseDiv.className = 'error-response';
-			errorResponseDiv.innerHTML = "Please call 911 or your local emergency number for immediate help.";
+			errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+			errorResponseDiv.innerHTML = `
+				${botChatAvatarHTML}
+				<div class="error-response">
+					Please call 911 or your local emergency number for immediate help.
+				</div>
+			`;
 			chatResponses.appendChild(errorResponseDiv);
 
 			scrolltoBottom();
@@ -3261,8 +3916,13 @@ async function getCrisisHotlines() {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.textContent = "Sorry, I couldn't find any hotlines for immediate help. Please call 911 or your local emergency number for immediate help.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't find any hotlines for immediate help. Please call 911 or your local emergency number for immediate help.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -3281,16 +3941,26 @@ async function setTimer(time) {
 
 		if (isNaN(duration)) {
 			const errorResponseDiv = document.createElement('div');
-			errorResponseDiv.className = 'error-response';
-			errorResponseDiv.innerHTML = "Sorry, I couldn't set the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
+			errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+			errorResponseDiv.innerHTML = `
+				${botChatAvatarHTML}
+				<div class="error-response">
+					Sorry, I couldn't set the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes
+				</div>
+			`;
 			chatResponses.appendChild(errorResponseDiv);
 
 			scrolltoBottom();
 			return;
 		} else if (duration <= 0) {
 			const errorResponseDiv = document.createElement('div');
-			errorResponseDiv.className = 'error-response';
-			errorResponseDiv.innerHTML = "Please enter a valid duration for the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
+			errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+			errorResponseDiv.innerHTML = `
+				${botChatAvatarHTML}
+				<div class="error-response">
+					Please enter a valid duration for the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes
+				</div>
+			`;
 			chatResponses.appendChild(errorResponseDiv);
 
 			scrolltoBottom();
@@ -3302,16 +3972,26 @@ async function setTimer(time) {
 
 		if (timeInMs === 0) {
 			const errorResponseDiv = document.createElement('div');
-			errorResponseDiv.className = 'error-response';
-			errorResponseDiv.innerHTML = "Please enter a valid unit for the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
+			errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+			errorResponseDiv.innerHTML = `
+				${botChatAvatarHTML}
+				<div class="error-response">
+					Please enter a valid unit for the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes
+				</div>
+			`;
 			chatResponses.appendChild(errorResponseDiv);
 
 			scrolltoBottom();
 			return;
 		} else if (timeInMs > 86400000) {
 			const errorResponseDiv = document.createElement('div');
-			errorResponseDiv.className = 'error-response';
-			errorResponseDiv.innerHTML = "Please enter a duration less than or equal to 24 hours.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
+			errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+			errorResponseDiv.innerHTML = `
+				${botChatAvatarHTML}
+				<div class="error-response">
+					Please enter a duration less than or equal to 24 hours.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes
+				</div>
+			`;
 			chatResponses.appendChild(errorResponseDiv);
 
 			scrolltoBottom();
@@ -3321,8 +4001,13 @@ async function setTimer(time) {
 		console.log(`Timer: ${duration} ${unit} timer has started!`);
 
 		const timerResponseDiv = document.createElement('div');
-		timerResponseDiv.className = 'bot-response';
-		timerResponseDiv.textContent = `${duration} ${unit} timer has started!`;
+		timerResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		timerResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				${duration} ${unit} timer has started!
+			</div>
+		`;
 		chatResponses.appendChild(timerResponseDiv);
 
 		scrolltoBottom();
@@ -3331,7 +4016,12 @@ async function setTimer(time) {
 
 		const interval = setInterval(() => {
 			remainingTime -= 1000;
-			timerResponseDiv.innerHTML = `${Math.floor(remainingTime / 1000)} seconds remaining...`;
+			timerResponseDiv.innerHTML = `
+				${botChatAvatarHTML}
+				<div class="bot-response">
+					${Math.floor(remainingTime / 1000)} seconds remaining...
+				</div>
+			`;
 			console.log(`Timer: ${Math.floor(remainingTime / 1000)} seconds remaining...`);
 			if (remainingTime <= 0) {
 				clearInterval(interval);
@@ -3341,7 +4031,12 @@ async function setTimer(time) {
 		await new Promise(resolve => setTimeout(resolve, timeInMs));
 
 		console.log(`${duration} ${unit} timer has completed!`);
-		timerResponseDiv.innerHTML = `${duration} ${unit} timer has completed!`;
+		timerResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				${duration} ${unit} timer has completed!
+			</div>
+		`;
 
 		scrolltoBottom();
 
@@ -3353,8 +4048,13 @@ async function setTimer(time) {
 		console.error('Failed to set timer:', error);
 
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't set the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't set the timer.<br><br>Please make sure you have this format: set a timer for [duration] [unit].<br>For example, set a timer for 5 minutes
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -3398,8 +4098,13 @@ async function playRockPaperScissors(userMessage) {
 	choices = ['Rock', 'Paper', 'Scissors'];
 
 	const botResponseDiv = document.createElement('div');
-	botResponseDiv.className = 'bot-response';
-	botResponseDiv.innerHTML = `Let's play rock, paper, scissors!`;
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+	botResponseDiv.innerHTML = `
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			Let's play rock, paper, scissors!
+		</div>
+	`;
 	chatResponses.appendChild(botResponseDiv);
 
 	scrolltoBottom();
@@ -3444,7 +4149,10 @@ async function playRockPaperScissors(userMessage) {
 		}
 
 		botResponseDiv.innerHTML = `
-			I chose ${computer_choice}!<br><br>${resultComment}, so <span style="font-weight: bold;">${result}</span>!
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				I chose ${computer_choice}!<br><br>${resultComment}, so <span style="font-weight: bold;">${result}</span>!
+			</div>
 		`;
 
 		scrolltoBottom();
@@ -3453,8 +4161,13 @@ async function playRockPaperScissors(userMessage) {
 
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't play rock paper scissors. Please try again.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't play rock paper scissors. Please try again.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -3468,8 +4181,13 @@ async function playRockPaperScissors(userMessage) {
 async function wakeUpAlarm(wakeUpTime) {
 	if (wakeUpTime === "") {
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Please provide a time to wake up.<br>Hint: wake me up at 9:00 AM";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Please provide a time to wake up.<br>Hint: wake me up at 9:00 AM
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 		return;
 	}
@@ -3484,8 +4202,13 @@ async function wakeUpAlarm(wakeUpTime) {
 
 	if (wakeUpTimeArray.length !== 2) {
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Please provide time in HH:MM format.<br>Hint: wake me up at 9:00 AM";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Please provide time in HH:MM format.<br>Hint: wake me up at 9:00 AM
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 		return;
 	}
@@ -3500,8 +4223,13 @@ async function wakeUpAlarm(wakeUpTime) {
 	// Validate hours and minutes
 	if (wakeUpHour < 0 || wakeUpHour > 23 || wakeUpMinute < 0 || wakeUpMinute > 59 || isNaN(wakeUpHour) || isNaN(wakeUpMinute)) {
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Please provide a valid time to wake up.<br>Hint: wake me up at 9:00 AM";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Please provide a valid time to wake up.<br>Hint: wake me up at 9:00 AM
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 		return; // Exit function if invalid time
 	}
@@ -3525,9 +4253,12 @@ async function wakeUpAlarm(wakeUpTime) {
 		const displayTime = `${displayHour}:${wakeUpMinute.toString().padStart(2, '0')} ${ampm}`;
 
 		const botResponseDiv = document.createElement('div');
-		botResponseDiv.className = 'bot-response';
+		botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 		botResponseDiv.innerHTML = `
-			Wake up alarm successfully set! I'll wake you up at <span style="font-weight: bold;">${displayTime}</span>!
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				Wake up alarm successfully set! I'll wake you up at <span style="font-weight: bold;">${displayTime}</span>!
+			</div>
 		`;
 		chatResponses.appendChild(botResponseDiv);
 
@@ -3552,8 +4283,11 @@ async function wakeUpAlarm(wakeUpTime) {
 
 			// Create stop alarm indicator
 			botResponseDiv.innerHTML = `
-				Time to wake up! It's <span style="font-weight: bold;">${displayTime}</span> now!<br><br>
-				<button id="stopAlarm">Stop Alarm</button>
+				${botChatAvatarHTML}
+				<div class="bot-response">
+					Time to wake up! It's <span style="font-weight: bold;">${displayTime}</span> now!<br><br>
+					<button id="stopAlarm">Stop Alarm</button>
+				</div>
 			`;
 
 			scrolltoBottom();
@@ -3563,7 +4297,10 @@ async function wakeUpAlarm(wakeUpTime) {
 				audio.pause();
 				audio.currentTime = 0;
 				botResponseDiv.innerHTML = `
-					Wake up alarm stopped!
+					${botChatAvatarHTML}
+					<div class="bot-response">
+						Wake up alarm stopped!
+					</div>
 				`;
 			});
 
@@ -3573,7 +4310,10 @@ async function wakeUpAlarm(wakeUpTime) {
 					audio.pause();
 					audio.currentTime = 0;
 					botResponseDiv.innerHTML = `
-						Wake up alarm stopped!
+						${botChatAvatarHTML}
+						<div class="bot-response">
+							Wake up alarm stopped!
+						</div>
 					`;
 				}
 			}, 60000);
@@ -3584,8 +4324,13 @@ async function wakeUpAlarm(wakeUpTime) {
 		console.error('Failed to set wake up alarm:', error);
 
 		const errorResponseDiv = document.createElement('div');
-		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Sorry, I couldn't set the wake up alarm. Please try again.";
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't set the wake up alarm. Please try again.
+			</div>
+		`;
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();

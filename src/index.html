@@ -17,10 +17,6 @@
 	<!-- ASSISTANT FEATURE SCRIPTS END -->
 
 	<link rel="stylesheet" href="css/style.css">
-
-	<link rel="preload" href="tts/sherpa-onnx-wasm-main-tts.js" as="script">
-	<link rel="preload" href="tts/sherpa-onnx-tts.js" as="script">
-	<link rel="preload" href="functions.js" as="script">
 </head>
 
 <body>
@@ -42,7 +38,7 @@
 
 		<div class="container" style="height: calc(100% - 20px); display: flex; flex-direction: column; align-items: center; justify-content: center;">
 			<div id="chatResponsesContainer" style="display: flex; align-items: start; justify-content: center; height: 85%; width: 100%; overflow: auto;">
-				<div id="chatResponses" style="display: flex; flex-direction: column; gap: 15px; height: calc(100% - 30px); width: 90%; margin-top: 30px;"></div>
+				<div id="chatResponses" style="display: flex; flex-direction: column; height: calc(100% - 30px); width: 90%; margin-top: 15px;"></div>
 			</div>
 
 			<div class="chatFormContainer" style="height: 15%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;">
@@ -60,6 +56,20 @@
 			</div>
 		</div>
 	</div>
+
+	<script>
+		const observer = new MutationObserver(() => {
+			const firstUserResponse = chatResponses.querySelector('.user-response');
+			if (firstUserResponse) {
+				firstUserResponse.style.borderTop = 'none';
+			}
+		});
+
+		observer.observe(chatResponses, {
+			childList: true,
+			subtree: true
+		});
+	</script>
 </body>
 
 </html>
