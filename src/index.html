@@ -17,6 +17,10 @@
 	<!-- ASSISTANT FEATURE SCRIPTS END -->
 
 	<link rel="stylesheet" href="css/style.css">
+
+	<link rel="preload" href="tts/sherpa-onnx-wasm-main-tts.js" as="script">
+	<link rel="preload" href="tts/sherpa-onnx-tts.js" as="script">
+	<link rel="preload" href="functions.js" as="script">
 </head>
 
 <body>
@@ -56,6 +60,9 @@
 			</div>
 		</div>
 	</div>
+
+	<script src="tts/sherpa-onnx-tts.js" async defer></script>
+	<script src="tts/sherpa-onnx-wasm-main-tts.js" async defer></script>
 </body>
 
 </html>

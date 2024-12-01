@@ -195,6 +195,7 @@ table th, table td {
 	background: #00AAFF14;
 	padding: 15px;
 	font-size: 14px;
+	word-break: break-word;
 }
 
 .bot-response {
@@ -202,6 +203,7 @@ table th, table td {
 	background: #42424238;
 	padding: 15px;
 	font-size: 14px;
+	word-break: break-word;
 }
 
 .error-response {
@@ -209,6 +211,7 @@ table th, table td {
 	background: #FF000014;
 	padding: 15px;
 	font-size: 14px;
+	word-break: break-word;
 }
 
 
