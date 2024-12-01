@@ -124,10 +124,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 			const userResponse = document.createElement('div');
 			userResponse.className = 'user-response';
-			userResponse.innerHTML = 'User: ' + chatMessage.value.trim();
+			userResponse.innerHTML = chatMessage.value.trim();
 			chatResponses.appendChild(userResponse);
 
 			const userMessage = chatMessage.value.trim();
+
+			chatMessage.value = '';
 
 			try {
 				if (userMessage.toLowerCase().startsWith("set a timer for")) {
@@ -185,7 +187,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 					botResponseDiv.className = 'bot-response';
 					botResponseDiv.innerHTML = `
 						<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-							Nova: Fetching disaster alerts... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+							Fetching disaster alerts... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 						</span>
 					`;
 					chatResponses.appendChild(botResponseDiv);
@@ -193,7 +195,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 					scrolltoBottom();
 
 					getDisasterAlerts().then(alerts => {
-						botResponseDiv.innerHTML = `Nova: ${alerts}`;
+						botResponseDiv.innerHTML = `${alerts}`;
 
 						scrolltoBottom();
 					}).catch(() => {
@@ -212,7 +214,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 						botResponseDiv.className = 'bot-response';
 						botResponseDiv.innerHTML = `
 							<p style="margin-bottom: 5px;">
-								Nova: Please provide a song name or artist to play.<br>
+								Please provide a song name or artist to play.<br>
 								Hint: play Believer by Imagine Dragons
 							</p><br>
 							<p style="font-size: 10px;">Powered by <a href="https://music.youtube.com" target="_blank">YouTube Music</a></p><br>
@@ -244,7 +246,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 						botResponseDiv.className = 'bot-response';
 						botResponseDiv.innerHTML = `
 							<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-								Nova: Converting ${formattedAmount} ${fromCurrency} to ${toCurrency}... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+								Converting ${formattedAmount} ${fromCurrency} to ${toCurrency}... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 							</span>
 						`;
 						chatResponses.appendChild(botResponseDiv);
@@ -253,7 +255,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 						convertCurrency(amount, fromCurrency, toCurrency).then(convertedAmount => {
 							botResponseDiv.innerHTML = `
-								<p>Nova: Here's the currency conversion:</p><br>
+								<p>Here's the currency conversion:</p><br>
 								<h1>${convertedAmount}</h1>
 								<p>(as of ${getDateForFunctions().month} ${getDateForFunctions().day}, ${getDateForFunctions().year} at ${getTimeForFunctions()})</p>
 							`;
@@ -284,7 +286,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 							const botResponseDiv = document.createElement('div');
 							botResponseDiv.className = 'bot-response';
 							botResponseDiv.innerHTML = `
-								<p style="margin-bottom: 5px;">Nova: Here are the details for the bug code:</p><br>
+								<p style="margin-bottom: 5px;">Here are the details for the bug code:</p><br>
 
 								<h3>Bug Code:</h3>
 								<p>${bugCodeDetails.code}</p><br>
@@ -332,7 +334,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 						botResponseDiv.className = 'bot-response';
 						botResponseDiv.innerHTML = `
 							<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-								Nova: Changing the wallpaper... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+								Changing the wallpaper... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 							</span>
 						`;
 						chatResponses.appendChild(botResponseDiv);
@@ -341,7 +343,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 						changeWallpaper(category).then(() => {
 							botResponseDiv.innerHTML = `
-								Nova: ${category.charAt(0).toUpperCase() + category.slice(1)} wallpaper changed successfully!
+								${category.charAt(0).toUpperCase() + category.slice(1)} wallpaper changed successfully!
 							`;
 
 							scrolltoBottom();
@@ -355,7 +357,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 							scrolltoBottom();
 						});
 					} else {
-						const response = "Nova: Sorry, I couldn't find any wallpaper to change.";
+						const response = "Sorry, I couldn't find any wallpaper to change.";
 						const botResponseDiv = document.createElement('div');
 						botResponseDiv.className = 'bot-response';
 						botResponseDiv.innerHTML = response;
@@ -382,13 +384,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 						botResponseDiv.className = 'bot-response';
 						botResponseDiv.innerHTML = `
 							<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-								Nova: Summarizing the text... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+								Summarizing the text... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 							</span>
 						`;
 						chatResponses.appendChild(botResponseDiv);
 
 						const response = await textSummarizer(inputText).then(summary => summary).catch(error => "Sorry, I couldn't summarize the text.");
-						botResponseDiv.innerHTML = 'Nova: Here is the summarized text:<br><br>' + response;
+						botResponseDiv.innerHTML = 'Here is the summarized text:<br><br>' + response;
 
 						scrolltoBottom();
 					}
@@ -532,7 +534,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 								const response = await assistant.processQuery(userMessage);
 								const botResponseDiv = document.createElement('div');
 								botResponseDiv.className = 'bot-response';
-								botResponseDiv.innerHTML = 'Nova: ' + response;
+								botResponseDiv.innerHTML = response;
 								chatResponses.appendChild(botResponseDiv);
 						}
 					} else {
@@ -540,12 +542,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 						const response = await assistant.processQuery(userMessage);
 						const botResponseDiv = document.createElement('div');
 						botResponseDiv.className = 'bot-response';
-						botResponseDiv.innerHTML = 'Nova: ' + response;
+						botResponseDiv.innerHTML = response;
 						chatResponses.appendChild(botResponseDiv);
 					}
 				}
-
-				chatMessage.value = '';
 
 				scrolltoBottom();
 			} catch (error) {
@@ -612,7 +612,7 @@ async function openURL(url) {
 
 	const botResponseDiv = document.createElement('div');
 	botResponseDiv.className = 'bot-response';
-	botResponseDiv.innerHTML = "Nova: Opening " + url + "...";
+	botResponseDiv.innerHTML = "Opening " + url + "...";
 	chatResponses.appendChild(botResponseDiv);
 
 	scrolltoBottom();
@@ -623,7 +623,7 @@ async function openURL(url) {
 		});
 
 		botResponseDiv.innerHTML = `
-			Nova: Opened <a href="${url}" target="_blank">${url}</a> successfully. Enjoy!
+			Opened <a href="${url}" target="_blank">${url}</a> successfully. Enjoy!
 		`;
 
 		scrolltoBottom();
@@ -633,7 +633,7 @@ async function openURL(url) {
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
 		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.textContent = "Nova: Sorry, I couldn't open the URL.";
+		errorResponseDiv.textContent = "Sorry, I couldn't open the URL.";
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -657,7 +657,7 @@ async function openApplication(appName) {
 				const botResponseDiv = document.createElement('div');
 				botResponseDiv.className = 'bot-response';
 				botResponseDiv.innerHTML = `
-					Nova: ${response.launched_app} launched successfully. Enjoy!
+					${response.launched_app} launched successfully. Enjoy!
 				`;
 				chatResponses.appendChild(botResponseDiv);
 
@@ -710,7 +710,7 @@ async function closeApplication(appName) {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Attempting to close ${appName} and its processes... <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Attempting to close ${appName} and its processes... <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -725,7 +725,7 @@ async function closeApplication(appName) {
 			case 'success':
 				responseDiv.className = 'bot-response';
 				responseDiv.innerHTML = `
-					Nova: ${response.message}
+					${response.message}
 				`;
 				new Notification('Application Closed', {
 					body: response.message,
@@ -738,7 +738,7 @@ async function closeApplication(appName) {
 				if (response.protected) {
 					// Handle protected process error
 					responseDiv.innerHTML = `
-						Nova: ${response.message}<br>
+						${response.message}<br>
 						<span style="color: var(--lightGray); font-size: 12px;">
 							This is a system process that cannot be terminated for security reasons.
 						</span>
@@ -746,7 +746,7 @@ async function closeApplication(appName) {
 				} else if (response.not_found) {
 					// Handle process not found error
 					responseDiv.innerHTML = `
-						Nova: ${response.message}<br>
+						${response.message}<br>
 						<span style="color: var(--lightGray); font-size: 12px;">
 							The application might not be running or might have a different process name.
 						</span>
@@ -754,7 +754,7 @@ async function closeApplication(appName) {
 				} else {
 					// Handle other errors
 					responseDiv.innerHTML = `
-						Nova: ${response.message}
+						${response.message}
 					`;
 				}
 				new Notification('Error', {
@@ -765,7 +765,7 @@ async function closeApplication(appName) {
 
 			default:
 				responseDiv.className = 'error-response';
-				responseDiv.innerHTML = 'Nova: An unexpected error occurred.';
+				responseDiv.innerHTML = 'An unexpected error occurred.';
 				new Notification('Error', {
 					body: 'An unexpected error occurred.',
 					sound: 'Default'
@@ -782,7 +782,7 @@ async function closeApplication(appName) {
 		const errorDiv = document.createElement('div');
 		errorDiv.className = 'error-response';
 		errorDiv.innerHTML = `
-			Nova: Failed to close application.<br>
+			Failed to close application.<br>
 			<span style="color: var(--lightGray); font-size: 12px;">
 				Error: ${error.message}
 			</span>
@@ -809,7 +809,7 @@ function getRandomMovie() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Searching for a movie... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Searching for a movie... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -863,7 +863,7 @@ function getRandomMovie() {
 			}
 
 			botResponseDiv.innerHTML = `
-				Nova: Here's a movie I found for you:<br><br>
+				Here's a movie I found for you:<br><br>
 				<span style="display: flex; flex-direction: row; justify-content: center; gap: 15px;">
 					<span style="width: 50%;">
 						<h1>${movieTitle} (${movieYear})</h1><br>
@@ -894,7 +894,7 @@ async function getIPAddress() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Fetching your IP Address... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Fetching your IP Address... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -908,7 +908,7 @@ async function getIPAddress() {
 		const country = data.country;
 
 		botResponseDiv.innerHTML = `
-			<p style="margin-bottom: 5px;">Nova: Your IP Address is:</p>
+			<p style="margin-bottom: 5px;">Your IP Address is:</p>
 			<h1>${ipaddress}</h1>
 		`;
 
@@ -921,7 +921,7 @@ async function getIPAddress() {
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
 		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Nova: Sorry, I couldn't fetch your IP Address.";
+		errorResponseDiv.innerHTML = "Sorry, I couldn't fetch your IP Address.";
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -953,7 +953,7 @@ async function getWeather() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Fetching the weather... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Fetching the weather... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -1037,7 +1037,7 @@ async function getWeather() {
 		}
 
 		const response = `
-			<p style="margin-bottom: 5px;">Nova: Here are the weather information for ${location}:</p><br>
+			<p style="margin-bottom: 5px;">Here are the weather information for ${location}:</p><br>
 			<h1>${temperature} in ${location}</h1><br>
 			<h3>Humidity:</h3><p>${humidity}</p><br>
 			<h3>Wind Speed:</h3><p>${windSpeed}</p><br>
@@ -1055,7 +1055,7 @@ async function getWeather() {
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
 		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Nova: Sorry, I couldn't fetch the weather.";
+		errorResponseDiv.innerHTML = "Sorry, I couldn't fetch the weather.";
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1077,7 +1077,7 @@ async function searchWeb(query) {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Searching the web... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Searching the web... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -1157,7 +1157,7 @@ async function searchWeb(query) {
 
 		if (search_status === 'success') {
 			botResponseDiv.innerHTML = `
-				Nova: Here's what i've found in web:<br><br>
+				Here's what i've found in web:<br><br>
 				${snippetText}<br><br>
 				<p style="font-size: 10px;">Powered by <a href="https://duckduckgo.com" target="_blank">DuckDuckGo</a></p>
 			`;
@@ -1178,7 +1178,7 @@ async function searchWeb(query) {
 		botResponseDiv.remove();
 		const botResponseDiv = document.createElement('div');
 		botResponseDiv.className = 'error-response';
-		botResponseDiv.innerHTML = "Nova: Sorry, I couldn't find any relevant information. Please try again in a bit or try a different search query.";
+		botResponseDiv.innerHTML = "Sorry, I couldn't find any relevant information. Please try again in a bit or try a different search query.";
 		chatResponses.appendChild(botResponseDiv);
 
 		scrolltoBottom();
@@ -1194,7 +1194,7 @@ function getTime() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Fetching the time... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Fetching the time... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -1231,7 +1231,7 @@ function getTime() {
 		let ampm = date.getHours() >= 12 ? 'pm' : 'am';
 
 		botResponseDiv.innerHTML = `
-			<p style="margin-bottom: 5px;">Nova: Current time is:</p>
+			<p style="margin-bottom: 5px;">Current time is:</p>
 			<h1>${hours}:${minutes}${ampm}</h1>
 		`;
 
@@ -1244,7 +1244,7 @@ function getTime() {
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
 		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Nova: Sorry, I couldn't fetch the time.";
+		errorResponseDiv.innerHTML = "Sorry, I couldn't fetch the time.";
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1298,7 +1298,7 @@ function getDate() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Fetching the date... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Fetching the date... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -1332,7 +1332,7 @@ function getDate() {
 		let year = date.getFullYear();
 
 		botResponseDiv.innerHTML = `
-			<p style="margin-bottom: 5px;">Nova: Today's date is:</p>
+			<p style="margin-bottom: 5px;">Today's date is:</p>
 			<h1>${day} ${month}, ${year}</h1>
 		`;
 
@@ -1345,7 +1345,7 @@ function getDate() {
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
 		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Nova: Sorry, I couldn't fetch the date.";
+		errorResponseDiv.innerHTML = "Sorry, I couldn't fetch the date.";
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1397,7 +1397,7 @@ function calculateNumbers(expression) {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Calculating... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Calculating... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -1408,7 +1408,7 @@ function calculateNumbers(expression) {
 		const result = new Function('return ' + expression)();
 
 		botResponseDiv.innerHTML = `
-			<p style="margin-bottom: 5px;">Nova: The answer of ${expression} is:</p>
+			<p style="margin-bottom: 5px;">The answer of ${expression} is:</p>
 			<h1>${result}</h1>
 		`;
 
@@ -1420,7 +1420,7 @@ function calculateNumbers(expression) {
 
 		const errorResponseDiv = document.createElement('div');
 		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Nova: Sorry, I couldn't calculate the numbers.";
+		errorResponseDiv.innerHTML = "Sorry, I couldn't calculate the numbers.";
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1437,7 +1437,7 @@ async function fetchNews() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Fetching the latest news... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Fetching the latest news... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -1471,7 +1471,7 @@ async function fetchNews() {
 		});
 
 		newsText += '<br><p style="font-size: 10px;">Powered by <a href="https://abcnews.go.com" target="_blank">ABC News</a></p>';
-		botResponseDiv.innerHTML = 'Nova: ' + newsText;
+		botResponseDiv.innerHTML = newsText;
 
 		return newsItems;
 	} catch (error) {
@@ -1497,7 +1497,7 @@ async function getImageOfTheDay() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Fetching the image of the day... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Fetching the image of the day... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -1524,7 +1524,7 @@ async function getImageOfTheDay() {
 		const imageCredits = jsonData.images[0].copyright;
 
 		botResponseDiv.innerHTML = `
-			Nova: Here's the image of the day:<br><br>
+			Here's the image of the day:<br><br>
 			<h1>${imageTitle}</h1>
 			<img src="${imageUrl}" alt="${imageTitle}" style="margin: 10px 0px 5px 0px;">
 			<br><p style="font-size: 10px;">Powered by <a href="https://www.bing.com" target="_blank">Bing</a> | Image Credits: ${imageCredits}</p>
@@ -1539,7 +1539,7 @@ async function getImageOfTheDay() {
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
 		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.textContent = "Nova: Sorry, I couldn't fetch the image of the day.";
+		errorResponseDiv.textContent = "Sorry, I couldn't fetch the image of the day.";
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1556,7 +1556,7 @@ async function getQuoteOfTheDay() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Fetching the quote of the day... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Fetching the quote of the day... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -1583,7 +1583,7 @@ async function getQuoteOfTheDay() {
 		const fullQuote = quote + ' - ' + author;
 
 		botResponseDiv.innerHTML = `
-			Nova: Quote of the day is:<br><br>
+			Quote of the day is:<br><br>
 			<h1>${quote}</h1>
 			<p style="margin-top: 5px;">- ${author}</p>
 		`;
@@ -1597,7 +1597,7 @@ async function getQuoteOfTheDay() {
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
 		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.textContent = "Nova: Sorry, I couldn't fetch the quote of the day.";
+		errorResponseDiv.textContent = "Sorry, I couldn't fetch the quote of the day.";
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1614,7 +1614,7 @@ async function getRandomQuote() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Fetching a random quote... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Fetching a random quote... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -1641,7 +1641,7 @@ async function getRandomQuote() {
 		const fullQuote = quote + ' - ' + author;
 
 		botResponseDiv.innerHTML = `
-			Nova: Here's a quote I found for you:<br><br>
+			Here's a quote I found for you:<br><br>
 			<h1>${quote}</h1>
 			<p style="margin-top: 5px;">- ${author}</p>
 		`;
@@ -1655,7 +1655,7 @@ async function getRandomQuote() {
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
 		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.textContent = "Nova: Sorry, I couldn't fetch a random quote.";
+		errorResponseDiv.textContent = "Sorry, I couldn't fetch a random quote.";
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1672,7 +1672,7 @@ async function getOnThisDayEvents() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Fetching on this day events... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Fetching on this day events... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -1705,7 +1705,7 @@ async function getOnThisDayEvents() {
 			eventsText += `<p style="margin-top: 20px;">${event}</p>`;
 		});
 
-		botResponseDiv.innerHTML = `Nova: ${eventsText}`;
+		botResponseDiv.innerHTML = `${eventsText}`;
 
 		return events;
 	} catch (error) {
@@ -1714,7 +1714,7 @@ async function getOnThisDayEvents() {
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
 		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.textContent = "Nova: Sorry, I couldn't fetch on this day events.";
+		errorResponseDiv.textContent = "Sorry, I couldn't fetch on this day events.";
 		chatResponses.appendChild(errorResponseDiv);
 
 		scrolltoBottom();
@@ -1731,7 +1731,7 @@ async function getRandomMeal() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Fetching a random meal recipe... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Fetching a random meal recipe... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -1772,7 +1772,7 @@ async function getRandomMeal() {
 			<p style="font-size: 10px; margin-top: 5px;"><a href="${mealYoutube}" target="_blank">YouTube</a></p>
 		`;
 
-		botResponseDiv.innerHTML = `Nova:<br><br> ${mealDetails}`;
+		botResponseDiv.innerHTML = `${mealDetails}`;
 
 		scrolltoBottom();
 
@@ -1783,7 +1783,7 @@ async function getRandomMeal() {
 		botResponseDiv.remove();
 		const errorResponseDiv = document.createElement('div');
 		errorResponseDiv.className = 'error-response';
-		errorResponseDiv.innerHTML = "Nova: Sorry, I couldn't fetch a random meal recipe.";
+		errorResponseDiv.innerHTML = "Sorry, I couldn't fetch a random meal recipe.";
 		chatResponses.appendChild(errorResponseDiv);
 
 		throw error;
@@ -1798,7 +1798,7 @@ async function searchBooks(query) {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Searching for books about ${query}... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Searching for books about ${query}... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -1843,7 +1843,7 @@ async function searchBooks(query) {
 			}).join('<br>');
 
 			botResponseDiv.innerHTML = `
-				Nova: Here are books that I found for "${query}":<br><br>
+				Here are books that I found for "${query}":<br><br>
 				${bookDetails}
 			`;
 
@@ -1880,7 +1880,7 @@ async function translateText(text, targetLanguage) {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Translating the text... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Translating the text... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -1944,7 +1944,7 @@ async function translateText(text, targetLanguage) {
 		const translatedText = data.translations[0].text;
 
 		botResponseDiv.innerHTML = `
-			<p style="margin-bottom: 5px;">Nova: Here's the translated text for "${text}":</p>
+			<p style="margin-bottom: 5px;">Here's the translated text for "${text}":</p>
 			<h1>${translatedText}</h1>
 		`;
 
@@ -1972,7 +1972,7 @@ function createQRCode(textforqr) {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Creating QR Code for ${textforqr}... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Creating QR Code for ${textforqr}... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -1995,7 +1995,7 @@ function createQRCode(textforqr) {
 
 		botResponseDiv.innerHTML = `
 			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-				Nova: Here's the QR Code for "${textforqr}":<br><br>
+				Here's the QR Code for "${textforqr}":<br><br>
 			</span>
 		`;
 		botResponseDiv.appendChild(qrCodeElement);
@@ -2026,7 +2026,7 @@ async function openYTMusic(queryforytmusic) {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Opening YouTube Music... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Opening YouTube Music... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2054,7 +2054,7 @@ async function openYTMusic(queryforytmusic) {
 			console.log("Opened YouTube Music");
 
 			botResponseDiv.innerHTML = `
-				<p style="margin-bottom: 5px;">Nova: Opened YouTube Music</p>
+				<p style="margin-bottom: 5px;">Opened YouTube Music</p>
 			`;
 
 			scrolltoBottom();
@@ -2084,7 +2084,7 @@ async function playMedia() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Resuming playback... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Resuming playback... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2094,7 +2094,7 @@ async function playMedia() {
 	try {
 		await window.__TAURI__.invoke('play_media');
 
-		botResponseDiv.innerHTML = "Nova: Resumed playback...";
+		botResponseDiv.innerHTML = "Resumed playback...";
 	} catch (error) {
 		console.error('Failed to play media:', error);
 
@@ -2114,7 +2114,7 @@ async function pauseMedia() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Pausing playback... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Pausing playback... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2124,7 +2124,7 @@ async function pauseMedia() {
 	try {
 		await window.__TAURI__.invoke('pause_media');
 
-		botResponseDiv.innerHTML = "Nova: Paused playback...";
+		botResponseDiv.innerHTML = "Paused playback...";
 	} catch (error) {
 		console.error('Failed to pause media:', error);
 
@@ -2144,7 +2144,7 @@ async function previousMedia() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Playing previous track... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Playing previous track... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2154,7 +2154,7 @@ async function previousMedia() {
 	try {
 		await window.__TAURI__.invoke('previous_media');
 
-		botResponseDiv.innerHTML = "Nova: Played previous track...";
+		botResponseDiv.innerHTML = "Played previous track...";
 	} catch (error) {
 		console.error('Failed to play previous media:', error);
 
@@ -2174,7 +2174,7 @@ async function nextMedia() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Playing next track... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Playing next track... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2184,7 +2184,7 @@ async function nextMedia() {
 	try {
 		await window.__TAURI__.invoke('next_media');
 
-		botResponseDiv.innerHTML = "Nova: Played next track...";
+		botResponseDiv.innerHTML = "Played next track...";
 	} catch (error) {
 		console.error('Failed to play next media:', error);
 
@@ -2204,7 +2204,7 @@ async function increaseVolume() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Increasing volume... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Increasing volume... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2214,7 +2214,7 @@ async function increaseVolume() {
 	try {
 		await window.__TAURI__.invoke('increase_volume');
 
-		botResponseDiv.innerHTML = "Nova: Volume increased...";
+		botResponseDiv.innerHTML = "Volume increased...";
 	} catch (error) {
 		console.error('Failed to increase volume:', error);
 
@@ -2234,7 +2234,7 @@ async function decreaseVolume() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Decreasing volume... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Decreasing volume... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2244,7 +2244,7 @@ async function decreaseVolume() {
 	try {
 		await window.__TAURI__.invoke('decrease_volume');
 
-		botResponseDiv.innerHTML = "Nova: Volume decreased...";
+		botResponseDiv.innerHTML = "Volume decreased...";
 	} catch (error) {
 		console.error('Failed to decrease volume:', error);
 
@@ -2264,7 +2264,7 @@ async function muteVolume() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Toggling mute... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Toggling mute... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2274,7 +2274,7 @@ async function muteVolume() {
 	try {
 		await window.__TAURI__.invoke('toggle_mute');
 
-		botResponseDiv.innerHTML = "Nova: Volume muted...";
+		botResponseDiv.innerHTML = "Volume muted...";
 	} catch (error) {
 		console.error('Failed to mute volume:', error);
 
@@ -2294,7 +2294,7 @@ async function unmuteVolume() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Toggling unmute... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Toggling unmute... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2304,7 +2304,7 @@ async function unmuteVolume() {
 	try {
 		await window.__TAURI__.invoke('toggle_mute');
 
-		botResponseDiv.innerHTML = "Nova: Volume unmuted...";
+		botResponseDiv.innerHTML = "Volume unmuted...";
 	} catch (error) {
 		console.error('Failed to unmute volume:', error);
 
@@ -2325,7 +2325,7 @@ async function turnOnWiFi() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Turning on WiFi... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Turning on WiFi... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2335,7 +2335,7 @@ async function turnOnWiFi() {
 	try {
 		await window.__TAURI__.invoke('turn_on_wifi');
 
-		botResponseDiv.innerHTML = "Nova: WiFi turned on...";
+		botResponseDiv.innerHTML = "WiFi turned on...";
 	} catch (error) {
 		console.error('Failed to turn on WiFi:', error);
 
@@ -2354,7 +2354,7 @@ async function turnOffWiFi() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Turning off WiFi... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Turning off WiFi... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2364,7 +2364,7 @@ async function turnOffWiFi() {
 	try {
 		await window.__TAURI__.invoke('turn_off_wifi');
 
-		botResponseDiv.innerHTML = "Nova: WiFi turned off...";
+		botResponseDiv.innerHTML = "WiFi turned off...";
 	} catch (error) {
 		console.error('Failed to turn off WiFi:', error);
 
@@ -2573,7 +2573,7 @@ async function getSystemInfo() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Fetching system information... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Fetching system information... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2619,7 +2619,7 @@ async function getSystemInfo() {
 		console.log('Networks:\n' + networksInfo.replace(/<br>/g, '\n'));
 
 		const response = `
-			<p style="margin-bottom: 5px;">Nova: Here's your system information at a glance:</p><br>
+			<p style="margin-bottom: 5px;">Here's your system information at a glance:</p><br>
 			<h1>${deviceName}</h1><br>
 
 			<h3>Operating System:</h3>
@@ -2710,7 +2710,7 @@ async function sendEmail() {
 
 		const botResponseDiv = document.createElement('div');
 		botResponseDiv.className = 'bot-response';
-		botResponseDiv.innerHTML = "Nova: Enter the email details here:<br><br>";
+		botResponseDiv.innerHTML = "Enter the email details here:<br><br>";
 
 		const emailForm = document.createElement('form');
 		emailForm.id = 'emailForm';
@@ -2755,7 +2755,7 @@ async function sendEmail() {
 			try {
 				await window.__TAURI__.invoke('open_url', { url: mailtolink });
 
-				botResponseDiv.innerHTML = "Nova: Opened email client. Please click send to send the email.";
+				botResponseDiv.innerHTML = "Opened email client. Please click send to send the email.";
 
 				scrolltoBottom();
 
@@ -2918,7 +2918,7 @@ async function switchToLight() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Switching to Light Mode... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Switching to Light Mode... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2929,7 +2929,7 @@ async function switchToLight() {
 		await invoke('set_light_mode');
 		console.log('Switched to light mode');
 
-		botResponseDiv.innerHTML = "Nova: Switched to Light Mode successfully!";
+		botResponseDiv.innerHTML = "Switched to Light Mode successfully!";
 
 		scrolltoBottom();
 	} catch (error) {
@@ -2951,7 +2951,7 @@ async function switchToDark() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Switching to Dark Mode... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Switching to Dark Mode... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2962,7 +2962,7 @@ async function switchToDark() {
 		await invoke('set_dark_mode');
 		console.log('Switched to dark mode');
 
-		botResponseDiv.innerHTML = "Nova: Switched to Dark Mode successfully!";
+		botResponseDiv.innerHTML = "Switched to Dark Mode successfully!";
 
 		scrolltoBottom();
 	} catch (error) {
@@ -2986,7 +2986,7 @@ async function takeScreenshot() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Taking a screenshot... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Taking a screenshot... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -2997,7 +2997,7 @@ async function takeScreenshot() {
 		const screenshot = await invoke('take_screenshot');
 		console.log('Screenshot taken:', screenshot);
 
-		botResponseDiv.innerHTML = "Nova: Screenshot successfully saved to Desktop!";
+		botResponseDiv.innerHTML = "Screenshot successfully saved to Desktop!";
 
 		scrolltoBottom();
 
@@ -3055,7 +3055,7 @@ async function shutdown_pc() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: PC is shutting down... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			PC is shutting down... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -3066,7 +3066,7 @@ async function shutdown_pc() {
 		await invoke('shutdown_pc');
 		console.log('System shutdown initiated');
 
-		botResponseDiv.innerHTML = "Nova: PC is turned off...";
+		botResponseDiv.innerHTML = "PC is turned off...";
 
 		new Notification('System Shutdown Initiated', {
 			body: 'Your system will be shutting down in 10 seconds...',
@@ -3094,7 +3094,7 @@ async function restart_pc() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: PC is restarting... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			PC is restarting... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -3105,7 +3105,7 @@ async function restart_pc() {
 		await invoke('restart_pc');
 		console.log('System restart initiated');
 
-		botResponseDiv.innerHTML = "Nova: PC is restarting...";
+		botResponseDiv.innerHTML = "PC is restarting...";
 
 		new Notification('System Restart Initiated', {
 			body: 'Your system will be restarting in 10 seconds...',
@@ -3133,7 +3133,7 @@ async function lock_pc() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Locking the PC... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Locking the PC... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -3144,7 +3144,7 @@ async function lock_pc() {
 		await invoke('lock_pc');
 		console.log('System lock initiated');
 
-		botResponseDiv.innerHTML = "Nova: PC is locked...";
+		botResponseDiv.innerHTML = "PC is locked...";
 
 		new Notification('System Lock Initiated', {
 			body: 'Your system is locked!',
@@ -3172,7 +3172,7 @@ async function sleep_pc() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Putting the PC to sleep... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Putting the PC to sleep... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -3183,7 +3183,7 @@ async function sleep_pc() {
 		await invoke('sleep_pc');
 		console.log('System sleep initiated');
 
-		botResponseDiv.innerHTML = "Nova: PC is slept...";
+		botResponseDiv.innerHTML = "PC is slept...";
 
 		new Notification('System Sleep Initiated', {
 			body: 'Your system will be going to sleep in moments...',
@@ -3213,7 +3213,7 @@ async function getCrisisHotlines() {
 	botResponseDiv.className = 'bot-response';
 	botResponseDiv.innerHTML = `
 		<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-			Nova: Fetching crisis hotlines... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			Fetching crisis hotlines... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 		</span>
 	`;
 	chatResponses.appendChild(botResponseDiv);
@@ -3238,7 +3238,7 @@ async function getCrisisHotlines() {
 
 			console.log(hotlinesText);
 
-			botResponseDiv.innerHTML = 'Nova: ' + response;
+			botResponseDiv.innerHTML = response;
 
 			scrolltoBottom();
 
@@ -3322,7 +3322,7 @@ async function setTimer(time) {
 
 		const timerResponseDiv = document.createElement('div');
 		timerResponseDiv.className = 'bot-response';
-		timerResponseDiv.textContent = `Nova: ${duration} ${unit} timer has started!`;
+		timerResponseDiv.textContent = `${duration} ${unit} timer has started!`;
 		chatResponses.appendChild(timerResponseDiv);
 
 		scrolltoBottom();
@@ -3331,7 +3331,7 @@ async function setTimer(time) {
 
 		const interval = setInterval(() => {
 			remainingTime -= 1000;
-			timerResponseDiv.innerHTML = `Nova: ${Math.floor(remainingTime / 1000)} seconds remaining...`;
+			timerResponseDiv.innerHTML = `${Math.floor(remainingTime / 1000)} seconds remaining...`;
 			console.log(`Timer: ${Math.floor(remainingTime / 1000)} seconds remaining...`);
 			if (remainingTime <= 0) {
 				clearInterval(interval);
@@ -3340,8 +3340,8 @@ async function setTimer(time) {
 
 		await new Promise(resolve => setTimeout(resolve, timeInMs));
 
-		console.log(`Nova: ${duration} ${unit} timer has completed!`);
-		timerResponseDiv.innerHTML = `Nova: ${duration} ${unit} timer has completed!`;
+		console.log(`${duration} ${unit} timer has completed!`);
+		timerResponseDiv.innerHTML = `${duration} ${unit} timer has completed!`;
 
 		scrolltoBottom();
 
@@ -3399,7 +3399,7 @@ async function playRockPaperScissors(userMessage) {
 
 	const botResponseDiv = document.createElement('div');
 	botResponseDiv.className = 'bot-response';
-	botResponseDiv.innerHTML = `Nova: Let's play rock, paper, scissors!`;
+	botResponseDiv.innerHTML = `Let's play rock, paper, scissors!`;
 	chatResponses.appendChild(botResponseDiv);
 
 	scrolltoBottom();
@@ -3444,7 +3444,7 @@ async function playRockPaperScissors(userMessage) {
 		}
 
 		botResponseDiv.innerHTML = `
-			Nova: I chose ${computer_choice}!<br><br>${resultComment}, so <span style="font-weight: bold;">${result}</span>!
+			I chose ${computer_choice}!<br><br>${resultComment}, so <span style="font-weight: bold;">${result}</span>!
 		`;
 
 		scrolltoBottom();
@@ -3527,7 +3527,7 @@ async function wakeUpAlarm(wakeUpTime) {
 		const botResponseDiv = document.createElement('div');
 		botResponseDiv.className = 'bot-response';
 		botResponseDiv.innerHTML = `
-			Nova: Wake up alarm successfully set! I'll wake you up at <span style="font-weight: bold;">${displayTime}</span>!
+			Wake up alarm successfully set! I'll wake you up at <span style="font-weight: bold;">${displayTime}</span>!
 		`;
 		chatResponses.appendChild(botResponseDiv);
 
@@ -3552,7 +3552,7 @@ async function wakeUpAlarm(wakeUpTime) {
 
 			// Create stop alarm indicator
 			botResponseDiv.innerHTML = `
-				Nova: Time to wake up! It's <span style="font-weight: bold;">${displayTime}</span> now!<br><br>
+				Time to wake up! It's <span style="font-weight: bold;">${displayTime}</span> now!<br><br>
 				<button id="stopAlarm">Stop Alarm</button>
 			`;
 
@@ -3563,7 +3563,7 @@ async function wakeUpAlarm(wakeUpTime) {
 				audio.pause();
 				audio.currentTime = 0;
 				botResponseDiv.innerHTML = `
-					Nova: Wake up alarm stopped!
+					Wake up alarm stopped!
 				`;
 			});
 
@@ -3573,7 +3573,7 @@ async function wakeUpAlarm(wakeUpTime) {
 					audio.pause();
 					audio.currentTime = 0;
 					botResponseDiv.innerHTML = `
-						Nova: Wake up alarm stopped!
+						Wake up alarm stopped!
 					`;
 				}
 			}, 60000);
