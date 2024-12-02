@@ -239,6 +239,8 @@ table th, table td {
 	white-space: nowrap;
 	background: #33333350;
 	color: var(--white);
+	font-size: 11px;
+	font-weight: 300;
 	text-align: center;
 	border-radius: 2px;
 	border: 0.5px solid #2878C140;
