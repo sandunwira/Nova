@@ -1464,15 +1464,18 @@
 	{
 		"intent": "get_ip",
 		"requests": [
+			"ip",
 			"ip address",
+			"public ip",
+			"what is my ip",
 			"what is my ip address",
 			"what is my public ip address",
-			"what is my private ip address",
-			"what is my local ip address",
 			"what is my public ip",
+			"get my ip",
+			"get my ip address",
+			"fetch my ip",
 			"fetch my ip address",
-			"fetch my public ip address",
-			"fetch my private ip address"
+			"fetch my public ip address"
 		]
 	},
 	{
