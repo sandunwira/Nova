@@ -1257,6 +1257,22 @@
 		]
 	},
 	{
+		"intent": "generosity",
+		"requests": [
+			"i feel generous",
+			"i feel generous today",
+			"im in the mood to give back",
+			"i want to be more generous",
+			"i feel like helping someone out",
+			"i think im going to donate today",
+			"i love being generous",
+			"i want to do something kind for others",
+			"ive been thinking about giving more",
+			"i feel like I have so much to give",
+			"I wish I could help more people"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",

@@ -830,6 +830,25 @@
 		]
 	},
 	{
+		"intent": "generosity",
+		"responses": [
+			"That's wonderful, [name]! Generosity is a beautiful thing. Even the smallest acts can make a big difference.",
+			"It's great that you're in the mood to give back! Generosity helps create a more compassionate world, [name].",
+			"Generosity is a wonderful quality to have, [name]. Your kindness and generosity can have a positive impact on others.",
+			"Thank you for being generous, [name]. Your acts of kindness can make a big difference in someone's day.",
+			"Generosity is a gift that you can give to others every day, [name]. Your thoughtful actions can bring joy and comfort to those around you.",
+			"That's a great way to live your life, [name]. Generosity is contagious, so keep spreading it!",
+			"Being generous is such a fulfilling feeling, [name]. It doesn't always have to be big—it's the thought that counts!",
+			"What a kind-hearted mindset, [name]! Offering help or support, even in small ways, can really change someone's day.",
+			"That's amazing, [name]! Giving, whether it's time, resources, or support, makes the world a better place.",
+			"Your generosity can truly inspire others, [name]. Every act of kindness, big or small, is a step toward a better community.",
+			"That's fantastic, [name]! Generosity not only helps others, but it can bring you a deep sense of satisfaction too.",
+			"It's amazing that you want to give more, [name]! There are so many ways to be generous—your efforts will certainly make an impact.",
+			"Such a thoughtful approach, [name]! Generosity can be about anything, from a kind word to a big donation. Every little bit helps.",
+			"It's great that you want to help more people, [name]. Generosity has a ripple effect, inspiring others to do the same!"
+		]
+	},
+	{
 		"intent": "agree",
 		"responses": [
 			"I'm glad we're on the same page [name].",
