@@ -1273,6 +1273,39 @@
 		]
 	},
 	{
+		"intent": "love",
+		"requests": [
+			"ily",
+			"ilysm",
+			"i luv u",
+			"luv u",
+			"love u",
+			"i love you",
+			"i love you so much"
+		]
+	},
+	{
+		"intent": "ask_love",
+		"requests": [
+			"love me",
+			"you love me",
+			"do you love me"
+		]
+	},
+	{
+		"intent": "ask_about_love",
+		"requests": [
+			"what you love about me",
+			"what you like about me",
+			"what do you love about me",
+			"what do you love about me the most",
+			"what do you love about me the best",
+			"what do you like about me",
+			"what do you like about me the most",
+			"what do you like about me the best"
+		]
+	},
+	{
 		"intent": "agree",
 		"requests": [
 			"agree",

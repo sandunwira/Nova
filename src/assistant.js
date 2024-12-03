@@ -20,10 +20,31 @@ class Assistant {
 			return response.json();
 		},
 
+		cleanQuery(input) {
+			const emojiRegex = /[\p{Emoji}]/gu;
+			// Check if query has both text and emojis
+			const hasEmojis = emojiRegex.test(input);
+			const hasText = input.replace(emojiRegex, '').trim().length > 0;
+
+			// If only emojis, return as is
+			if (hasEmojis && !hasText) {
+				return input;
+			}
+			// If both text and emojis, remove emojis
+			if (hasEmojis && hasText) {
+				return input.replace(emojiRegex, '').trim();
+			}
+			// If only text, return as is
+			return input;
+		},
+
 		// New method to extract keywords from a query
 		extractKeywords(query) {
-			// Remove punctuation and convert to lowercase
-			const cleanQuery = query.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').toLowerCase();
+			// Clean the query first
+			const cleanedQuery = this.cleanQuery(query);
+
+			// Process cleaned query
+			const cleanQuery = cleanedQuery.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').toLowerCase();
 
 			// Split into words and remove common stop words
 			const stopWords = new Set([
@@ -32,8 +53,7 @@ class Assistant {
 				'to', 'was', 'were', 'will', 'with'
 			]);
 
-			return cleanQuery.split(/\s+/)
-				.filter(word => word.length > 1 && !stopWords.has(word));
+			return cleanQuery.split(/\s+/).filter(word => word.length > 1 && !stopWords.has(word));
 		},
 
 		// Enhanced keyword matching with more sophisticated scoring
@@ -278,16 +298,14 @@ class Assistant {
 
 	async processQuery(query) {
 		try {
-			console.log("Query:", query);
+			console.log("Original Query:", query);
+			// Clean the query first
+			const cleanedQuery = Assistant.Utility.cleanQuery(query);
+			console.log("Cleaned Query:", cleanedQuery);
+
 			let response;
-			response = this.findResponse(query);
-			// Replace dynamic variables in all responses
+			response = this.findResponse(cleanedQuery);
 			response = this.replaceDynamicVariables(response);
-
-			// Save the conversation
-			// this.saveConversation(query, response);
-
-			// console.log(this.getConversationHistory());
 
 			console.log("Response:", response);
 			return response;
