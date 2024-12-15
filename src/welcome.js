@@ -1,6 +1,6 @@
 if (window.localStorage.getItem('userData') && !window.localStorage.getItem('onboarding')) {
-    window.location.href = 'main.html';
-    throw new Error('User already registered');
+	window.location.href = '/';
+	throw new Error('User already registered');
 }
 
 // Set onboarding flag
@@ -278,10 +278,17 @@ function newUserProfileFormStep(step) {
 }
 
 function completeUserRegistration(userData) {
+    if (!userData || !userData.avatar) {
+        console.error('Invalid user data');
+        return;
+    }
+    
     // Remove onboarding flag
     window.localStorage.removeItem('onboarding');
-    // Save user data
+    
+    // Save complete user data
     window.localStorage.setItem('userData', JSON.stringify(userData));
+    
     // Redirect to main page
     window.location.href = 'main.html';
 }

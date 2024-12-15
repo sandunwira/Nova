@@ -26,15 +26,37 @@ const chatFormSubmitBtn = document.getElementById('chatFormSubmitBtn');
 const chatResponses = document.getElementById('chatResponses');
 
 
-let userData = JSON.parse(window.localStorage.getItem('userData'));
-console.log('Current User Data:', userData);
+// GET USER DATA START ======================================================== //
+let userData = null;
+try {
+	const storedData = window.localStorage.getItem('userData');
+
+	if (storedData) {
+		userData = JSON.parse(storedData);
+		if (!userData || !userData.avatar) {
+			window.location.href = 'welcome.html';
+		}
+		console.log('User Data:', userData);
+	} else {
+		window.location.href = 'welcome.html';
+	}
+} catch (error) {
+	console.error('Error loading user data:', error);
+	window.location.href = 'welcome.html';
+}
+// ========================================================== GET USER DATA END //
 
 
-let userChatAvatarHTML = `
+let userChatAvatarHTML = userData ? `
 	<div style="height: calc(100% - 30px); padding-top: 30px; width: 45px; display: flex; align-items: start; justify-content: center; user-select: none;">
 		<img src="${userData.avatar}" alt="User Avatar" style="height: 20px; width: 20px; object-fit: cover; border-radius: 50px;">
 	</div>
+` : `
+	<div style="height: calc(100% - 30px); padding-top: 30px; width: 45px; display: flex; align-items: start; justify-content: center; user-select: none;">
+		<img src="assets/images/useravatars/thumbs-default.svg" alt="User Avatar" style="height: 20px; width: 20px; object-fit: contain;">
+	</div>
 `;
+
 let botChatAvatarHTML = `
 	<div style="height: calc(100% - 30px); padding-top: 30px; width: 45px; display: flex; align-items: start; justify-content: center; user-select: none;">
 		<img src="assets/images/logo.svg" alt="Nova Avatar" style="height: 20px; width: 20px; object-fit: contain;">
