@@ -77,26 +77,60 @@ img {
 	border-radius: 2px;
 }
 
-input[type="text"], input[type="submit"], input[type="email"], input[type="password"], input[type="number"], input[type="tel"], input[type="search"], input[type="url"], textarea {
+input[type="text"], input[type="date"], input[type="submit"], input[type="email"], input[type="password"], input[type="number"], input[type="tel"], input[type="search"], input[type="url"], textarea {
 	color: var(--white);
 	background: #333333;
 	font-size: 13px;
 	padding: 9px 12px;
 	border: none;
 	outline: none;
+	transition: 0.2s;
 }
-input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="tel"], input[type="search"], input[type="url"], textarea {
+input[type="text"], input[type="date"], input[type="email"], input[type="password"], input[type="number"], input[type="tel"], input[type="search"], input[type="url"], textarea {
 	min-width: 350px;
 	height: 18px;
 	line-height: 1.4;
 	resize: none;
+	transition: 0.2s;
 }
-input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="number"]:focus, input[type="tel"]:focus, input[type="search"]:focus, input[type="url"]:focus, textarea:focus {
+input[type="text"]:focus, input[type="date"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="number"]:focus, input[type="tel"]:focus, input[type="search"]:focus, input[type="url"]:focus, textarea:focus {
 	background: var(--darkGray);
+	transition: 0.2s;
 }
-input[type="text"][disabled], input[type="email"][disabled], input[type="password"][disabled], input[type="number"][disabled], input[type="tel"][disabled], input[type="search"][disabled], input[type="url"][disabled], textarea[disabled] {
+input[type="text"][disabled], input[type="date"][disabled], input[type="email"][disabled], input[type="password"][disabled], input[type="number"][disabled], input[type="tel"][disabled], input[type="search"][disabled], input[type="url"][disabled], textarea[disabled] {
 	background: var(--blackGray);
 	cursor: not-allowed;
+	transition: 0.2s;
+}
+
+select {
+	color: var(--white);
+	background: #333333;
+	min-width: 350px;
+	padding: 9px 12px;
+	border-top: none;
+	border-bottom: none;
+	border-left: none;
+	border-right: 10px solid #333333;
+	outline: none;
+	transition: 0.2s;
+}
+select:focus {
+	background: var(--darkGray);
+	border-top: none;
+	border-bottom: none;
+	border-left: none;
+	border-right: 10px solid var(--darkGray);
+	transition: 0.2s;
+}
+select[disabled] {
+	background: var(--blackGray);
+	border-top: none;
+	border-bottom: none;
+	border-left: none;
+	border-right: 10px solid var(--blackGray);
+	cursor: not-allowed;
+	transition: 0.2s;
 }
 
 button {
@@ -107,13 +141,16 @@ button {
 	border: none;
 	outline: none;
 	cursor: pointer;
+	transition: 0.2s;
 }
 button:hover {
 	background: var(--darkGray);
+	transition: 0.2s;
 }
 button[disabled] {
 	background: var(--blackGray);
 	cursor: not-allowed;
+	transition: 0.2s;
 }
 
 
@@ -134,16 +171,20 @@ table th, table td {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	transition: 0.2s;
 }
 #chatForm:focus-within #chatFormSubmitBtn {
 	background: var(--darkGray);
+	transition: 0.2s;
 }
 #chatFormSubmitBtn:hover {
 	background: #333333;
+	transition: 0.2s;
 }
 #chatFormSubmitBtn[disabled] {
 	background: var(--blackGray);
 	cursor: not-allowed;
+	transition: 0.2s;
 }
 
 #chatFormVoiceBtn {
@@ -152,18 +193,45 @@ table th, table td {
 	align-items: center;
 	justify-content: center;
 	border-right: 0.5px solid var(--darkGray);
+	transition: 0.2s;
 }
 #chatForm:focus-within #chatFormVoiceBtn {
 	background: var(--darkGray);
 	border-right: 0.5px solid #333333;
+	transition: 0.2s;
 }
 #chatFormVoiceBtn:hover {
 	background: #333333;
+	transition: 0.2s;
 }
 #chatFormVoiceBtn[disabled] {
 	background: var(--blackGray);
 	cursor: not-allowed;
+	transition: 0.2s;
 }
+
+
+#newUserProfileFormSubmitBtn {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: 0.2s;
+}
+#newUserProfileForm:focus-within #newUserProfileFormSubmitBtn {
+	background: var(--darkGray);
+	transition: 0.2s;
+}
+#newUserProfileFormSubmitBtn:hover {
+	background: #333333;
+	transition: 0.2s;
+}
+#newUserProfileFormSubmitBtn[disabled] {
+	background: var(--blackGray);
+	cursor: not-allowed;
+	transition: 0.2s;
+}
+
 
 
 .titlebarButtons {
@@ -263,9 +331,12 @@ table th, table td {
 
 
 
-/* LOADER ANIMATION */
+/* ANIMATIONS START */
 .spinner {
 	animation: spin 1s linear infinite;
+}
+.fadeIn {
+	animation: fadeIn 1s;
 }
 
 @keyframes spin {
@@ -276,3 +347,13 @@ table th, table td {
 		transform: rotate(360deg);
 	}
 }
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+/* ANIMATIONS END */

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script type="module" src="/main.js" defer></script>
+
+	<!-- ASSISTANT OPERATIONS SCRIPTS START -->
+	<script src="welcome.js" defer></script>
+	<!-- ASSISTANT OPERATIONS SCRIPTS END -->
+
+	<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+	<div class="containerBlock" style="position: fixed; top: 0; left: 0; height: 100vh; width: 100%;">
+		<div class="titlebar" style="background: var(--blackGray); height: 25px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; user-select: none;">
+			<span style="padding-left: 10px; font-size: 10px; text-transform: uppercase;">
+				Nova <span style="text-transform: none; font-weight: 300; color: var(--lightGray);">v1.0</span>
+			</span>
+			<div class="titlebarButtons">
+				<button id="titlebar-minimize" class="tooltip" data-tooltip="Minimize">
+					<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-arrows-diagonal-minimize-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 10h-4v-4" /><path d="M20 4l-6 6" /><path d="M6 14h4v4" /><path d="M10 14l-6 6" /></svg>
+				</button>
+				<button id="titlebar-close" class="tooltip" data-tooltip="Close">
+					<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+				</button>
+			</div>
+		</div>
+		<div data-tauri-drag-region style="position: fixed; top: 5px; left: 0; background: transparent; height: 20px; width: calc(100% - 69px);"></div>
+
+		<div class="container" style="background: linear-gradient(#1E1E1E55, #1E1E1E55), url('assets/images/splashbg.jpg'); background-size: cover; background-position: center; height: calc(100% - 20px); display: flex; flex-direction: column; align-items: center; justify-content: center; user-select: none;">
+			<div id="newUserProfileSplashscreenContainer" class="fadeIn" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 85%; width: 100%;"></div>
+
+			<div id="newUserProfileFormContainer" class="fadeIn" style="height: 15%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;"></div>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -1,3 +1,5 @@
+let currentUserData = JSON.parse(window.localStorage.getItem('userData'));
+
 class Assistant {
 	constructor() {
 		this.requestsData = [];
@@ -8,7 +10,7 @@ class Assistant {
 
 		// Dynamic Variables
 		this.customData = {
-			name: "Adam",
+			name: currentUserData.name,
 			feedback_url: "https://forms.gle/77MP5rjGaXWLjhmcA",
 		};
 	}

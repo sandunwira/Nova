@@ -98,6 +98,7 @@
     "windows": [
       {
         "title": "Nova",
+        "url": "index.html",
         "minWidth": 900,
         "minHeight": 600,
         "fullscreen": false,

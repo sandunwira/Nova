@@ -22,14 +22,17 @@ fetch('data/crisis_hotlines.json')
 const chatForm = document.getElementById('chatForm');
 const chatMessage = document.getElementById('chatMessage');
 const botResponse = document.getElementById('botResponse');
-const chatFormVoiceBtn = document.getElementById('chatFormVoiceBtn');
 const chatFormSubmitBtn = document.getElementById('chatFormSubmitBtn');
 const chatResponses = document.getElementById('chatResponses');
 
 
+let userData = JSON.parse(window.localStorage.getItem('userData'));
+console.log('Current User Data:', userData);
+
+
 let userChatAvatarHTML = `
 	<div style="height: calc(100% - 30px); padding-top: 30px; width: 45px; display: flex; align-items: start; justify-content: center; user-select: none;">
-		<img src="assets/images/useravatars/thumbs13.svg" alt="User Avatar" style="height: 20px; width: 20px; object-fit: cover; border-radius: 50px;">
+		<img src="${userData.avatar}" alt="User Avatar" style="height: 20px; width: 20px; object-fit: cover; border-radius: 50px;">
 	</div>
 `;
 let botChatAvatarHTML = `
@@ -62,7 +65,10 @@ function showWelcomeMessage() {
 				welcomeDiv.innerHTML = `
 					<span style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
 						<p>This is</p>
-						<h1 style="font-size: 55px;">NOVA</h1>
+						<span style="display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 15px;">
+							<img src="assets/images/logo.svg" alt="Nova Logo" style="height: 38px; object-fit: contain; margin-top: 4px;">
+							<h1 style="font-size: 55px;">NOVA</h1>
+						</span>
 					</span>
 
 					<span style="width: 60%; display: flex; flex-direction: column; align-items: center; gap: 35px;">
