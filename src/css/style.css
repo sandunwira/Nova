@@ -1,6 +1,6 @@
 @font-face {
 	font-family: 'Funnel Display';
-	src: url('assets/fonts/FunnelDisplay.ttf') format('truetype');
+	src: url('../assets/fonts/FunnelDisplay.ttf') format('truetype');
 }
 
 :root {
