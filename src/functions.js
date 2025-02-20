@@ -4,6 +4,7 @@ const { invoke } = window.__TAURI__.tauri;
 
 let bugcodesData = [];
 let crisisHotlinesData = [];
+let dictionaryData = [];
 
 // // Fetch the JSON files
 fetch('data/bugcodes.json')
@@ -16,6 +17,12 @@ fetch('data/crisis_hotlines.json')
 	.then(response => response.json())
 	.then(data => {
 		crisisHotlinesData = data;
+	});
+
+fetch('data/dictionary.min.json')
+	.then(response => response.json())
+	.then(data => {
+		dictionaryData = data;
 	});
 
 
@@ -482,6 +489,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 					wakeUpAlarm(wakeUpTime);
 
 					scrolltoBottom();
+				} else if (userMessage.toLowerCase().startsWith("define")) {
+					const word = userMessage.replace("define", "").trim();
+					defineWord(word);
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().startsWith("summarize:") || userMessage.toLowerCase().startsWith("summarise:")) {
 					const inputText = userMessage.replace("summarize:", "").trim().replace("summarise:", "").trim();
 					if (inputText === "") {
@@ -700,7 +712,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 			}
 		});
 
-		chatMessage.addEventListener('keydown', function(e) {
+		chatMessage.addEventListener('keydown', function (e) {
 			if (e.key === 'Enter' && !e.shiftKey) {
 				e.preventDefault();
 				chatForm.dispatchEvent(new Event('submit'));
@@ -895,7 +907,7 @@ async function closeApplication(appName) {
 
 		const responseDiv = document.createElement('div');
 
-		switch(response.status) {
+		switch (response.status) {
 			case 'success':
 				responseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
 				responseDiv.innerHTML = `
@@ -4363,6 +4375,147 @@ async function wakeUpAlarm(wakeUpTime) {
 
 		scrolltoBottom();
 
+		throw error;
+	}
+}
+
+
+
+// function to define a word
+async function defineWord(word) {
+	const botResponseDiv = document.createElement('div');
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+	botResponseDiv.innerHTML = `
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Finding definitions for "${word}"... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
+	`;
+	chatResponses.appendChild(botResponseDiv);
+
+	scrolltoBottom();
+
+	try {
+		// Find the letter group containing the word
+		const letterGroup = dictionaryData.find(group =>
+			group.letter.toLowerCase() === word[0].toLowerCase()
+		);
+
+		if (!letterGroup) {
+			console.warn(`No letter group found for the word ${word}`);
+
+			botResponseDiv.remove();
+			const errorResponseDiv = document.createElement('div');
+			errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+			errorResponseDiv.innerHTML = `
+				${botChatAvatarHTML}
+				<div class="error-response">
+					Sorry, the word <span style="font-weight: bold;">"${word}"</span> is not a valid word. Please enter a word that starts with A - Z
+				</div>
+			`;
+			chatResponses.appendChild(errorResponseDiv);
+
+			scrolltoBottom();
+			return null;
+		}
+
+		// Find the word in the letter group
+		const wordData = letterGroup.words.find(w =>
+			w.word.toLowerCase() === word.toLowerCase()
+		);
+
+		if (wordData) {
+			if (!wordData.definitions || wordData.definitions.length === 0 || wordData.definitions.includes(null)) {
+				console.warn(`No definitions found for the word ${word}`);
+
+				botResponseDiv.remove();
+				const errorResponseDiv = document.createElement('div');
+				errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+				errorResponseDiv.innerHTML = `
+					${botChatAvatarHTML}
+					<div class="error-response">
+						Sorry, I couldn't find any definitions for the word <span style="font-weight: bold;">"${wordData.word}"</span>
+					</div>
+				`;
+				chatResponses.appendChild(errorResponseDiv);
+
+				scrolltoBottom();
+				return null;
+			}
+
+			let definitions = '';
+			wordData.definitions.forEach((definition) => {
+				if (definition) {
+					definitions += `<p>- ${definition}</p>`;
+				}
+			});
+
+			// If no valid definitions were found after filtering
+			if (!definitions) {
+				console.warn(`No definitions found for the word ${word}`);
+
+				botResponseDiv.remove();
+				const errorResponseDiv = document.createElement('div');
+				errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+				errorResponseDiv.innerHTML = `
+					${botChatAvatarHTML}
+					<div class="error-response">
+						Sorry, I couldn't find any definitions for the word <span style="font-weight: bold;">"${word}"</span>
+					</div>
+				`;
+				chatResponses.appendChild(errorResponseDiv);
+
+				scrolltoBottom();
+				return null;
+			}
+
+			botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+			botResponseDiv.innerHTML = `
+				${botChatAvatarHTML}
+				<div class="bot-response">
+					<h2>Definitions found for the word "${wordData.word}":</h2><br>
+					<div style="display: flex; flex-direction: column; gap: 5px;">
+						${definitions}
+					</div>
+				</div>
+			`;
+
+			scrolltoBottom();
+			return wordData;
+		} else {
+			console.warn(`${word} is not included in the dictionary`);
+
+			botResponseDiv.remove();
+			const errorResponseDiv = document.createElement('div');
+			errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+			errorResponseDiv.innerHTML = `
+				${botChatAvatarHTML}
+				<div class="error-response">
+					Sorry, the word <span style="font-weight: bold;">"${word}"</span> is not included in my dictionary. Please try another word
+				</div>
+			`;
+			chatResponses.appendChild(errorResponseDiv);
+
+			scrolltoBottom();
+			return null;
+		}
+	} catch (error) {
+		console.error('Error in defineWord:', error);
+
+		botResponseDiv.remove();
+		const errorResponseDiv = document.createElement('div');
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't find any definitions for the word <span style="font-weight: bold;">"${word}"</span>
+			</div>
+		`;
+		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
 		throw error;
 	}
 }
