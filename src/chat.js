@@ -85,3 +85,22 @@ chatFormVoiceBtn.addEventListener('click', () => {
 	}
 });
 // ===================================================== VOICE RECOGNITION END //
+
+
+// USER PROFILE START ======================================================== //
+window.addEventListener('DOMContentLoaded', () => {
+	const titlebarProfile = document.getElementById('titlebar-profile');
+	titlebarProfile.style = 'display: flex; flex-direction: row; align-items: center; gap: 8px; z-index: 10; width: auto; cursor: default;';
+	titlebarProfile.title = `Logged in as ${userData.name}`;
+	titlebarProfile.innerHTML = `
+		<img
+			src="${userData.avatar}"
+			alt="Avatar for ${userData.name}"
+			style="width: 12px; height: 12px;"
+		/>
+		<span style="font-size: 10px; color: var(--white); font-weight: 300;">
+			${userData.name}
+		</span>
+	`;
+});
+// ========================================================== USER PROFILE END //
