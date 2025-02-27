@@ -90,7 +90,7 @@ chatFormVoiceBtn.addEventListener('click', () => {
 // USER PROFILE START ======================================================== //
 window.addEventListener('DOMContentLoaded', () => {
 	const titlebarProfile = document.getElementById('titlebar-profile');
-	titlebarProfile.style = 'display: flex; flex-direction: row; align-items: center; gap: 8px; z-index: 10; width: auto; cursor: default;';
+	titlebarProfile.style = 'display: flex; flex-direction: row; align-items: center; gap: 8px; z-index: 10; width: auto; cursor: default; animation: fadeIn 1s;';
 	titlebarProfile.title = `Logged in as ${userData.name}`;
 	titlebarProfile.innerHTML = `
 		<img
@@ -98,9 +98,14 @@ window.addEventListener('DOMContentLoaded', () => {
 			alt="Avatar for ${userData.name}"
 			style="width: 12px; height: 12px;"
 		/>
-		<span style="font-size: 10px; color: var(--white); font-weight: 300;">
-			${userData.name}
+		<span style="font-size: 10px; color: var(--white); font-weight: 300;" id="greetingText">
+			Hey, ${userData.name}
 		</span>
 	`;
+
+	const greetingText = document.getElementById('greetingText');
+	setTimeout(() => {
+		greetingText.textContent = userData.name;
+	}, 8000);
 });
 // ========================================================== USER PROFILE END //
