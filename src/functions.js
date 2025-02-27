@@ -494,6 +494,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 					defineWord(word);
 
 					scrolltoBottom();
+				} else if (userMessage.toLowerCase().startsWith("extract text from")) {
+					const imageData = userMessage.replace("extract text from", "").trim();
+					extractTextFromImage(imageData);
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().startsWith("summarize:") || userMessage.toLowerCase().startsWith("summarise:")) {
 					const inputText = userMessage.replace("summarize:", "").trim().replace("summarise:", "").trim();
 					if (inputText === "") {
@@ -4511,6 +4516,69 @@ async function defineWord(word) {
 			${botChatAvatarHTML}
 			<div class="error-response">
 				Sorry, I couldn't find any definitions for the word <span style="font-weight: bold;">"${word}"</span>
+			</div>
+		`;
+		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
+		throw error;
+	}
+}
+
+
+
+// function for ocr text extraction
+async function extractTextFromImage(imageData) {
+	const botResponseDiv = document.createElement('div');
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+	botResponseDiv.innerHTML = `
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Extracting text from image... <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
+	`;
+	chatResponses.appendChild(botResponseDiv);
+
+	scrolltoBottom();
+
+	try {
+		// Create worker and load language data
+		const worker = await Tesseract.createWorker();
+		await worker.loadLanguage('eng');
+		await worker.initialize('eng');
+
+		// Recognize text from image
+		imageData = `https://api.allorigins.win/raw?url=${encodeURIComponent(imageData)}`;
+		const { data: { text } } = await worker.recognize(imageData);
+
+		// Terminate worker after recognition
+		await worker.terminate();
+
+		console.log('Extracted text from image:', text);
+
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				<h2>Extracted text from the image:</h2><br>
+				<p>${text}</p>
+			</div>
+		`;
+
+		scrolltoBottom();
+		return text;
+
+	} catch (error) {
+		console.error('Failed to extract text from image:', error);
+
+		botResponseDiv.remove();
+		const errorResponseDiv = document.createElement('div');
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't extract text from the image. Please try again later.
 			</div>
 		`;
 		chatResponses.appendChild(errorResponseDiv);
