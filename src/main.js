@@ -18,41 +18,4 @@ document.addEventListener('DOMContentLoaded', function () {
 		window.location.href = 'welcome.html';
 	}
 	// ================================================= USER REGISTRATION END //
-
-	// TOOLTIP START ========================================================= //
-	const tooltips = document.querySelectorAll('.tooltip');
-
-	tooltips.forEach(function (tooltip) {
-		const text = tooltip.getAttribute('data-tooltip');
-		const tooltipText = document.createElement('span');
-		tooltipText.className = 'tooltiptext';
-		tooltipText.innerText = text;
-		tooltip.appendChild(tooltipText);
-
-		tooltip.addEventListener('mouseenter', function () {
-			const rect = tooltipText.getBoundingClientRect();
-			const windowWidth = window.innerWidth;
-			const windowHeight = window.innerHeight;
-
-			// Adjust horizontal position if cropped
-			if (rect.left < 0) {
-				tooltipText.style.left = '0';
-				tooltipText.style.marginLeft = '0';
-			} else if (rect.right > windowWidth) {
-				tooltipText.style.left = 'auto';
-				tooltipText.style.right = '5px';
-				tooltipText.style.marginLeft = '0';
-			}
-
-			// Adjust vertical position if cropped
-			if (rect.top < 0) {
-				tooltipText.style.bottom = 'auto';
-				tooltipText.style.top = '125%';
-			} else if (rect.bottom > windowHeight) {
-				tooltipText.style.top = 'auto';
-				tooltipText.style.bottom = '125%';
-			}
-		});
-	});
-	// =========================================================== TOOLTIP END //
 });
