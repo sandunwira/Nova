@@ -29,6 +29,11 @@
 			</span>
 			<div class="titlebarButtons">
 				<button id="titlebar-profile" title="Profile"></button>
+				<div id="profile-dropdown" class="dropdown-menu" style="display: none; position: absolute; top: 25px; right: 75px; background: var(--blackGray); border: 1px solid var(--darkGray); border-radius: 3px; z-index: 100; min-width: 120px;">
+					<div class="dropdown-item" id="logout-option" style="padding: 8px 12px; font-size: 12px; cursor: pointer; transition: 0.2s;">
+						Logout
+					</div>
+				</div>
 				<button id="titlebar-minimize" title="Minimize">
 					<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-arrows-diagonal-minimize-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 10h-4v-4" /><path d="M20 4l-6 6" /><path d="M6 14h4v4" /><path d="M10 14l-6 6" /></svg>
 				</button>

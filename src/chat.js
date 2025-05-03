@@ -109,3 +109,39 @@ window.addEventListener('DOMContentLoaded', () => {
 	}, 8000);
 });
 // ========================================================== USER PROFILE END //
+
+// PROFILE DROPDOWN START =================================================== //
+document.addEventListener('DOMContentLoaded', function () {
+	const profileButton = document.getElementById('titlebar-profile');
+	const profileDropdown = document.getElementById('profile-dropdown');
+	const logoutOption = document.getElementById('logout-option');
+
+	// Toggle dropdown visibility when profile button is clicked
+	profileButton.addEventListener('click', (e) => {
+		e.stopPropagation();
+		profileDropdown.style.display = profileDropdown.style.display === 'none' ? 'block' : 'none';
+	});
+
+	// Hide dropdown when clicking anywhere else
+	document.addEventListener('click', () => {
+		profileDropdown.style.display = 'none';
+	});
+
+	// Prevent dropdown from closing when clicking within it
+	profileDropdown.addEventListener('click', (e) => {
+		e.stopPropagation();
+	});
+
+	// Handle logout functionality
+	logoutOption.addEventListener('click', () => {
+		// Clear user data
+		window.localStorage.removeItem('userData');
+
+		// Set onboarding flag to trigger welcome flow
+		window.localStorage.setItem('onboarding', 'true');
+
+		// Redirect to welcome page
+		window.location.href = 'welcome.html';
+	});
+});
+// =================================================== PROFILE DROPDOWN END //
