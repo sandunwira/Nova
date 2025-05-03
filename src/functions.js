@@ -1241,9 +1241,6 @@ async function getWeather() {
 // function to search the web
 async function searchWeb(query) {
 	query = query.replace('search ', '').trim();
-	const proxyUrl = 'https://api.allorigins.win/get?url=';
-	const targetUrl = encodeURIComponent(`https://html.duckduckgo.com/html/?q=${query}`);
-	const url = proxyUrl + targetUrl;
 
 	const botResponseDiv = document.createElement('div');
 	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
@@ -1262,61 +1259,15 @@ async function searchWeb(query) {
 	try {
 		let search_status;
 
-		const response = await fetch(url);
-		let data = await response.json();
-		console.log('Fetched data:', data);
+		const response = await fetch(`https://novaserver.onrender.com/api/functions/web-search?query=${query}`)
+			.then(response => response.json())
+			.catch(error => {
+				console.error('Error fetching web search results:', error);
+				throw error;
+			});
 
-		let htmlString = data.contents.replace(/\s+/g, ' ').trim();
-		console.log('HTML string:', htmlString);
-
-		const parser = new DOMParser();
-		const doc = parser.parseFromString(htmlString, 'text/html');
-		console.log('Parsed document:', doc);
-
-		// Priority 1: Find the element with the ID 'zero_click_abstract'
-		let snippetElement = doc.getElementById('zero_click_abstract');
-		let snippetText = 'Sorry, I couldn\'t find any relevant information. Please try again in a bit or try a different search query.';
-
-		if (snippetElement) {
-			snippetText = snippetElement.innerText;
-			console.log('Snippet text: ' + snippetText);
-			snippetText = snippetText.replace('More at Wikipedia', '');
-		} else {
-			// Priority 2: Find the first element with the class 'result__snippet'
-			const snippetElements = doc.querySelectorAll('.result__snippet');
-			if (snippetElements.length > 0) {
-				// Check if the first element's text starts with "Learn about"
-				if (snippetElements[0].innerText.startsWith('Learn about')) {
-					// If so, use the second element's text if it exists
-					if (snippetElements.length > 1) {
-						snippetText = snippetElements[1].innerText;
-					}
-				} else {
-					// Otherwise, use the first element's text
-					snippetText = snippetElements[0].innerText;
-				}
-			}
-		}
-
-		// Remove the last sentence that contains "More at..."
-		snippetText = snippetText.replace(/\.?\s*More at.*$/, '');
-
-		// Split the text into sentences
-		let sentences = snippetText.split('. ');
-
-		// Remove the last sentence that ends with "..."
-		for (let i = sentences.length - 1; i >= 0; i--) {
-			if (sentences[i].endsWith('...')) {
-				sentences.splice(i, 1);
-				break;
-			}
-		}
-
-		// Remove citation elements such as "[1]" or "[a]", "[ 1 ]" or "[ a ]" from the sentences
-		sentences = sentences.map(sentence => sentence.replace(/\[[a-zA-Z0-9]+\]/g, '').replace(/\[[ a-zA-Z0-9 ]+\]/g, ''));
-
-		// Join the sentences back together
-		snippetText = sentences.join('. ');
+		console.log('Web search response:', response);
+		const snippetText = response.snippet;
 
 		search_status = 'success';
 
@@ -1325,10 +1276,10 @@ async function searchWeb(query) {
 			snippetText = 'Sorry, I couldn\'t find any relevant information. Please try again in a bit or try a different search query.';
 		} else if (snippetText.length < 110) {
 			search_status = 'no_snippet';
-			snippetText = 'Sorry, I couldn\'t find a detailed snippet. Please click the link below to read more.';
+			snippetText = 'Sorry, I couldn\'t find a detailed snippet. Here\'s the link to the search results: <a href="https://duckduckgo.com/?q=' + query + '" target="_blank">DuckDuckGo</a>';
 		}
 
-		console.log('Sanitized snippet text: ' + snippetText);
+		console.log('Snippet text: ' + snippetText);
 
 		if (search_status === 'success') {
 			botResponseDiv.innerHTML = `
