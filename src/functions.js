@@ -1014,7 +1014,6 @@ async function closeApplication(appName) {
 // function to get a random movie
 function getRandomMovie() {
 	let movieDetails = null;
-	let randomMovieID = Math.floor(Math.random() * 10000000);
 
 	const botResponseDiv = document.createElement('div');
 	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
@@ -1030,27 +1029,19 @@ function getRandomMovie() {
 
 	scrolltoBottom();
 
-	fetch(`https://www.omdbapi.com/?i=tt${randomMovieID}&apikey=1e86c5d2`)
+	fetch(`https://novaserver.onrender.com/api/functions/random-movie`)
 		.then(response => response.json())
 		.then(data => {
-			const movieTitle = data.Title;
-			const movieYear = data.Year;
-			const movieGenre = data.Genre;
-			const moviePlot = data.Plot;
-			const movieRating = data.imdbRating;
-			const movieActors = data.Actors;
-			const movieDirector = data.Director;
-			const moviePoster = data.Poster;
+			const movieID = data.id;
+			const movieTitle = data.title;
+			const movieYear = data.year;
+			const movieGenre = data.genre;
+			const moviePlot = data.plot;
+			const movieRating = data.rating;
+			const movieActors = data.actors;
+			const movieDirector = data.director;
+			const moviePoster = data.poster;
 			let moviePosterContainer;
-			const type = data.Type;
-
-			console.log(randomMovieID);
-
-			if (movieTitle === undefined || type === "episode") {
-				botResponseDiv.remove();
-				getRandomMovie();
-				return;
-			}
 
 			movieDetails = `
 				${movieTitle} (${movieYear})\n
@@ -1060,7 +1051,7 @@ function getRandomMovie() {
 				Actors: ${movieActors}\n
 				Plot: ${moviePlot}\n
 				Poster: ${moviePoster}\n
-				Imdb: https://www.imdb.com/title/${data.imdbID}
+				Imdb: https://www.imdb.com/title/${movieID}
 			`;
 			console.log(movieDetails);
 
@@ -1088,7 +1079,7 @@ function getRandomMovie() {
 							<h3>Director:</h3><p>${movieDirector}</p><br>
 							<h3>Actors:</h3><p>${movieActors}</p><br>
 							<h3>Plot:</h3><p>${moviePlot}</p><br>
-							<p>Visit <a href="https://www.imdb.com/title/${data.imdbID}" target="_blank">IMDb Page</a></p>
+							<p>Visit <a href="https://www.imdb.com/title/${movieID}" target="_blank">IMDb Page</a></p>
 						</span>
 						<span style="width: 50%;">
 							${moviePosterContainer}
