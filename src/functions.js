@@ -1187,76 +1187,16 @@ async function getWeather() {
 		const location = await fetch(`https://ipinfo.io/${ipaddress}/city?token=a6384bf1fee5c5`)
 			.then(response => response.text());
 		console.log(`Location: ${location}`);
-		const weatherData = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=2e65cf86daa6dc72fef7c3f47c32788e`)
+		const weatherData = await fetch(`https://novaserver.onrender.com/api/functions/weather?location=${location}`)
 			.then(response => response.json());
 		console.log(weatherData);
 
-		const description = weatherData.weather[0].description.charAt(0).toUpperCase() + weatherData.weather[0].description.slice(1);
-		const temperature = `${Math.round(weatherData.main.temp - 273.15)}°C`;
-		const humidity = `${weatherData.main.humidity}%`;
-		const windSpeed = `${weatherData.wind.speed} m/s`;
-		const weatherDetails = `Weather in ${location} - ${description} • Temperature: ${temperature} • Humidity: ${humidity} • Wind Speed: ${windSpeed}`;
-
-		let weatherComment = "";
-
-		switch (description) {
-			case "Thunderstorm with light rain": weatherComment = "Just a sprinkle with a bit of rumble. Bring a hoodie—should be fun! ☔️⚡️"; break;
-			case "Thunderstorm with rain": weatherComment = "Raindrops and rumbles coming your way. Better grab your rain boots! 🌧️⚡️"; break;
-			case "Thunderstorm with heavy rain": weatherComment = "Full-on symphony outside—thunder, and a downpour! Better stay dry. ⛈️⚡️"; break;
-			case "Light thunderstorm": weatherComment = "Just a gentle boom or two. Enjoy the show! 🌩️😊"; break;
-			case "Thunderstorm": weatherComment = "It's a classic thunderstorm out there. Cue the dramatic skies! 🌩️🌧️"; break;
-			case "Heavy thunderstorm": weatherComment = "Big booms and serious rain—nature's got a show planned! ⛈️💥"; break;
-			case "Ragged thunderstorm": weatherComment = "A wild one's rolling in, a bit all over the place. Keep cozy inside if you can. 🌩️💨"; break;
-			case "Thunderstorm with light drizzle": weatherComment = "A little drizzle with some rumbles. Just enough to keep things interesting! 🌦️⚡️"; break;
-			case "Thunderstorm with drizzle": weatherComment = "A stormy drizzle is here—grab that raincoat for extra protection! ☔️⚡️"; break;
-			case "Thunderstorm with heavy drizzle": weatherComment = "Thundery skies and a heavy mist. It's one of those classic stormy days! 🌧️⚡️"; break;
-			case "Light intensity drizzle": weatherComment = "A soft drizzle—just enough to make things shimmer. No umbrella needed! 🌦️😊"; break;
-			case "Drizzle": weatherComment = "A gentle mist is in the air. Just enough to feel refreshing. 🌫️☁️"; break;
-			case "Heavy intensity drizzle": weatherComment = "Heavy on the drizzle but light on the storm. It's a wet one out there! ☔️🌧️"; break;
-			case "Light intensity drizzle rain": weatherComment = "A mix of rain and mist. Gentle enough for a quick walk. 🌦️🚶‍♂️"; break;
-			case "Drizzle rain": weatherComment = "A steady drizzle is here. Just a perfect cozy-weather vibe! ☕🌧️"; break;
-			case "Heavy intensity drizzle rain": weatherComment = "Drizzly and damp. A day for tea and a warm blanket! 🍵☔️"; break;
-			case "Shower rain and drizzle": weatherComment = "Raindrops with a bit of mist. Embrace the moodiness! 🌧️💧"; break;
-			case "Heavy shower rain and drizzle": weatherComment = "It's like the sky's watering the earth today. Keep your umbrella handy! ☔️💦"; break;
-			case "Shower drizzle": weatherComment = "A quick sprinkle of drizzly rain—nothing an umbrella can't handle. ☔️🌫️"; break;
-			case "Light rain": weatherComment = "A soft sprinkle outside. You might just skip the umbrella for this one. 🌦️😊"; break;
-			case "Moderate rain": weatherComment = "A steady fall—great for those rain lovers out there. 🌧️💧"; break;
-			case "Heavy intensity rain": weatherComment = "It's a pour out there! Don't forget your waterproof boots! 🥾🌧️"; break;
-			case "Very heavy rain": weatherComment = "Full downpour mode! The plants are happy, and you'll need serious rain gear. 🌧️🌊"; break;
-			case "Extreme rain": weatherComment = "The sky's pouring everything it has! Maybe stay indoors for this one. 🏠💦"; break;
-			case "Freezing rain": weatherComment = "Rain with a frosty touch. Bundle up and take it slow on the roads! 🧣❄️"; break;
-			case "Light intensity shower rain": weatherComment = "A brief, soft shower. Just enough to keep things cool. 🌦️😄"; break;
-			case "Shower rain": weatherComment = "A passing shower—could clear up soon, but maybe grab a hat! 🧢🌦️"; break;
-			case "Heavy intensity shower rain": weatherComment = "A solid rain shower is here. It's getting serious out there! 🌧️💧"; break;
-			case "Ragged shower rain": weatherComment = "Rain on and off, like nature can't quite decide. Keep that umbrella close! ☂️🌦️"; break;
-			case "Light snow": weatherComment = "Just a dusting. A little winter magic in the air! ❄️😊"; break;
-			case "Snow": weatherComment = "Snowfall! Perfect day for hot cocoa and cozy sweaters. ☕️❄️"; break;
-			case "Heavy snow": weatherComment = "It's a winter wonderland outside! The world's getting a thick white blanket. 🌨️⛄️"; break;
-			case "Sleet": weatherComment = "Cold and wet—sleet's here! Bundle up and watch your step. 🧥❄️"; break;
-			case "Light shower sleet": weatherComment = "A hint of sleet—just a sprinkle to keep things frosty. ❄️🌧️"; break;
-			case "Shower sleet": weatherComment = "On-and-off sleet showers. It's a chilly dance of rain and snow! 🌧️❄️"; break;
-			case "Light rain and snow": weatherComment = "Rain meets snow—double the fun, double the layers. 🌨️🌧️"; break;
-			case "Rain and snow": weatherComment = "It's a mix outside! Stay cozy and enjoy the unique weather show. ☔️❄️"; break;
-			case "Light shower snow": weatherComment = "Gentle snow showers—just enough to catch a few flakes. 🌨️✨"; break;
-			case "Shower snow": weatherComment = "On-and-off snow showers. Perfect for a bit of winter magic. 🌨️💫"; break;
-			case "Heavy shower snow": weatherComment = "Serious snow showers are here—time to make some snow angels! ☃️❄️"; break;
-			case "Mist": weatherComment = "A bit of mist is hanging around. The world feels like a fairytale! 🌫️🧚"; break;
-			case "Smoke": weatherComment = "A hazy day out there. Take it easy and breathe safe. 💨😷"; break;
-			case "Haze": weatherComment = "A gentle haze, making everything feel a bit mysterious. 🌫️🕵️"; break;
-			case "Sand/dust whirls": weatherComment = "A dusty swirl's in the air—watch out for a bit of grit! 🌪️👀"; break;
-			case "Fog": weatherComment = "It's a thick fog! Feels like walking through a cloud. 🌫️☁️"; break;
-			case "Sand": weatherComment = "A sandy breeze blowing through—might feel a bit gritty out there! 🏜️💨"; break;
-			case "Dust": weatherComment = "Dust in the air, keep an eye out if you're sensitive. 🌬️😶"; break;
-			case "Volcanic ash": weatherComment = "Volcanic ash is in the air. Best to stay indoors! 🌋😯"; break;
-			case "Squalls": weatherComment = "Quick gusts and winds—it's a bit of a wild one out there! 💨🌪️"; break;
-			case "Tornado": weatherComment = "Tornado watch! Stay alert, stay safe, and find shelter if needed. 🌪️⚠️"; break;
-			case "Clear sky": weatherComment = "It's as clear as it gets—sunshine and endless blue skies! ☀️😎"; break;
-			case "Few clouds": weatherComment = "Just a few fluffy clouds—enough for some shade but lots of sun. 🌤️😌"; break;
-			case "Scattered clouds": weatherComment = "Clouds scattered around—just enough for a little variety. 🌥️😌"; break;
-			case "Broken clouds": weatherComment = "Clouds breaking up the blue sky. Nature's design looks great today. 🌤️🌥️"; break;
-			case "Overcast clouds": weatherComment = "A fully cloudy day. Perfect for cozying up indoors. ☁️📚"; break;
-			default: weatherComment = "Time to enjoy the day!"; break;
-		}
+		const description = weatherData.description;
+		const temperature = weatherData.temperature;
+		const humidity = weatherData.humidity;
+		const windSpeed = weatherData.windSpeed;
+		const weatherDetails = weatherData.weatherDetails;
+		const weatherComment = weatherData.weatherComment;
 
 		const response = `
 			<p style="margin-bottom: 5px;">Here are the weather information for ${location}:</p><br>
