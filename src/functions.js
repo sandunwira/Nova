@@ -499,6 +499,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 					extractTextFromImage(imageData);
 
 					scrolltoBottom();
+				} else if (userMessage.toLowerCase().startsWith("lyrics for")) {
+					const songName = userMessage.replace("lyrics for", "").trim();
+					fetchLyrics(songName);
+
+					scrolltoBottom();
 				} else if (userMessage.toLowerCase().startsWith("summarize:") || userMessage.toLowerCase().startsWith("summarise:")) {
 					const inputText = userMessage.replace("summarize:", "").trim().replace("summarise:", "").trim();
 					if (inputText === "") {
@@ -4402,6 +4407,70 @@ async function extractTextFromImage(imageData) {
 		throw error;
 	}
 }
+
+
+
+// function to fetch lyrics of a song
+async function fetchLyrics(songName) {
+	const botResponseDiv = document.createElement('div');
+	botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+	botResponseDiv.innerHTML = `
+		${botChatAvatarHTML}
+		<div class="bot-response">
+			<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+				Finding lyrics for "${songName}"... <svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+			</span>
+		</div>
+	`;
+	chatResponses.appendChild(botResponseDiv);
+
+	scrolltoBottom();
+
+	try {
+		const response = await fetch(`http://localhost:5000/api/functions/lyrics?query=${encodeURIComponent(songName)}`)
+			.then(res => res.json())
+			.catch(err => {
+				console.error('Error fetching lyrics:', err);
+				throw err;
+			});
+
+		const songTitle = response.title;
+		const songArtist = response.artist;
+		const songLyrics = response.lyrics.join('<br>');
+
+		botResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="bot-response">
+				<h2>Lyrics for "${songTitle}" by ${songArtist}:</h2><br>
+				<p>${songLyrics}</p>
+			</div>
+		`;
+
+		scrolltoBottom();
+		return {
+			title: songTitle,
+			artist: songArtist,
+			lyrics: songLyrics
+		};
+	} catch (error) {
+		console.error('Failed to fetch lyrics:', error);
+
+		botResponseDiv.remove();
+		const errorResponseDiv = document.createElement('div');
+		errorResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+		errorResponseDiv.innerHTML = `
+			${botChatAvatarHTML}
+			<div class="error-response">
+				Sorry, I couldn't find any lyrics for the song <span style="font-weight: bold;">"${songName}"</span>. Please try again later.
+			</div>
+		`;
+		chatResponses.appendChild(errorResponseDiv);
+
+		scrolltoBottom();
+		throw error;
+	}
+}
+
 
 
 
