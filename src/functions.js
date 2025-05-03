@@ -2040,39 +2040,32 @@ async function searchBooks(query) {
 	scrolltoBottom();
 
 	try {
-		const proxyUrl = 'https://api.allorigins.win/get?url=';
-		const targetUrl = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`;
-		const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				'Accept': 'application/json'
-			}
-		});
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
-		const data = await response.json();
-		const jsonData = JSON.parse(data.contents);
-		const books = jsonData.items;
+		const response = await fetch(`http://localhost:5000/api/functions/book-search?query=${query}`)
+			.then(response => response.json())
+			.catch(error => {
+				console.error('Error fetching book search:', error);
+				throw error;
+			});
+
+		console.log('Book search response:', response);
+
+		const books = response.results;
 
 		if (books && books.length > 0) {
 			const bookDetails = books.map(book => {
-				const volumeInfo = book.volumeInfo;
-				const authors = volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown Author';
 				return `
 					<span style="display: flex; flex-direction: row; gap: 10px; width: 100%; margin-top: 15px;">
 						<span style="width: 50%;">
-							<h1><a href="${volumeInfo.infoLink}" target="_blank">${volumeInfo.title}</a></h1><br>
-							<h3>Authors:</h3><p>${authors}</p><br>
-							<h3>Publisher:</h3><p>${volumeInfo.publisher}</p><br>
-							<h3>Published Date:</h3><p>${volumeInfo.publishedDate}</p><br>
+							<h1><a href="${book.infoLink}" target="_blank">${book.title}</a></h1><br>
+							<h3>Authors:</h3><p>${book.authors}</p><br>
+							<h3>Publisher:</h3><p>${book.publisher}</p><br>
+							<h3>Published Date:</h3><p>${book.publishedDate}</p><br>
 						</span>
 						<span style="width: 50%; height: 200px;">
-							<img src="${volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : ''}" style="height: 100%; width: 100%; object-fit: contain;" alt="${volumeInfo.title}">
+							<img src="${book.thumbnail}" style="height: 100%; width: 100%; object-fit: contain;" alt="${book.title}">
 						</span>
 					</span>
-					<h3>Description:</h3><p>${volumeInfo.description}</p>
+					<h3>Description:</h3><p>${book.description}</p>
 				`;
 			}).join('<br>');
 
