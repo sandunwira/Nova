@@ -1689,23 +1689,17 @@ async function getImageOfTheDay() {
 	scrolltoBottom();
 
 	try {
-		const proxyUrl = 'https://api.allorigins.win/get?url=';
-		const targetUrl = 'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=en-US';
-		const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				'Accept': 'application/json'
-			}
-		});
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
-		const data = await response.json();
-		const jsonData = JSON.parse(data.contents);
-		const imageTitle = jsonData.images[0].title;
-		const imageUrl = "https://www.bing.com" + jsonData.images[0].urlbase + "_1920x1080.jpg";
-		const imageCredits = jsonData.images[0].copyright;
+		const response = await fetch(`https://novaserver.onrender.com/api/functions/iotd`)
+			.then(response => response.json())
+			.catch(error => {
+				console.error('Error fetching image of the day:', error);
+				throw error;
+			});
+		console.log('Image of the day response:', response);
+
+		const imageTitle = response.title;
+		const imageUrl = response.imageUrl;
+		const imageCredits = response.credits;
 
 		botResponseDiv.innerHTML = `
 			${botChatAvatarHTML}
