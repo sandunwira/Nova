@@ -1949,23 +1949,34 @@ async function getRandomMeal() {
 	scrolltoBottom();
 
 	try {
-		const response = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
-		const data = await response.json();
-		const meal = data.meals[0];
-		const mealName = meal.strMeal;
-		const mealCategory = meal.strCategory;
-		const mealArea = meal.strArea;
-		const mealInstructions = meal.strInstructions;
+		const response = await fetch('https://novaserver.onrender.com/api/functions/random-meal')
+			.then(response => response.json())
+			.catch(error => {
+				console.error('Error fetching random meal:', error);
+				throw error;
+			});
+
+		console.log('Random meal response:', response);
+
+		const mealName = response.name;
+		const mealCategory = response.category;
+		const mealArea = response.area;
+		const mealInstructions = response.instructions;
 		const mealIngredients = [];
-		for (let i = 1; i <= 20; i++) {
-			const ingredient = meal['strIngredient' + i];
-			const measure = meal['strMeasure' + i];
+		response.ingredients.forEach(ingredient => {
 			if (ingredient) {
-				mealIngredients.push(`- ${ingredient}: ${measure}`);
+				mealIngredients.push(`- ${ingredient}`);
 			}
+		});
+		const mealImage = response.thumbnail;
+		const mealYoutube = response.youtube;
+		let youtubeLink = "";
+		if (mealYoutube) {
+			youtubeLink = `<p style="font-size: 10px; margin-top: 5px;"><a href="${mealYoutube}" target="_blank">YouTube</a></p>`;
+		} else {
+			youtubeLink = "";
 		}
-		const mealImage = meal.strMealThumb;
-		const mealYoutube = meal.strYoutube;
+
 		const mealDetails = `
 			<h1>${mealName} (${mealCategory}, ${mealArea})</h1><br>
 			<span style="display: flex; flex-direction: row; gap: 10px; width: 100%;">
@@ -1979,7 +1990,7 @@ async function getRandomMeal() {
 			</span>
 			<h2>Instructions:</h2>
 			<p>${mealInstructions}</p><br>
-			<p style="font-size: 10px; margin-top: 5px;"><a href="${mealYoutube}" target="_blank">YouTube</a></p>
+			${youtubeLink}
 		`;
 
 		botResponseDiv.innerHTML = `
