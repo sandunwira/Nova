@@ -3462,9 +3462,16 @@ async function takeScreenshot() {
 // function to change wallpaper
 async function changeWallpaper(category) {
 	try {
-		const response = await fetch(`https://api.unsplash.com/photos/random?query=${category}&count=1&orientation=landscape&client_id=aXEHFMJhuEQoof-Sm66CGSaq41BYMrH_LwBTL1XRiwY`);
-		const data = await response.json();
-		const wallpaper = data[0].urls.raw + '&dpr=2';
+		const response = await fetch(`https://novaserver.onrender.com/api/functions/wallpaper?category=${category}`)
+			.then(res => res.json())
+			.catch(err => {
+				console.error('Error fetching wallpaper:', err);
+				throw err;
+			});
+
+		console.log('Wallpaper response:', response);
+
+		const wallpaper = response.wallpaper;
 		const imagePath = wallpaper;
 
 		new Notification('Downloading Wallpaper', {
