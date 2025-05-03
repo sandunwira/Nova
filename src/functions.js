@@ -4427,7 +4427,7 @@ async function fetchLyrics(songName) {
 	scrolltoBottom();
 
 	try {
-		const response = await fetch(`http://localhost:5000/api/functions/lyrics?query=${encodeURIComponent(songName)}`)
+		const response = await fetch(`https://novaserver.onrender.com/api/functions/lyrics?query=${encodeURIComponent(songName)}`)
 			.then(res => res.json())
 			.catch(err => {
 				console.error('Error fetching lyrics:', err);
