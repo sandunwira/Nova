@@ -2893,28 +2893,19 @@ async function getDisasterAlerts() {
 // function to convert currencies
 async function convertCurrency(amount, fromCurrency, toCurrency) {
 	try {
-		const proxyUrl = 'https://api.allorigins.win/get?url=';
-		const targetUrl = `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${fromCurrency.toLowerCase()}.json`;
-		const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				'Accept': 'application/json'
-			}
-		});
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
-		const data = await response.json();
-		const jsonData = JSON.parse(data.contents);
-		const exchangeRate = jsonData[fromCurrency.toLowerCase()][toCurrency.toLowerCase()];
-		if (!exchangeRate) {
-			throw new Error(`Exchange rate not found for ${fromCurrency} to ${toCurrency}`);
-		}
-		let convertedAmount = (amount * exchangeRate).toFixed(2);
-		// format the amount to have commas
-		amount = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-		convertedAmount = convertedAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		const response = await fetch(`https://novaserver.onrender.com/api/functions/convert-currency?amount=${amount}&from=${fromCurrency}&to=${toCurrency}`)
+			.then(res => res.json())
+			.catch(err => {
+				console.error('Error fetching currency conversion:', err);
+				throw err;
+			});
+
+		console.log('Currency conversion response:', response);
+
+		amount = response.amount;
+		fromCurrency = response.from;
+		toCurrency = response.to;
+		const convertedAmount = response.convertedAmount;
 		return `${amount} ${fromCurrency} = ${convertedAmount} ${toCurrency}`;
 	} catch (error) {
 		console.error('Error in convertCurrency:', error);
