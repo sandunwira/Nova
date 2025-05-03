@@ -1880,26 +1880,21 @@ async function getOnThisDayEvents() {
 
 	scrolltoBottom();
 
-	let month = new Date().getMonth() + 1;
-	let day = new Date().getDate();
+	let monthNum = new Date().getMonth() + 1;
+	let dayNum = new Date().getDate();
 
 	try {
 		const { day, month } = getDateForFunctions();
-		const proxyUrl = 'https://api.allorigins.win/get?url=';
-		const targetUrl = `https://today.zenquotes.io/api/${month}/${day}`;
-		const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				'Accept': 'application/json'
-			}
-		});
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
-		const data = await response.json();
-		const jsonData = JSON.parse(data.contents);
-		const events = jsonData.data.Events.map(event => event.text);
+		const response = await fetch(`https://novaserver.onrender.com/api/functions/otd?m=${monthNum}&d=${dayNum}`)
+			.then(response => response.json())
+			.catch(error => {
+				console.error('Error fetching on this day events:', error);
+				throw error;
+			});
+
+		console.log('On this day events response:', response);
+
+		const events = response.events.map(event => `${event.year}: ${event.event}`);
 
 		let eventsText = `Here are some interesting events that happened on ${month} ${day} in history:<br>`;
 		events.forEach((event) => {
@@ -1913,6 +1908,7 @@ async function getOnThisDayEvents() {
 			</div>
 		`;
 
+		scrolltoBottom();
 		return events;
 	} catch (error) {
 		console.error('Error in getOnThisDayEvents:', error);
