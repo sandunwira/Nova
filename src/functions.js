@@ -1276,7 +1276,7 @@ async function searchWeb(query) {
 			snippetText = 'Sorry, I couldn\'t find any relevant information. Please try again in a bit or try a different search query.';
 		} else if (snippetText.length < 110) {
 			search_status = 'no_snippet';
-			snippetText = 'Sorry, I couldn\'t find a detailed snippet. Here\'s the link to the search results: <a href="https://duckduckgo.com/?q=' + query + '" target="_blank">DuckDuckGo</a>';
+			snippetText = 'Sorry, I couldn\'t find a detailed response. Please try again in a bit or try a different search query.';
 		}
 
 		console.log('Snippet text: ' + snippetText);
@@ -1621,20 +1621,14 @@ async function fetchNews() {
 	scrolltoBottom();
 
 	try {
-		const response = await fetch(`https://api.allorigins.win/get?url=https://abcnews.go.com/abcnews/internationalheadlines?${Date.now()}`);
+		const response = await fetch(`https://novaserver.onrender.com/api/functions/news`);
 		const data = await response.json();
-		const xmlString = data.contents;
-		const parser = new DOMParser();
-		const xml = parser.parseFromString(xmlString, 'text/xml');
-		const items = xml.querySelectorAll('item');
-		const newsItems = [];
 
-		items.forEach(item => {
-			const title = item.querySelector('title').textContent;
-			const description = item.querySelector('description').textContent;
-			const link = item.querySelector('link').textContent;
-			newsItems.push({ title, description, link });
-		});
+		if (!data || !data.items || !Array.isArray(data.items)) {
+			throw new Error('Invalid news data format');
+		}
+
+		const newsItems = data.items;
 
 		let newsText = "Here are some of the latest global news:<br>";
 		newsItems.forEach((item) => {
@@ -1654,6 +1648,7 @@ async function fetchNews() {
 			</div>
 		`;
 
+		scrolltoBottom();
 		return newsItems;
 	} catch (error) {
 		console.error('Error in fetchNews:', error);
