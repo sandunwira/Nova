@@ -1753,22 +1753,17 @@ async function getQuoteOfTheDay() {
 	scrolltoBottom();
 
 	try {
-		const proxyUrl = 'https://api.allorigins.win/get?url=';
-		const targetUrl = 'https://zenquotes.io/api/today';
-		const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				'Accept': 'application/json'
-			}
-		});
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
-		const data = await response.json();
-		const jsonData = JSON.parse(data.contents);
-		const quote = jsonData[0].q;
-		const author = jsonData[0].a;
+		const response = await fetch(`https://novaserver.onrender.com/api/functions/qotd`)
+			.then(response => response.json())
+			.catch(error => {
+				console.error('Error fetching quote of the day:', error);
+				throw error;
+			});
+
+		console.log('Quote of the day response:', response);
+
+		const quote = response.quote;
+		const author = response.author;
 		const fullQuote = quote + ' - ' + author;
 
 		botResponseDiv.innerHTML = `
