@@ -2131,60 +2131,16 @@ async function translateText(text, targetLanguage) {
 	scrolltoBottom();
 
 	try {
-		const proxyUrl = `https://auroraproxyserver.onrender.com/`;
-		const targetUrl = 'https://api-free.deepl.com/v2/translate';
-		targetLanguage = targetLanguage.toLowerCase();
-		switch (targetLanguage) {
-			case 'arabic': targetLanguage = 'AR'; break;
-			case 'bulgarian': targetLanguage = 'BG'; break;
-			case 'czech': targetLanguage = 'CS'; break;
-			case 'danish': targetLanguage = 'DA'; break;
-			case 'german': targetLanguage = 'DE'; break;
-			case 'greek': targetLanguage = 'EL'; break;
-			case 'english': targetLanguage = 'EN-US'; break;
-			case 'spanish': targetLanguage = 'ES'; break;
-			case 'estonian': targetLanguage = 'ET'; break;
-			case 'finnish': targetLanguage = 'FI'; break;
-			case 'french': targetLanguage = 'FR'; break;
-			case 'hungarian': targetLanguage = 'HU'; break;
-			case 'indonesian': targetLanguage = 'ID'; break;
-			case 'italian': targetLanguage = 'IT'; break;
-			case 'japanese': targetLanguage = 'JA'; break;
-			case 'korean': targetLanguage = 'KO'; break;
-			case 'lithuanian': targetLanguage = 'LT'; break;
-			case 'latvian': targetLanguage = 'LV'; break;
-			case 'norwegian': targetLanguage = 'NB'; break;
-			case 'dutch': targetLanguage = 'NL'; break;
-			case 'polish': targetLanguage = 'PL'; break;
-			case 'portuguese br': targetLanguage = 'PT-BR'; break;
-			case 'portuguese pt': targetLanguage = 'PT-PT'; break;
-			case 'romanian': targetLanguage = 'RO'; break;
-			case 'russian': targetLanguage = 'RU'; break;
-			case 'slovak': targetLanguage = 'SK'; break;
-			case 'slovenian': targetLanguage = 'SL'; break;
-			case 'swedish': targetLanguage = 'SV'; break;
-			case 'turkish': targetLanguage = 'TR'; break;
-			case 'ukrainian': targetLanguage = 'UK'; break;
-			case 'chinese': targetLanguage = 'ZH'; break;
-			case 'chinese simplified': targetLanguage = 'ZH-HANS'; break;
-			case 'chinese traditional': targetLanguage = 'ZH-HANT'; break;
-		}
-		const response = await fetch(`${proxyUrl}${targetUrl}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': 'DeepL-Auth-Key 93c60809-8f46-4788-b25f-9c73a7122ae8:fx'
-			},
-			body: JSON.stringify({
-				text: [text],
-				target_lang: targetLanguage
-			})
-		});
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
-		const data = await response.json();
-		const translatedText = data.translations[0].text;
+		const response = await fetch(`http://localhost:5000/api/functions/translate?text=${text}&target=${targetLanguage}`)
+			.then(response => response.json())
+			.catch(error => {
+				console.error('Error fetching translation:', error);
+				throw error;
+			});
+
+		console.log('Translation response:', response);
+
+		const translatedText = response.translation;
 
 		botResponseDiv.innerHTML = `
 			${botChatAvatarHTML}
