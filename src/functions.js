@@ -2136,7 +2136,7 @@ async function translateText(text, targetLanguage) {
 	scrolltoBottom();
 
 	try {
-		const response = await fetch(`http://localhost:5000/api/functions/translate?text=${text}&target=${targetLanguage}`)
+		const response = await fetch(`https://novaserver.onrender.com/api/functions/translate?text=${text}&target=${targetLanguage}`)
 			.then(response => response.json())
 			.catch(error => {
 				console.error('Error fetching translation:', error);
