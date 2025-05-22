@@ -339,7 +339,7 @@ class Assistant {
 	async fetchExternalResponse(query) {
 		try {
 			const encodedPrompt = encodeURIComponent(query);
-			const response = await fetch(`http://localhost:5000/api/chat?prompt=${encodedPrompt}`);
+			const response = await fetch(`https://novaserver.onrender.com/api/chat?prompt=${encodedPrompt}`);
 
 			if (!response.ok) {
 				throw new Error(`API responded with status: ${response.status}`);
