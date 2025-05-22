@@ -678,29 +678,61 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 							default:
 								// For intents that only need responses (like greetings)
-								const response = await assistant.processQuery(userMessage);
+								// First show loading indicator
 								const botResponseDiv = document.createElement('div');
 								botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+								botResponseDiv.innerHTML = `
+									${botChatAvatarHTML}
+									<div class="bot-response">
+										<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+											Thinking... <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+										</span>
+									</div>
+								`;
+								chatResponses.appendChild(botResponseDiv);
+
+								scrolltoBottom();
+
+								// Get actual response
+								const response = await assistant.processQuery(userMessage);
+
+								// Update the div with the actual response
 								botResponseDiv.innerHTML = `
 									${botChatAvatarHTML}
 									<div class="bot-response">
 										${response}
 									</div>
 								`;
-								chatResponses.appendChild(botResponseDiv);
 						}
 					} else {
 						// No intent matched, use default response
-						const response = await assistant.processQuery(userMessage);
+						// First show loading indicator
 						const botResponseDiv = document.createElement('div');
 						botResponseDiv.style = 'width: 100%; display: flex; flex-direction: row; justify-content: space-between;';
+						botResponseDiv.innerHTML = `
+							${botChatAvatarHTML}
+							<div class="bot-response">
+								<span style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+									Thinking... <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+								</span>
+							</div>
+						`;
+						chatResponses.appendChild(botResponseDiv);
+						
+						scrolltoBottom();
+						
+						// Get actual response
+						const response = await assistant.processQuery(userMessage);
+						
+						// Update the div with the actual response
 						botResponseDiv.innerHTML = `
 							${botChatAvatarHTML}
 							<div class="bot-response">
 								${response}
 							</div>
 						`;
-						chatResponses.appendChild(botResponseDiv);
+
+						scrolltoBottom();
 					}
 				}
 
