@@ -58,10 +58,33 @@ class Assistant {
 			return cleanQuery.split(/\s+/).filter(word => word.length > 1 && !stopWords.has(word));
 		},
 
+		// Add method to detect knowledge-seeking questions
+		isKnowledgeQuestion(query) {
+			const knowledgePatterns = [
+				/^what is/i,
+				/^who is/i,
+				/^where is/i,
+				/^when was/i,
+				/^how does/i,
+				/^why does/i,
+				/^explain/i,
+				/^tell me about/i,
+				/^define/i,
+				/^meaning of/i
+			];
+
+			return knowledgePatterns.some(pattern => pattern.test(query.trim()));
+		},
+
 		// Enhanced keyword matching with more sophisticated scoring
 		calculateIntentScore(query, requestExamples) {
 			// Remove punctuation and extra whitespace
 			const cleanQuery = query.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').trim();
+
+			// Knowledge question check - if it's a knowledge question, reduce matching likelihood
+			if (this.isKnowledgeQuestion(cleanQuery)) {
+				console.log("Knowledge question detected");
+			}
 
 			// Exact match check
 			const exactMatches = requestExamples.filter(example =>
@@ -75,19 +98,30 @@ class Assistant {
 				const cleanExample = example.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').trim();
 				const exampleWords = cleanExample.split(/\s+/);
 
-				// Calculate word overlap
-				const matchedWords = queryWords.filter(qw =>
-					exampleWords.some(ew => ew === qw || ew.includes(qw) || qw.includes(ew))
-				);
+				// Calculate exact word matches (stricter matching)
+				const exactWordMatches = queryWords.filter(qw => exampleWords.includes(qw));
+				const exactWordScore = exactWordMatches.length / Math.max(queryWords.length, exampleWords.length);
 
-				// Calculate scores based on word overlap and length
-				const wordOverlapScore = matchedWords.length / Math.max(queryWords.length, exampleWords.length);
+				// Calculate partial word matches
+				const partialWordMatches = queryWords.filter(qw =>
+					exampleWords.some(ew => ew.includes(qw) || qw.includes(ew))
+				) - exactWordMatches.length; // Don't double count
+				const partialWordScore = partialWordMatches / Math.max(queryWords.length, exampleWords.length) * 0.5; // Half weight for partial matches
+
+				// Calculate word overlap score (combining exact and partial with appropriate weights)
+				const wordOverlapScore = exactWordScore + partialWordScore;
 
 				// Levenshtein distance as a fallback
 				const distanceScore = 1 - (this.levenshtein(cleanQuery, cleanExample) / Math.max(cleanQuery.length, cleanExample.length));
 
-				// Combine scores with more weight to word overlap
-				const combinedScore = (wordOverlapScore * 0.7) + (distanceScore * 0.3);
+				// Combine scores with more weight to exact word matches
+				const combinedScore = (wordOverlapScore * 0.8) + (distanceScore * 0.2);
+
+				// Apply penalties for knowledge questions matching with non-knowledge intents
+				if (this.isKnowledgeQuestion(cleanQuery) && !this.isKnowledgeQuestion(cleanExample)) {
+					return combinedScore * 0.6; // 40% penalty
+				}
+
 				return combinedScore;
 			});
 
@@ -183,6 +217,9 @@ class Assistant {
 				bestMatch = request;
 			}
 		}
+
+		// Store the highest score for use in processQuery
+		this.lastIntentScore = highestScore;
 
 		// Log matching details
 		console.log(`Matched Intent: ${bestMatch?.intent || 'None'}, Score: ${highestScore}`);
@@ -298,6 +335,36 @@ class Assistant {
 		}
 	}
 
+	// New method to fetch response from external API
+	async fetchExternalResponse(query) {
+		try {
+			const encodedPrompt = encodeURIComponent(query);
+			const response = await fetch(`http://localhost:5000/api/chat?prompt=${encodedPrompt}`);
+
+			if (!response.ok) {
+				throw new Error(`API responded with status: ${response.status}`);
+			}
+
+			const data = await response.json();
+			
+			// Extract response from the correct path in the JSON structure
+			if (data.candidates && 
+				data.candidates[0] && 
+				data.candidates[0].content && 
+				data.candidates[0].content.parts && 
+				data.candidates[0].content.parts[0] && 
+				data.candidates[0].content.parts[0].text) {
+				return data.candidates[0].content.parts[0].text;
+			}
+			
+			// Fallback if structure doesn't match
+			return data.response || "Sorry, I couldn't understand the response from the server.";
+		} catch (error) {
+			console.error('Error fetching from external API:', error);
+			return "Sorry, I couldn't connect to the external service.";
+		}
+	}
+
 	async processQuery(query) {
 		try {
 			console.log("Original Query:", query);
@@ -305,9 +372,41 @@ class Assistant {
 			const cleanedQuery = Assistant.Utility.cleanQuery(query);
 			console.log("Cleaned Query:", cleanedQuery);
 
+			// Check if this looks like a knowledge question
+			const isKnowledgeQuestion = Assistant.Utility.isKnowledgeQuestion(cleanedQuery);
+
 			let response;
-			response = this.findResponse(cleanedQuery);
-			response = this.replaceDynamicVariables(response);
+			let highestScore = 0;
+
+			// If it's a knowledge-seeking question, prefer using external API
+			if (isKnowledgeQuestion) {
+				console.log("Knowledge question detected, preferring external API");
+				response = await this.fetchExternalResponse(cleanedQuery);
+				// Apply dynamic variable replacement to external API response
+				response = this.replaceDynamicVariables(response);
+
+				// Save the fact that we used external API
+				this.lastMatchedIntent = "external_knowledge";
+			} else {
+				// For other queries, try to find a local response
+				response = this.findResponse(cleanedQuery);
+
+				// If we get the score, store it (modifying findResponse to return score)
+				if (this.lastIntentScore) {
+					highestScore = this.lastIntentScore;
+				}
+
+				// If no good intent match was found or score is below enhanced threshold for general questions
+				if (response === "Sorry, I couldn't understand the request." ||
+					(response.includes("I'm here to assist") && highestScore < 0.7)) {
+					console.log("No strong intent match found, querying external API...");
+					response = await this.fetchExternalResponse(cleanedQuery);
+					// Apply dynamic variable replacement to external API response
+					response = this.replaceDynamicVariables(response);
+				} else {
+					response = this.replaceDynamicVariables(response);
+				}
+			}
 
 			console.log("Response:", response);
 			return response;
