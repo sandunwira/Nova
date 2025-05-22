@@ -149,16 +149,16 @@ document.addEventListener('DOMContentLoaded', async function () {
 	});
 
 	// weather notification
-	setTimeout(() => {
-		getWeather().then(({ location, weatherComment, temperature }) => {
-			new Notification(`${temperature} in ${location}`, {
-				body: weatherComment,
-				sound: 'Default'
-			});
-		}).catch(error => {
-			console.error('Error in getting weather:', error);
-		});
-	}, 60000);
+	// setTimeout(() => {
+	// 	getWeather().then(({ location, weatherComment, temperature }) => {
+	// 		new Notification(`${temperature} in ${location}`, {
+	// 			body: weatherComment,
+	// 			sound: 'Default'
+	// 		});
+	// 	}).catch(error => {
+	// 		console.error('Error in getting weather:', error);
+	// 	});
+	// }, 60000);
 
 
 	try {
