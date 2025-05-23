@@ -259,6 +259,11 @@ class Assistant {
 
 		this.conversationHistory.push(conversation);
 
+		// Keep only the last 5 entries
+		if (this.conversationHistory.length > 5) {
+			this.conversationHistory = this.conversationHistory.slice(-5);
+		}
+
 		// Save to localStorage if available
 		if (typeof localStorage !== 'undefined') {
 			localStorage.setItem('conversationHistory', JSON.stringify(this.conversationHistory));
@@ -338,6 +343,11 @@ class Assistant {
 	// New method to fetch response from external API
 	async fetchExternalResponse(query) {
 		try {
+			const userInfo = `DOB: ${currentUserData.dob}, Gender: ${currentUserData.gender}, Created At: ${currentUserData.createdAt}`;
+			query = query + " | " + "User Info: " + userInfo + " | " + "Context: " + JSON.stringify(this.conversationHistory.map(item => ({
+				query: item.query,
+				response: item.response
+			})));
 			const encodedPrompt = encodeURIComponent(query);
 			const response = await fetch(`https://novaserver.onrender.com/api/chat?prompt=${encodedPrompt}`);
 
@@ -346,7 +356,7 @@ class Assistant {
 			}
 
 			const data = await response.json();
-			
+
 			// Extract response from the correct path in the JSON structure
 			if (data.candidates && 
 				data.candidates[0] && 
@@ -356,7 +366,7 @@ class Assistant {
 				data.candidates[0].content.parts[0].text) {
 				return data.candidates[0].content.parts[0].text;
 			}
-			
+
 			// Fallback if structure doesn't match
 			return data.response || "Sorry, I couldn't understand the response from the server.";
 		} catch (error) {
@@ -409,6 +419,8 @@ class Assistant {
 			}
 
 			console.log("Response:", response);
+			// Save conversation history
+			this.saveConversation(query, response);
 			return response;
 		} catch (error) {
 			console.error('Error processing query:', error);

@@ -143,10 +143,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 		greeting = "Good Evening! 🌙";
 	}
 
-	new Notification(`${greeting}`, {
-		body: 'Ask me anything and I will try my best to help you out ;)',
-		sound: 'Default'
-	});
+	// new Notification(`${greeting}`, {
+	// 	body: 'Ask me anything and I will try my best to help you out ;)',
+	// 	sound: 'Default'
+	// });
 
 	// weather notification
 	// setTimeout(() => {
@@ -700,7 +700,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 								botResponseDiv.innerHTML = `
 									${botChatAvatarHTML}
 									<div class="bot-response">
-										${response}
+										${formatMarkdown(response)}
 									</div>
 								`;
 						}
@@ -718,17 +718,17 @@ document.addEventListener('DOMContentLoaded', async function () {
 							</div>
 						`;
 						chatResponses.appendChild(botResponseDiv);
-						
+
 						scrolltoBottom();
-						
+
 						// Get actual response
 						const response = await assistant.processQuery(userMessage);
-						
+
 						// Update the div with the actual response
 						botResponseDiv.innerHTML = `
 							${botChatAvatarHTML}
 							<div class="bot-response">
-								${response}
+								${formatMarkdown(response)}
 							</div>
 						`;
 
@@ -776,6 +776,26 @@ document.addEventListener('DOMContentLoaded', async function () {
 		scrolltoBottom();
 	}
 });
+
+
+
+// Function to format markdown text
+function formatMarkdown(text) {
+	if (!text) return '';
+
+	// Auto-close unclosed code blocks (add closing ``` if needed)
+	const codeBlockOpenings = (text.match(/```/g) || []).length;
+	if (codeBlockOpenings % 2 !== 0) {
+		text += '\n```';
+	}
+
+	return marked.parse(text, {
+		breaks: true,
+		gfm: true,
+		headerIds: false,
+		mangle: false
+	});
+}
 
 
 

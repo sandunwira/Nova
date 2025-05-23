@@ -396,3 +396,39 @@ table td {
 }
 
 /* ANIMATIONS END */
+
+
+/* Markdown Styling */
+.bot-response h1, .bot-response h2, .bot-response h3, .bot-response h4, .bot-response h5, .bot-response h6 {
+	margin-bottom: 10px;
+}
+
+.bot-response pre code {
+	background: #242424;
+	color: #E0E0E0;
+	padding: 12px;
+	border: 1px solid #424242;
+	margin: 20px 0px;
+	display: block;
+	font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+	font-size: 14px;
+	overflow-x: auto;
+}
+
+.bot-response ul, .bot-response ol {
+	padding-left: 20px;
+}
+
+.bot-response li {
+	margin: 0px 0px 15px 0px;
+}
+
+.bot-response p {
+	line-height: 1.3;
+	margin-bottom: 15px;
+}
+
+.bot-response hr {
+	border: 0.5px solid #303030;
+	margin-bottom: 15px;
+}

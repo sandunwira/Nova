@@ -7,6 +7,8 @@
 
 	<script type="module" src="/main.js" defer></script>
 
+	<script src="js/marked.min.js"></script>
+
 	<!-- ASSISTANT OPERATIONS SCRIPTS START -->
 	<script src="assistant.js" defer></script>
 	<script src="chat.js" defer></script>
@@ -23,44 +25,87 @@
 
 <body>
 	<div class="containerBlock" style="position: fixed; top: 0; left: 0; height: 100vh; width: 100%;">
-		<div class="titlebar" style="background: var(--blackGray); height: 25px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; user-select: none;">
+		<div class="titlebar"
+			style="background: var(--blackGray); height: 25px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; user-select: none;">
 			<span style="padding-left: 10px; font-size: 10px; text-transform: uppercase;">
 				Nova <span style="text-transform: none; font-weight: 300; color: var(--lightGray);">v1.0</span>
 			</span>
 			<div class="titlebarButtons">
 				<button id="titlebar-profile" title="Profile"></button>
-				<div id="profile-dropdown" class="dropdown-menu" style="display: none; position: absolute; top: 25px; right: 75px; background: var(--blackGray); border: 1px solid var(--darkGray); border-radius: 3px; z-index: 100; min-width: 120px;">
-					<div class="dropdown-item" id="logout-option" style="padding: 8px 12px; font-size: 12px; cursor: pointer; transition: 0.2s;">
+				<div id="profile-dropdown" class="dropdown-menu"
+					style="display: none; position: absolute; top: 25px; right: 75px; background: var(--blackGray); border: 1px solid var(--darkGray); border-radius: 3px; z-index: 100; min-width: 120px;">
+					<div class="dropdown-item" id="logout-option"
+						style="padding: 8px 12px; font-size: 12px; cursor: pointer; transition: 0.2s;">
 						Logout
 					</div>
 				</div>
 				<button id="titlebar-minimize" title="Minimize">
-					<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-arrows-diagonal-minimize-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 10h-4v-4" /><path d="M20 4l-6 6" /><path d="M6 14h4v4" /><path d="M10 14l-6 6" /></svg>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+						stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						class="icon icon-tabler icons-tabler-outline icon-tabler-arrows-diagonal-minimize-2">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+						<path d="M18 10h-4v-4" />
+						<path d="M20 4l-6 6" />
+						<path d="M6 14h4v4" />
+						<path d="M10 14l-6 6" />
+					</svg>
 				</button>
 				<button id="titlebar-close" title="Close">
-					<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+						stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+						<path d="M18 6l-12 12" />
+						<path d="M6 6l12 12" />
+					</svg>
 				</button>
 			</div>
 		</div>
-		<div data-tauri-drag-region style="position: fixed; top: 5px; left: 0; background: transparent; height: 20px; width: calc(100% - 69px);"></div>
+		<div data-tauri-drag-region
+			style="position: fixed; top: 5px; left: 0; background: transparent; height: 20px; width: calc(100% - 69px);">
+		</div>
 
-		<div class="container" style="height: calc(100% - 20px); display: flex; flex-direction: column; align-items: center; justify-content: center;">
-			<div id="chatResponsesContainer" style="display: flex; align-items: start; justify-content: center; height: 85%; width: 100%; overflow: auto;">
-				<div id="chatResponses" style="display: flex; flex-direction: column; height: calc(100% - 30px); width: 90%; margin-top: 15px;"></div>
+		<div class="container"
+			style="height: calc(100% - 20px); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+			<div id="chatResponsesContainer"
+				style="display: flex; align-items: start; justify-content: center; height: 85%; width: 100%; overflow: auto;">
+				<div id="chatResponses"
+					style="display: flex; flex-direction: column; height: calc(100% - 30px); width: 90%; margin-top: 15px;">
+				</div>
 			</div>
 
-			<div class="chatFormContainer" style="height: 15%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;">
-				<form id="chatForm" style="width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: center;">
-					<textarea id="chatMessage" name="message" autocomplete="off" spellcheck="false" placeholder="Chat with Nova" required></textarea>
+			<div class="chatFormContainer"
+				style="height: 15%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;">
+				<form id="chatForm"
+					style="width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: center;">
+					<textarea id="chatMessage" name="message" autocomplete="off" spellcheck="false"
+						placeholder="Chat with Nova" required></textarea>
 					<button type="button" id="chatFormVoiceBtn" title="Voice Input">
-						<svg  xmlns="http://www.w3.org/2000/svg"  width="13px"  height="13px"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-microphone"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 2m0 3a3 3 0 0 1 3 -3h0a3 3 0 0 1 3 3v5a3 3 0 0 1 -3 3h0a3 3 0 0 1 -3 -3z" /><path d="M5 10a7 7 0 0 0 14 0" /><path d="M8 21l8 0" /><path d="M12 17l0 4" /></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" width="13px" height="13px" viewBox="0 0 24 24"
+							fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+							stroke-linejoin="round"
+							class="icon icon-tabler icons-tabler-outline icon-tabler-microphone">
+							<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+							<path d="M9 2m0 3a3 3 0 0 1 3 -3h0a3 3 0 0 1 3 3v5a3 3 0 0 1 -3 3h0a3 3 0 0 1 -3 -3z" />
+							<path d="M5 10a7 7 0 0 0 14 0" />
+							<path d="M8 21l8 0" />
+							<path d="M12 17l0 4" />
+						</svg>
 					</button>
 					<button type="submit" id="chatFormSubmitBtn" title="Send Message">
-						<svg  xmlns="http://www.w3.org/2000/svg"  width="13px"  height="13px"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="3"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-up"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M18 11l-6 -6" /><path d="M6 11l6 -6" /></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" width="13px" height="13px" viewBox="0 0 24 24"
+							fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+							stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-up">
+							<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+							<path d="M12 5l0 14" />
+							<path d="M18 11l-6 -6" />
+							<path d="M6 11l6 -6" />
+						</svg>
 					</button>
 				</form>
 
-				<p style="font-size: 10px; font-weight: 300; user-select: none;">Nova can make mistakes, so please double check important information</p>
+				<p style="font-size: 10px; font-weight: 300; user-select: none;">Nova can make mistakes, so please
+					double check important information</p>
 			</div>
 		</div>
 	</div>
